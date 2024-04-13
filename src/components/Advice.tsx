@@ -38,7 +38,7 @@ const formSchema = z.object({
   suggestion: z.string().trim().min(1, { message: "Harap isi kolom ini" }),
 });
 
-export default function HomeSuggestion() {
+export default function Advice() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

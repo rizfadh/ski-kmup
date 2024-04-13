@@ -1,6 +1,6 @@
 import FooterPage from "@/components/Footer";
 import HomeCarousel from "@/components/HomeCarousel";
-import HomeSuggestion from "@/components/HomeSuggestion";
+import Advice from "@/components/Advice";
 import PostItems from "@/components/PostItems";
 import { generateCarouselDummy, generatePostDummy } from "@/lib/dummyData";
 import Link from "next/link";
@@ -20,7 +20,7 @@ export default function HomePage() {
           </Link>
         </div>
         <PostItems props={postDummy} />
-        <HomeSuggestion />
+        <Advice />
         <FooterPage />
       </div>
     </main>
