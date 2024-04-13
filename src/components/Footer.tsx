@@ -1,0 +1,89 @@
+import { Facebook, Instagram, Mail, Twitter, Youtube } from "lucide-react";
+import Link from "next/link";
+import { Separator } from "./ui/separator";
+import { ReactElement } from "react";
+
+export default function FooterPage() {
+  const socialMedia: { icon: ReactElement; lable: string; href: string }[] = [
+    {
+      icon: <Facebook className="h-[2rem] w-[2rem]" />,
+      lable: "Facebook",
+      href: "#",
+    },
+    {
+      icon: <Instagram className="h-[2rem] w-[2rem]" />,
+      lable: "Instagram",
+      href: "#",
+    },
+    {
+      icon: <Twitter className="h-[2rem] w-[2rem]" />,
+      lable: "Twitter",
+      href: "#",
+    },
+    {
+      icon: <Youtube className="h-[2rem] w-[2rem]" />,
+      lable: "Youtube",
+      href: "#",
+    },
+  ];
+
+  return (
+    <footer>
+      <div className="mb-5 rounded-lg bg-primary text-primary-foreground md:rounded-2xl">
+        <div className="grid gap-5 p-5 md:grid-cols-2 md:p-10">
+          <div className="grid">
+            <h3 className="text-center text-xl font-bold">Tentang Kami</h3>
+            <div className="mt-5 grid items-center gap-3 md:mt-0">
+              <h4 className="text-center text-lg font-medium">Alamat</h4>
+              <p>
+                Pusat Kegiatan Mahasiswa Universitas Pancasila RT.5/RW.5,
+                Srengseng Sawah, Kec. Jagakarsa, Kota Jakarta Selatan, Daerah
+                Khusus Ibukota Jakarta 12630
+              </p>
+              <h4 className="text-center text-lg font-medium">Ikuti kami di</h4>
+              <div className="flex justify-center gap-3">
+                {socialMedia.map(({ icon, lable, href }) => (
+                  <Link
+                    key={lable}
+                    href={href}
+                    aria-label={lable}
+                    className="flex h-[3rem] w-[3rem] rotate-0 items-center justify-center rounded-full bg-background text-foreground shadow-sm transition-all hover:rotate-45 hover:shadow-lg"
+                  >
+                    {icon}
+                  </Link>
+                ))}
+              </div>
+              <h4 className="text-center text-lg font-medium">
+                Hubungi kami di
+              </h4>
+              <Link
+                href="mailto:ldkskiup@gmail.com"
+                className="flex justify-center gap-3"
+              >
+                <Mail />
+                ldkskiup@gmail.com
+              </Link>
+            </div>
+          </div>
+          <div>
+            <h3 className="text-center text-xl font-bold">Maps</h3>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d247.83941391364402!2d106.83245221462734!3d-6.338229177735141!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69edb3ed58680d%3A0x990525d601e1201d!2sUKM%20satuan%20kegiatan%20islam%20SKI-KMUP!5e0!3m2!1sid!2sid!4v1712954742616!5m2!1sid!2sid"
+              className="mt-5 w-full rounded-md shadow-sm"
+              height="300"
+              style={{ border: "0" }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+        <Separator />
+        <div className="py-5">
+          <p className="text-center">
+            Copyright &copy; SKI-KMUP {new Date().getFullYear()}
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}

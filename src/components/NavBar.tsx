@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Separator } from "./ui/separator"
-import { ModeToggle } from "./ModeToggle"
-import { usePathname } from "next/navigation"
+import Link from "next/link";
+import { Separator } from "./ui/separator";
+import { ModeToggle } from "./ModeToggle";
+import { usePathname } from "next/navigation";
 import {
   BookUserIcon,
   HomeIcon,
   LogInIcon,
   MenuIcon,
   NewspaperIcon,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetClose,
@@ -21,8 +21,8 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet"
-import { ReactElement } from "react"
+} from "@/components/ui/sheet";
+import { ReactElement } from "react";
 
 export default function NavBar() {
   const router: { icon: ReactElement; label: string; href: string }[] = [
@@ -33,7 +33,7 @@ export default function NavBar() {
     },
     {
       icon: <NewspaperIcon className="h-[1.2rem] w-[1.2rem]" />,
-      label: "Postingan",
+      label: "Post",
       href: "/post",
     },
     {
@@ -46,14 +46,14 @@ export default function NavBar() {
       label: "Login",
       href: "/login",
     },
-  ]
+  ];
 
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <header className="sticky top-0 z-10 bg-background">
       <nav>
-        <div className="flex container py-3 justify-between items-center md:hidden">
+        <div className="container flex items-center justify-between py-3 md:hidden">
           <h1 className="font-black text-primary">SKI-KMUP</h1>
           <Sheet>
             <SheetTrigger asChild>
@@ -65,12 +65,12 @@ export default function NavBar() {
               <SheetHeader>
                 <SheetTitle>Menu</SheetTitle>
               </SheetHeader>
-              <div className="flex flex-col gap-5 mt-5">
+              <div className="mt-5 flex flex-col gap-5">
                 {router.map(({ icon, label, href }) => (
                   <Link
                     key={label}
                     href={href}
-                    className={`flex gap-5 items-center ${
+                    className={`flex items-center gap-5 ${
                       pathname === href
                         ? "text-primary"
                         : "text-foreground hover:text-muted-foreground"
@@ -85,9 +85,9 @@ export default function NavBar() {
             </SheetContent>
           </Sheet>
         </div>
-        <div className="hidden md:container md:py-3 md:flex md:flex-grow md:justify-between md:items-center">
+        <div className="hidden md:container md:flex md:flex-grow md:items-center md:justify-between md:py-3">
           <h1 className="font-black text-primary">SKI-KMUP</h1>
-          <div className="flex gap-5 items-center">
+          <div className="flex items-center gap-5">
             {router.map(({ label, href }) => (
               <Link
                 key={label}
@@ -107,5 +107,5 @@ export default function NavBar() {
       </nav>
       <Separator />
     </header>
-  )
+  );
 }
