@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Separator } from "./ui/separator";
 import { ReactElement } from "react";
 
-export default function FooterPage() {
+export default function Footer() {
   const socialMedia: { icon: ReactElement; lable: string; href: string }[] = [
     {
       icon: <Facebook className="h-[2rem] w-[2rem]" />,
@@ -28,8 +28,8 @@ export default function FooterPage() {
   ];
 
   return (
-    <footer>
-      <div className="mb-5 rounded-lg bg-primary text-primary-foreground md:rounded-2xl">
+    <footer className="container my-8">
+      <div className="rounded-lg bg-primary text-primary-foreground md:rounded-2xl">
         <div className="grid gap-5 p-5 md:grid-cols-2 md:p-10">
           <div className="grid">
             <h3 className="text-center text-xl font-bold">Tentang Kami</h3>
