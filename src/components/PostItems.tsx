@@ -15,7 +15,7 @@ export default function PostItems({ props }: { props: Props[] }) {
     <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
       {props.map(({ id, img, title, date, author }) => (
         <Link key={id} href="#">
-          <Card className="transition-all hover:rotate-2 hover:shadow-lg">
+          <Card className="h-full transition-all hover:rotate-2 hover:shadow-lg">
             <CardHeader className="relative h-[200px] w-full p-0">
               <Image
                 src={img}
@@ -26,12 +26,12 @@ export default function PostItems({ props }: { props: Props[] }) {
               />
             </CardHeader>
             <CardContent className="p-6">
-              <p className="text-primary">{author}</p>
-              <p className="line-clamp-1 font-medium">{title}</p>
+              <div className="space-y-2">
+                <p className="text-primary">{author}</p>
+                <p className="line-clamp-2 font-medium">{title}</p>
+                <p className="text-sm text-muted-foreground">{date}</p>
+              </div>
             </CardContent>
-            <CardFooter>
-              <p className="text-sm text-muted-foreground">{date}</p>
-            </CardFooter>
           </Card>
         </Link>
       ))}

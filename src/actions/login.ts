@@ -11,6 +11,8 @@ export const login = async (
 
   if (!validated.success) return { error: true, message: "Invalid fields" };
 
+  console.log(data);
+
   return {
     error: false,
     message: "Formatnya udah bener, sayang ini masih dummy",

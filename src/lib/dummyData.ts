@@ -26,10 +26,14 @@ export const generatePostDummy = () => {
     return {
       id: index,
       img,
-      title: "Satuan Kegiatan Islam Keluarga Mahasiswa Universitas Pancasila",
+      title: `Bayangin liburan disini. ${Array.from({
+        length: index,
+      })
+        .map(() => "Oke. Oke. Oke. Oke. Oke")
+        .join(" ")}`,
       description:
         "Bersatu Dalam Islam Bersatu Dalam Islam Bersatu Dalam Islam Bersatu Dalam Islam",
-      date: `2022-01-0${index + 1}`,
+      date: new Date().toDateString(),
       author: `John Doe ${index + 1}`,
     };
   });

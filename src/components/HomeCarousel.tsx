@@ -23,7 +23,7 @@ export default function HomeCarousel({ props }: { props: Props[] }) {
                 className="h-auto w-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-primary to-80%"></div>
-              <div className="absolute inset-0 place-content-center self-end p-10 text-primary-foreground md:w-3/4">
+              <div className="absolute inset-0 grid content-end p-5 text-primary-foreground sm:p-10 md:w-3/4">
                 <p className="line-clamp-2 text-4xl font-bold">{title}</p>
                 <p className="mt-3 line-clamp-3">{description}</p>
               </div>
