@@ -14,37 +14,35 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ReactElement } from "react";
+import { Routes } from "@/lib/routes";
 
 export default function NavBar() {
-  const router: { icon: ReactElement; label: string; href: string }[] = [
+  const routes: { icon: ReactElement; label: string; href: string }[] = [
     {
       icon: <HomeIcon className="h-[1.2rem] w-[1.2rem]" />,
       label: "Home",
-      href: "/",
+      href: Routes.home,
     },
     {
       icon: <NewspaperIcon className="h-[1.2rem] w-[1.2rem]" />,
       label: "Post",
-      href: "/post",
+      href: Routes.post,
     },
     {
       icon: <BookUserIcon className="h-[1.2rem] w-[1.2rem]" />,
       label: "Tentang",
-      href: "/about",
+      href: Routes.about,
     },
     {
       icon: <LogInIcon className="h-[1.2rem] w-[1.2rem]" />,
       label: "Login",
-      href: "/login",
+      href: Routes.login,
     },
   ];
 
@@ -66,7 +64,7 @@ export default function NavBar() {
                 <SheetTitle>Menu</SheetTitle>
               </SheetHeader>
               <div className="mt-5 flex flex-col gap-5">
-                {router.map(({ icon, label, href }) => (
+                {routes.map(({ icon, label, href }) => (
                   <Link
                     key={label}
                     href={href}
@@ -88,7 +86,7 @@ export default function NavBar() {
         <div className="hidden md:container md:flex md:flex-grow md:items-center md:justify-between md:py-3">
           <h1 className="font-black text-primary">SKI-KMUP</h1>
           <div className="flex items-center gap-5">
-            {router.map(({ label, href }) => (
+            {routes.map(({ label, href }) => (
               <Link
                 key={label}
                 href={href}

@@ -23,8 +23,9 @@ import {
 import Link from "next/link";
 import { type LoginResult, login } from "@/actions/login";
 import { useState, useTransition } from "react";
-import { loginSchema } from "@/schemas";
+import { LoginSchema } from "@/schemas";
 import FormAlert from "./FormAlert";
+import { Routes } from "@/lib/routes";
 
 type Props = React.ComponentProps<typeof Card>;
 
@@ -32,17 +33,17 @@ export default function LoginForm({ className, ...props }: Props) {
   const [isPending, startTransition] = useTransition();
   const [isError, setIsError] = useState<LoginResult | null>(null);
 
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof loginSchema>) {
+  function onSubmit(data: z.infer<typeof LoginSchema>) {
     startTransition(async () => {
-      const result = await login(values);
+      const result = await login(data);
       setIsError(result);
     });
   }
@@ -100,7 +101,7 @@ export default function LoginForm({ className, ...props }: Props) {
           </Form>
           <p className="text-sm text-muted-foreground">
             Belum punya akun?{" "}
-            <Link href="#" className="text-primary underline">
+            <Link href={Routes.register} className="text-primary underline">
               Daftar disini
             </Link>
           </p>

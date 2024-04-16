@@ -1,12 +1,12 @@
 import BackButton from "@/components/BackButton";
-import LoginForm from "@/components/LoginForm";
+import RegsiterForm from "@/components/RegisterForm";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   return (
     <div className="container grid min-h-screen">
       <div className="my-8 grid content-center gap-2 sm:justify-center">
         <BackButton />
-        <LoginForm className="w-full sm:w-[360px]" />
+        <RegsiterForm className="w-full sm:w-[360px]" />
       </div>
     </div>
   );

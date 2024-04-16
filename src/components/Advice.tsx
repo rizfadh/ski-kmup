@@ -31,24 +31,20 @@ import {
 } from "./ui/card";
 import Image from "next/image";
 import suggestion from "../../public/suggestion.svg";
-
-const formSchema = z.object({
-  email: z.string().email({ message: "Harap masukan email yang valid" }),
-  for: z.string({ required_error: "Harap isi kolom ini" }),
-  suggestion: z.string().trim().min(1, { message: "Harap isi kolom ini" }),
-});
+import { AdviceSchema } from "@/schemas";
 
 export default function Advice() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof AdviceSchema>>({
+    resolver: zodResolver(AdviceSchema),
     defaultValues: {
       email: "",
+      for: "",
       suggestion: "",
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof AdviceSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
@@ -60,10 +56,6 @@ export default function Advice() {
         <h2 className="text-2xl font-bold md:text-center md:text-5xl md:text-primary lg:text-6xl">
           Punya Saran?
         </h2>
-        {/* <p className="mt-5">
-          Mari menjadi bagian dalam membangun SKI-KMUP untuk menjadi lebih baik,
-          kami sangat menghargai pendapatmu!
-        </p> */}
         <Image
           src={suggestion}
           alt="suggestion illustration"
