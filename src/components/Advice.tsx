@@ -31,7 +31,7 @@ import {
 } from "./ui/card";
 import Image from "next/image";
 import suggestion from "../../public/suggestion.svg";
-import { AdviceSchema } from "@/schemas";
+import { AdviceSchema } from "@/schemas/AdviceSchema";
 
 export default function Advice() {
   const form = useForm<z.infer<typeof AdviceSchema>>({

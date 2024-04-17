@@ -3,7 +3,7 @@ import Advice from "@/components/Advice";
 import PostItems from "@/components/PostItems";
 import { generateCarouselDummy, generatePostDummy } from "@/lib/dummyData";
 import Link from "next/link";
-import { Routes } from "@/lib/routes";
+import { Routes } from "@/constants/routes";
 
 export default function HomePage() {
   const carouselDummy = generateCarouselDummy();

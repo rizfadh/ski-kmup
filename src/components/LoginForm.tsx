@@ -21,11 +21,12 @@ import {
   CardTitle,
 } from "./ui/card";
 import Link from "next/link";
-import { type LoginResult, login } from "@/actions/login";
+import { login } from "@/actions/login";
 import { useState, useTransition } from "react";
-import { LoginSchema } from "@/schemas";
 import FormAlert from "./FormAlert";
-import { Routes } from "@/lib/routes";
+import { Routes } from "@/constants/routes";
+import { type LoginResult } from "@/types/LoginResult";
+import { LoginSchema } from "@/schemas/LoginSchema";
 
 type Props = React.ComponentProps<typeof Card>;
 

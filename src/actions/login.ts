@@ -1,9 +1,8 @@
 "use server";
 
-import { LoginSchema } from "@/schemas";
+import { LoginSchema } from "@/schemas/LoginSchema";
+import { LoginResult } from "@/types/LoginResult";
 import { z } from "zod";
-
-export type LoginResult = { error: boolean; message: string };
 
 export const login = async (
   data: z.infer<typeof LoginSchema>,

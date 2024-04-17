@@ -30,15 +30,17 @@ import {
 import { Textarea } from "./ui/textarea";
 import Link from "next/link";
 import { useState, useTransition } from "react";
-import { RegisterSchema } from "@/schemas";
 import FormAlert from "./FormAlert";
-import { Routes } from "@/lib/routes";
+import { Routes } from "@/constants/routes";
 import { register } from "@/actions/register";
+import { type RegisterResult } from "@/types/RegisterResult";
+import { RegisterSchema } from "@/schemas/RegisterSchema";
 
 type Props = React.ComponentProps<typeof Card>;
 
 export default function RegsiterForm({ className, ...props }: Props) {
   const [isPending, startTransition] = useTransition();
+  const [isError, setIsError] = useState<RegisterResult | null>(null);
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -57,7 +59,8 @@ export default function RegsiterForm({ className, ...props }: Props) {
 
   function onSubmit(data: z.infer<typeof RegisterSchema>) {
     startTransition(async () => {
-      await register(data);
+      const result = await register(data);
+      setIsError(result);
     });
   }
 
@@ -293,6 +296,12 @@ export default function RegsiterForm({ className, ...props }: Props) {
                   </FormItem>
                 )}
               />
+              {!!isError && (
+                <FormAlert
+                  variant={isError.error ? "error" : "success"}
+                  message={isError.message}
+                />
+              )}
               <Button type="submit" className="w-full" disabled={isPending}>
                 Daftar
               </Button>

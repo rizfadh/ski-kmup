@@ -20,7 +20,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ReactElement } from "react";
-import { Routes } from "@/lib/routes";
+import { Routes } from "@/constants/routes";
 
 export default function NavBar() {
   const routes: { icon: ReactElement; label: string; href: string }[] = [
