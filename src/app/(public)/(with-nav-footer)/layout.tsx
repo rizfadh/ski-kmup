@@ -1,7 +1,7 @@
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 
-export default function PublicLayout({
+export default function PublicWithNavFooterLayout({
   children,
 }: {
   children: React.ReactNode;

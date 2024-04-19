@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 import { RegisterResult } from "@/types/RegisterResult";
 import { RegisterSchema } from "@/schemas/RegisterSchema";
@@ -32,7 +32,7 @@ export const register = async (
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await db.user.create({
+    await db.user.create({
       data: {
         name,
         email,
@@ -52,8 +52,6 @@ export const register = async (
         registerApproval: true,
       },
     });
-
-    console.log(user);
     return { error: false, message: "Daftar berhasil" };
   } catch {
     return { error: true, message: "Daftar gagal" };

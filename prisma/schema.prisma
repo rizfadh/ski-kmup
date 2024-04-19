@@ -13,7 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
+enum UserRole {
   ADMIN
   PASSIVE
 }
@@ -31,7 +31,7 @@ model User {
   image         String?
   division      String?
 
-  role             Role              @default(PASSIVE)
+  role             UserRole          @default(PASSIVE)
   accounts         Account[]
   registerApproval RegisterApproval?
 

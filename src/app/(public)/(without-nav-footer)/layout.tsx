@@ -1,7 +1,4 @@
-import Footer from "@/components/Footer";
-import NavBar from "@/components/NavBar";
-
-export default function PublicLayout({
+export default function PublicWithoutNavFooterLayout({
   children,
 }: {
   children: React.ReactNode;

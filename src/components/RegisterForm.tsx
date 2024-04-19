@@ -31,7 +31,7 @@ import { Textarea } from "./ui/textarea";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import FormAlert from "./FormAlert";
-import { Routes } from "@/constants/routes";
+import { authRoutes } from "@/constants/routes";
 import { register } from "@/actions/register";
 import { type RegisterResult } from "@/types/RegisterResult";
 import { RegisterSchema } from "@/schemas/RegisterSchema";
@@ -309,7 +309,7 @@ export default function RegsiterForm({ className, ...props }: Props) {
           </Form>
           <p className="text-sm text-muted-foreground">
             Sudah punya akun?{" "}
-            <Link href={Routes.login} className="text-primary underline">
+            <Link href={authRoutes.login} className="text-primary underline">
               Login disini
             </Link>
           </p>

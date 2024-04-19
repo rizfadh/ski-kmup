@@ -24,7 +24,7 @@ import Link from "next/link";
 import { login } from "@/actions/login";
 import { useState, useTransition } from "react";
 import FormAlert from "./FormAlert";
-import { Routes } from "@/constants/routes";
+import { authRoutes } from "@/constants/routes";
 import { type LoginResult } from "@/types/LoginResult";
 import { LoginSchema } from "@/schemas/LoginSchema";
 
@@ -102,7 +102,7 @@ export default function LoginForm({ className, ...props }: Props) {
           </Form>
           <p className="text-sm text-muted-foreground">
             Belum punya akun?{" "}
-            <Link href={Routes.register} className="text-primary underline">
+            <Link href={authRoutes.register} className="text-primary underline">
               Daftar disini
             </Link>
           </p>

@@ -4,13 +4,7 @@ import Link from "next/link";
 import { Separator } from "./ui/separator";
 import { ModeToggle } from "./ModeToggle";
 import { usePathname } from "next/navigation";
-import {
-  BookUserIcon,
-  HomeIcon,
-  LogInIcon,
-  MenuIcon,
-  NewspaperIcon,
-} from "lucide-react";
+import { MenuIcon, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -20,29 +14,15 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ReactElement } from "react";
-import { authRoutes, publicRoutes } from "@/constants/routes";
+import { privateRoutes } from "@/constants/routes";
+import LogoutButton from "./LogoutButton";
 
-export default function NavBar() {
+export default function NavBarAuth() {
   const routes: { icon: ReactElement; label: string; href: string }[] = [
     {
-      icon: <HomeIcon className="h-[1.2rem] w-[1.2rem]" />,
-      label: "Home",
-      href: publicRoutes.home,
-    },
-    {
-      icon: <NewspaperIcon className="h-[1.2rem] w-[1.2rem]" />,
-      label: "Post",
-      href: publicRoutes.post,
-    },
-    {
-      icon: <BookUserIcon className="h-[1.2rem] w-[1.2rem]" />,
-      label: "Tentang",
-      href: publicRoutes.about,
-    },
-    {
-      icon: <LogInIcon className="h-[1.2rem] w-[1.2rem]" />,
-      label: "Login",
-      href: authRoutes.login,
+      icon: <User className="h-[1.2rem] w-[1.2rem]" />,
+      label: "Dashboard",
+      href: privateRoutes.dashboard,
     },
   ];
 
