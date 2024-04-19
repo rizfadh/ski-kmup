@@ -2,12 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
-import { ArrowLeft } from "lucide-react";
+import { Home } from "lucide-react";
 import { publicRoutes } from "@/constants/routes";
 
 type Props = React.ComponentProps<typeof Button>;
 
-export default function BackButton({ className, ...props }: Props) {
+export default function HomeButton({ className, ...props }: Props) {
   const router = useRouter();
 
   return (
@@ -19,7 +19,7 @@ export default function BackButton({ className, ...props }: Props) {
       onClick={() => router.push(publicRoutes.home)}
       aria-label="Go Home"
     >
-      <ArrowLeft className="h-[1.2rem] w-[1.2rem]" />
+      <Home className="h-[1.2rem] w-[1.2rem]" />
     </Button>
   );
 }
