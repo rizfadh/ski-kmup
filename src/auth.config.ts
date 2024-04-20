@@ -1,27 +1,34 @@
-import Credentials from "next-auth/providers/credentials";
 import type { NextAuthConfig } from "next-auth";
-import { LoginSchema } from "./schemas/LoginSchema";
-import { getUserByEmail } from "./lib/user";
-import bcrypt from "bcryptjs";
+import {
+  DEFAULT_LOGIN_REDIRECT,
+  authRoutes,
+  privateRoutes,
+} from "./constants/routes";
 
-export default {
-  providers: [
-    Credentials({
-      authorize: async (credentials) => {
-        const validated = LoginSchema.safeParse(credentials);
+export const authConfig = {
+  pages: {
+    signIn: authRoutes.login,
+  },
 
-        if (validated.success) {
-          const { email, password } = validated.data;
+  callbacks: {
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedin = !!auth?.user;
 
-          const user = await getUserByEmail(email);
-          if (!user || !user.password) return null;
+      const isPrivateRoute = Object.values(privateRoutes).includes(
+        nextUrl.pathname,
+      );
+      const isAuthRoute = Object.values(authRoutes).includes(nextUrl.pathname);
 
-          const passwordMatch = await bcrypt.compare(password, user.password);
-          if (passwordMatch) return user;
-        }
+      if (isLoggedin && isAuthRoute) {
+        return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+      }
 
-        return null;
-      },
-    }),
-  ],
+      if (!isLoggedin && isPrivateRoute) {
+        return false;
+      }
+      return true;
+    },
+  },
+
+  providers: [],
 } satisfies NextAuthConfig;

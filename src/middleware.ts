@@ -1,30 +1,7 @@
 import NextAuth from "next-auth";
-import authConfig from "@/auth.config";
-import {
-  authRoutes,
-  DEFAULT_LOGIN_REDIRECT,
-  privateRoutes,
-} from "@/constants/routes";
+import { authConfig } from "@/auth.config";
 
-const { auth } = NextAuth(authConfig);
-
-export default auth((req) => {
-  const { nextUrl } = req;
-  const isLoggedin = !!req.auth;
-
-  const isPrivateRoute = Object.values(privateRoutes).includes(
-    nextUrl.pathname,
-  );
-  const isAuthRoute = Object.values(authRoutes).includes(nextUrl.pathname);
-
-  if (isLoggedin && isAuthRoute) {
-    return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-  }
-
-  if (!isLoggedin && isPrivateRoute) {
-    return Response.redirect(new URL(authRoutes.login, nextUrl));
-  }
-});
+export default NextAuth(authConfig).auth;
 
 export const config = {
   matcher: [
