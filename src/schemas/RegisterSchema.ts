@@ -11,7 +11,8 @@ export const RegisterSchema = z.object({
   domicile: z.string().trim().min(1, { message: "Domisili wajib diisi" }),
   faculty: z.string().min(1, { message: "Fakultas wajib dipilih" }),
   major: z.string().min(1, { message: "Jurusan wajib dipilih" }),
-  division: z.string().min(1, { message: "Divisi wajib dipilih" }),
+  division_1: z.string().min(1, { message: "Divisi 1 wajib dipilih" }),
+  division_2: z.string().min(1, { message: "Divisi 2 wajib dipilih" }),
   reason: z
     .string()
     .trim()

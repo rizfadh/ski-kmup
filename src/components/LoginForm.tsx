@@ -56,7 +56,7 @@ export default function LoginForm({ className, ...props }: Props) {
         <CardDescription>Silahkan isi data berikut</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-5">
+        <div className="grid gap-y-5">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
               <FormField

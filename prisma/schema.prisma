@@ -29,7 +29,7 @@ model User {
   faculty       String
   major         String
   image         String?
-  division      String?
+  position      String?
 
   role             UserRole          @default(PASSIVE)
   registerApproval RegisterApproval?
@@ -39,10 +39,10 @@ model User {
 }
 
 model RegisterApproval {
-  id       String @id @default(cuid())
-  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId   String @unique
-  division String
+  id       String   @id @default(cuid())
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String   @unique
+  division String[]
   reason   String
 
   isAccepted Boolean   @default(false)

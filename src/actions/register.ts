@@ -21,7 +21,8 @@ export const register = async (
     domicile,
     faculty,
     major,
-    division,
+    division_1,
+    division_2,
     reason,
     password,
   } = validated.data;
@@ -43,7 +44,7 @@ export const register = async (
         major,
         registerApproval: {
           create: {
-            division,
+            division: [division_1, division_2],
             reason,
           },
         },

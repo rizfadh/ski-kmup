@@ -30,7 +30,7 @@ export default function Footer() {
   return (
     <footer className="container my-8">
       <div className="rounded-lg bg-primary text-primary-foreground md:rounded-2xl">
-        <div className="grid gap-5 p-5 md:grid-cols-2 md:p-10">
+        <div className="grid gap-y-5 p-5 md:grid-cols-2 md:p-10">
           <div className="grid">
             <h3 className="text-center text-xl font-bold">Tentang Kami</h3>
             <div className="mt-5 grid items-center gap-3 md:mt-0">

@@ -7,8 +7,8 @@ export default async function PrivateLayout({
 }) {
   return (
     <>
-      <NavBarAuth />
-      <main>{children}</main>
+      <NavBarAuth className="md:fixed md:min-h-screen md:w-52 md:border-r" />
+      <main className="md:ml-52">{children}</main>
     </>
   );
 }

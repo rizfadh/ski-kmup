@@ -35,12 +35,15 @@ import { authRoutes } from "@/constants/routes";
 import { register } from "@/actions/register";
 import { type RegisterResult } from "@/types/RegisterResult";
 import { RegisterSchema } from "@/schemas/RegisterSchema";
+import { userDivision, userFaculty, userMajor } from "@/constants/user";
+import { useRouter } from "next/navigation";
 
 type Props = React.ComponentProps<typeof Card>;
 
 export default function RegsiterForm({ className, ...props }: Props) {
   const [isPending, startTransition] = useTransition();
   const [isError, setIsError] = useState<RegisterResult | null>(null);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -51,7 +54,8 @@ export default function RegsiterForm({ className, ...props }: Props) {
       domicile: "",
       faculty: "",
       major: "",
-      division: "",
+      division_1: "",
+      division_2: "",
       reason: "",
       password: "",
     },
@@ -61,6 +65,12 @@ export default function RegsiterForm({ className, ...props }: Props) {
     startTransition(async () => {
       const result = await register(data);
       setIsError(result);
+
+      if (!result.error) {
+        setTimeout(() => {
+          router.push(authRoutes.login);
+        }, 2000);
+      }
     });
   }
 
@@ -71,7 +81,7 @@ export default function RegsiterForm({ className, ...props }: Props) {
         <CardDescription>Silahkan isi data berikut</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-5">
+        <div className="grid gap-y-5">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
               <FormField
@@ -142,13 +152,11 @@ export default function RegsiterForm({ className, ...props }: Props) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="feb">Ekonomi dan Bisnis</SelectItem>
-                        <SelectItem value="hukum">Hukum</SelectItem>
-                        <SelectItem value="teknik">Teknik</SelectItem>
-                        <SelectItem value="komunikasi">Komunikasi</SelectItem>
-                        <SelectItem value="farmasi">Farmasi</SelectItem>
-                        <SelectItem value="pariwisata">Pariwisata</SelectItem>
-                        <SelectItem value="psikologi">Psikologi</SelectItem>
+                        {Object.entries(userFaculty).map(([key, value]) => (
+                          <SelectItem key={key} value={key}>
+                            {value}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -171,57 +179,11 @@ export default function RegsiterForm({ className, ...props }: Props) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="s1_manajemen">
-                          S1 Manajemen
-                        </SelectItem>
-                        <SelectItem value="s1_akuntansi">
-                          S1 Akuntansi
-                        </SelectItem>
-                        <SelectItem value="d3_akuntansi">
-                          D3 Akuntansi
-                        </SelectItem>
-                        <SelectItem value="d3_perpajakan">
-                          D3 Perpajakan
-                        </SelectItem>
-                        <SelectItem value="s1_hukum">S1 Hukum</SelectItem>
-                        <SelectItem value="s1_arsitektur">
-                          S1 Arsitektur
-                        </SelectItem>
-                        <SelectItem value="s1_sipil">
-                          S1 Teknik Sipil
-                        </SelectItem>
-                        <SelectItem value="s1_mesin">
-                          S1 Teknik Mesin
-                        </SelectItem>
-                        <SelectItem value="s1_industri">
-                          S1 Teknik Industri
-                        </SelectItem>
-                        <SelectItem value="s1_informatika">
-                          S1 Teknik Informatika
-                        </SelectItem>
-                        <SelectItem value="s1_elektro">
-                          S1 Teknik Elektro
-                        </SelectItem>
-                        <SelectItem value="s1_perkeretaapian">
-                          S1 Teknik Perkeretaapian
-                        </SelectItem>
-                        <SelectItem value="d3_mesin">
-                          D3 Teknik Mesin
-                        </SelectItem>
-                        <SelectItem value="d3_elektro">
-                          D3 Teknik Elektro
-                        </SelectItem>
-                        <SelectItem value="s1_komunikasi">
-                          S1 Ilmu Komunikasi
-                        </SelectItem>
-                        <SelectItem value="s1_farmasi">S1 Farmasi</SelectItem>
-                        <SelectItem value="d3_farmasi">D3 Farmasi</SelectItem>
-                        <SelectItem value="s1_pariwisata">
-                          S1 Pariwisata
-                        </SelectItem>
-                        <SelectItem value="s1_psikologi">
-                          S1 Psikologi
-                        </SelectItem>
+                        {Object.entries(userMajor).map(([key, value]) => (
+                          <SelectItem key={key} value={key}>
+                            {value}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -230,10 +192,10 @@ export default function RegsiterForm({ className, ...props }: Props) {
               />
               <FormField
                 control={form.control}
-                name="division"
+                name="division_1"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Pilih divisi</FormLabel>
+                    <FormLabel>Opsi divisi 1</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -244,18 +206,38 @@ export default function RegsiterForm({ className, ...props }: Props) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="syiar">Syiar</SelectItem>
-                        <SelectItem value="kpsdm">KPSDM</SelectItem>
-                        <SelectItem value="kemuslimahan">
-                          Kemuslimahan
-                        </SelectItem>
-                        <SelectItem value="medcen">Media Center</SelectItem>
-                        <SelectItem value="sarpras">
-                          Sarana dan Prasarana
-                        </SelectItem>
-                        <SelectItem value="corporation">
-                          SKI Corporation
-                        </SelectItem>
+                        {Object.entries(userDivision).map(([key, value]) => (
+                          <SelectItem key={key} value={key}>
+                            {value}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="division_2"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Opsi divisi 2</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Silahkan pilih" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.entries(userDivision).map(([key, value]) => (
+                          <SelectItem key={key} value={key}>
+                            {value}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />

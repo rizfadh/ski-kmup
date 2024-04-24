@@ -16,3 +16,36 @@ export const getUserById = async (id: string) => {
     },
   });
 };
+
+export const getUserRegistrationStatus = async (isAccepted: boolean) => {
+  const res = await db.user.findMany({
+    where: { registerApproval: { isAccepted } },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true,
+      registerApproval: {
+        select: {
+          division: true,
+          reason: true,
+          isAccepted: true,
+        },
+      },
+    },
+  });
+
+  const users = res.map((user) => {
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      createdAt: user.createdAt,
+      division: user.registerApproval?.division,
+      reason: user.registerApproval?.reason,
+      isAccepted: user.registerApproval?.isAccepted,
+    };
+  });
+
+  return users;
+};
