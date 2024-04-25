@@ -11,13 +11,15 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "./ui/button";
 import { ComponentProps, ComponentType, useTransition } from "react";
+import { ActionResponse } from "@/types/ActionResponse";
+import { toast } from "./ui/use-toast";
 
 interface Props extends ComponentProps<typeof Button> {
   id: string;
   Icon: ComponentType<{ className?: string }>;
   title: string;
   description: string;
-  action: (id: string) => Promise<void>;
+  action: (id: string) => Promise<ActionResponse>;
 }
 
 export default function ButtonDialog({
@@ -33,7 +35,12 @@ export default function ButtonDialog({
 
   const onClickHandler = (id: string) => {
     startTransition(async () => {
-      await action(id);
+      const response = await action(id);
+      toast({
+        title: response.error ? "Gagal" : "Sukses",
+        description: response.message,
+        variant: response.error ? "destructive" : "default",
+      });
     });
   };
 

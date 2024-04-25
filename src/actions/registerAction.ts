@@ -3,13 +3,13 @@
 import { z } from "zod";
 import bcrypt from "bcrypt";
 import { db } from "@/lib/db";
-import { RegisterResult } from "@/types/RegisterResult";
+import { ActionResponse } from "@/types/ActionResponse";
 import { RegisterSchema } from "@/schemas/RegisterSchema";
-import { getUserByEmail } from "@/lib/user";
+import { getUserByEmail } from "@/lib/userDb";
 
 export const register = async (
   data: z.infer<typeof RegisterSchema>,
-): Promise<RegisterResult> => {
+): Promise<ActionResponse> => {
   const validated = RegisterSchema.safeParse(data);
 
   if (!validated.success) return { error: true, message: "Invalid fields" };

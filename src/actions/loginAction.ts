@@ -1,7 +1,7 @@
 "use server";
 
 import { LoginSchema } from "@/schemas/LoginSchema";
-import { LoginResult } from "@/types/LoginResult";
+import { type ActionResponse } from "@/types/ActionResponse";
 import { z } from "zod";
 import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/constants/routes";
@@ -9,7 +9,7 @@ import { AuthError } from "next-auth";
 
 export const login = async (
   data: z.infer<typeof LoginSchema>,
-): Promise<LoginResult | null> => {
+): Promise<ActionResponse | null> => {
   const validated = LoginSchema.safeParse(data);
 
   if (!validated.success) return { error: true, message: "Invalid fields" };

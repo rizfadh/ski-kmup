@@ -4,7 +4,7 @@ import PostItems from "@/components/PostItems";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { dateFormat } from "@/lib/dateFormatter";
 import { generatePostDummy } from "@/lib/dummyData";
-import { getUserById } from "@/lib/user";
+import { getUserById } from "@/lib/userDb";
 import { Building2, CalendarPlus, Guitar, Mountain } from "lucide-react";
 import { ComponentType } from "react";
 

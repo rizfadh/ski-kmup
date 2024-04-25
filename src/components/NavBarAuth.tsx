@@ -2,7 +2,7 @@
 
 import { Separator } from "./ui/separator";
 import { ModeToggle } from "./ModeToggle";
-import { Home, MenuIcon, User } from "lucide-react";
+import { Home, Mail, MenuIcon, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -11,32 +11,32 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ComponentPropsWithoutRef, ReactElement } from "react";
+import { ComponentPropsWithoutRef, ComponentType, ReactElement } from "react";
 import { privateRoutes } from "@/constants/routes";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 type NavBarAuthLinkProps = {
-  icon: ReactElement;
+  Icon: ComponentType<{ className?: string }>;
   label: string;
   href: string;
 };
 
-function NavBarAuthLink({ icon, label, href }: NavBarAuthLinkProps) {
+function NavBarAuthLink({ Icon, label, href }: NavBarAuthLinkProps) {
   const pathname = usePathname();
 
   return (
     <Link
       key={label}
       href={href}
-      className={`inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+      className={`inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
         pathname === href
           ? "bg-primary text-white"
           : "hover:text-accent-foreground"
       }`}
     >
-      {icon} {label}
+      <Icon className="h-[1.2rem] w-[1.2rem]" /> {label}
     </Link>
   );
 }
@@ -48,23 +48,28 @@ export default function NavBarAuth({
 }: {
   className: NavBarAuthProps;
 }) {
-  const routes: { icon: ReactElement; label: string; href: string }[] = [
+  const routes: NavBarAuthLinkProps[] = [
     {
-      icon: <Home className="h-[1.2rem] w-[1.2rem]" />,
+      Icon: Home,
       label: "Dashboard",
       href: privateRoutes.dashboard,
     },
     {
-      icon: <User className="h-[1.2rem] w-[1.2rem]" />,
+      Icon: User,
       label: "Pendaftaran",
       href: privateRoutes.registration,
+    },
+    {
+      Icon: Mail,
+      label: "Saran",
+      href: privateRoutes.advice,
     },
   ];
 
   return (
     <header
       className={cn(
-        "sticky left-0 top-0 bg-background shadow-sm md:flex",
+        "sticky left-0 top-0 z-50 bg-background shadow-sm md:flex",
         className,
       )}
     >
@@ -82,8 +87,8 @@ export default function NavBarAuth({
                 <SheetTitle>Menu</SheetTitle>
               </SheetHeader>
               <div className="mt-4 flex flex-col">
-                {routes.map(({ icon, label, href }) =>
-                  NavBarAuthLink({ icon, label, href }),
+                {routes.map(({ Icon, label, href }) =>
+                  NavBarAuthLink({ Icon, label, href }),
                 )}
               </div>
               <Separator className="my-4" />
@@ -95,8 +100,8 @@ export default function NavBarAuth({
         </div>
         <div className="mt-4 hidden grid-cols-1 md:grid">
           <p className="mb-4 text-center font-bold">Menu</p>
-          {routes.map(({ icon, label, href }) =>
-            NavBarAuthLink({ icon, label, href }),
+          {routes.map(({ Icon, label, href }) =>
+            NavBarAuthLink({ Icon, label, href }),
           )}
           <Separator className="my-4" />
           <div className="flex justify-center">

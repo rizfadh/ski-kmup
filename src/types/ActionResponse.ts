@@ -1,4 +1,4 @@
-export type RegisterResult = {
+export type ActionResponse = {
   error: boolean;
   message: string;
 };

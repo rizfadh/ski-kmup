@@ -1,5 +1,6 @@
 "use server";
 
+import { privateRoutes } from "@/constants/routes";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
@@ -17,9 +18,10 @@ export const acceptUserRegistration = async (id: string) => {
       },
     });
 
-    revalidatePath("/registration");
-  } catch (error) {
-    console.log(error);
+    revalidatePath(privateRoutes.registration);
+    return { error: false, message: "User diterima" };
+  } catch {
+    return { error: true, message: "Terjadi kesalahan" };
   }
 };
 
@@ -29,6 +31,9 @@ export const rejectUserRegistration = async (id: string) => {
       where: { id },
     });
 
-    revalidatePath("/registration");
-  } catch (error) {}
+    revalidatePath(privateRoutes.registration);
+    return { error: false, message: "User ditolak" };
+  } catch (error) {
+    return { error: true, message: "Terjadi kesalahan" };
+  }
 };

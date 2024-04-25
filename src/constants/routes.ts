@@ -7,6 +7,7 @@ export const publicRoutes = {
 export const privateRoutes = {
   dashboard: "/dashboard",
   registration: "/registration",
+  advice: "/advice",
 };
 
 export const authRoutes = {

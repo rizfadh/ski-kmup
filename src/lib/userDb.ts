@@ -17,7 +17,7 @@ export const getUserById = async (id: string) => {
   });
 };
 
-export const getUserRegistrationStatus = async (isAccepted: boolean) => {
+export const getUsersRegistrationStatus = async (isAccepted: boolean) => {
   const res = await db.user.findMany({
     where: { registerApproval: { isAccepted } },
     select: {

@@ -48,3 +48,11 @@ model RegisterApproval {
   isAccepted Boolean   @default(false)
   acceptedAt DateTime?
 }
+
+model Advice {
+  id        String   @id @default(cuid())
+  email     String
+  adviceFor String
+  advice    String
+  createdAt DateTime @default(now())
+}

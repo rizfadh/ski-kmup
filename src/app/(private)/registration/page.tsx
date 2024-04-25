@@ -1,15 +1,15 @@
-import { getUserRegistrationStatus } from "@/lib/user";
+import { getUsersRegistrationStatus } from "@/lib/userDb";
 import { DataTable } from "@/components/DataTable";
 import {
-  columnsAccepted,
-  columnsWaiting,
-} from "@/components/tables/registration";
+  acceptedColumns,
+  waitingColumns,
+} from "@/components/tables/registrationColumns";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default async function RegistrationPage() {
   const [waiting, accepted] = await Promise.all([
-    getUserRegistrationStatus(false),
-    getUserRegistrationStatus(true),
+    getUsersRegistrationStatus(false),
+    getUsersRegistrationStatus(true),
   ]);
 
   return (
@@ -20,10 +20,10 @@ export default async function RegistrationPage() {
           <TabsTrigger value="accepted">Diterima</TabsTrigger>
         </TabsList>
         <TabsContent value="waiting">
-          <DataTable columns={columnsWaiting} data={waiting} />
+          <DataTable columns={waitingColumns} data={waiting} />
         </TabsContent>
         <TabsContent value="accepted">
-          <DataTable columns={columnsAccepted} data={accepted} />
+          <DataTable columns={acceptedColumns} data={accepted} />
         </TabsContent>
       </Tabs>
     </div>

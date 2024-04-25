@@ -49,7 +49,7 @@ export default function NavBar() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-10 bg-background">
+    <header className="sticky top-0 z-50 bg-background">
       <nav>
         <div className="container flex items-center justify-between py-3 md:hidden">
           <h1 className="font-black text-primary">SKI-KMUP</h1>

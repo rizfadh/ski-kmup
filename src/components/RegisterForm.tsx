@@ -32,17 +32,17 @@ import Link from "next/link";
 import { useState, useTransition } from "react";
 import FormAlert from "./FormAlert";
 import { authRoutes } from "@/constants/routes";
-import { register } from "@/actions/register";
-import { type RegisterResult } from "@/types/RegisterResult";
+import { register } from "@/actions/registerAction";
+import { type ActionResponse } from "@/types/ActionResponse";
 import { RegisterSchema } from "@/schemas/RegisterSchema";
-import { userDivision, userFaculty, userMajor } from "@/constants/user";
+import { userDivision, userFaculty, userMajor } from "@/constants/userData";
 import { useRouter } from "next/navigation";
 
 type Props = React.ComponentProps<typeof Card>;
 
 export default function RegsiterForm({ className, ...props }: Props) {
   const [isPending, startTransition] = useTransition();
-  const [isError, setIsError] = useState<RegisterResult | null>(null);
+  const [isError, setError] = useState<ActionResponse | null>(null);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
@@ -64,7 +64,7 @@ export default function RegsiterForm({ className, ...props }: Props) {
   function onSubmit(data: z.infer<typeof RegisterSchema>) {
     startTransition(async () => {
       const result = await register(data);
-      setIsError(result);
+      setError(result);
 
       if (!result.error) {
         setTimeout(() => {

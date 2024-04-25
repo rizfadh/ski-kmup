@@ -21,18 +21,18 @@ import {
   CardTitle,
 } from "./ui/card";
 import Link from "next/link";
-import { login } from "@/actions/login";
+import { login } from "@/actions/loginAction";
 import { useState, useTransition } from "react";
 import FormAlert from "./FormAlert";
 import { authRoutes } from "@/constants/routes";
-import { type LoginResult } from "@/types/LoginResult";
+import { type ActionResponse } from "@/types/ActionResponse";
 import { LoginSchema } from "@/schemas/LoginSchema";
 
 type Props = React.ComponentProps<typeof Card>;
 
 export default function LoginForm({ className, ...props }: Props) {
   const [isPending, startTransition] = useTransition();
-  const [isError, setIsError] = useState<LoginResult | null>(null);
+  const [isError, setIsError] = useState<ActionResponse | null>(null);
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),

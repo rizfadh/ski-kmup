@@ -32,22 +32,30 @@ import {
 import Image from "next/image";
 import suggestion from "../../public/suggestion.svg";
 import { AdviceSchema } from "@/schemas/AdviceSchema";
+import { useState, useTransition } from "react";
+import FormAlert from "./FormAlert";
+import { type ActionResponse } from "@/types/ActionResponse";
+import { submitAdvice } from "@/actions/adviceAction";
 
-export default function Advice() {
+export default function AdviceForm() {
+  const [isError, setError] = useState<ActionResponse | null>(null);
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<z.infer<typeof AdviceSchema>>({
     resolver: zodResolver(AdviceSchema),
     defaultValues: {
       email: "",
-      for: "",
-      suggestion: "",
+      adviceFor: "",
+      advice: "",
     },
   });
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof AdviceSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    startTransition(async () => {
+      const result = await submitAdvice(values);
+      setError(result);
+    });
   }
 
   return (
@@ -87,7 +95,7 @@ export default function Advice() {
               />
               <FormField
                 control={form.control}
-                name="for"
+                name="adviceFor"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Saran untuk?</FormLabel>
@@ -112,7 +120,7 @@ export default function Advice() {
               />
               <FormField
                 control={form.control}
-                name="suggestion"
+                name="advice"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Saran</FormLabel>
@@ -127,7 +135,15 @@ export default function Advice() {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Kirim</Button>
+              {!!isError && (
+                <FormAlert
+                  variant={isError.error ? "error" : "success"}
+                  message={isError.message}
+                />
+              )}
+              <Button type="submit" disabled={isPending}>
+                Kirim
+              </Button>
             </form>
           </Form>
         </CardContent>

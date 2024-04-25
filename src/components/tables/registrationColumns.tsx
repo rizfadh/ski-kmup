@@ -6,12 +6,12 @@ import { Check, X, ArrowUpDown } from "lucide-react";
 import {
   acceptUserRegistration,
   rejectUserRegistration,
-} from "@/actions/confirmation";
+} from "@/actions/registerConfirmationAction";
 import { Button } from "../ui/button";
-import { userDivision } from "@/constants/user";
+import { userDivision } from "@/constants/userData";
 import { dateFormat } from "@/lib/dateFormatter";
 
-export type User = {
+type User = {
   id: string;
   name: string;
   email: string;
@@ -21,7 +21,7 @@ export type User = {
   isAccepted: boolean | undefined;
 };
 
-export const columnsWaiting: ColumnDef<User>[] = [
+export const waitingColumns: ColumnDef<User>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -52,7 +52,6 @@ export const columnsWaiting: ColumnDef<User>[] = [
             return string;
           })
           .join(" ");
-        console.log(formatted);
         return formatted;
       }
     },
@@ -85,7 +84,7 @@ export const columnsWaiting: ColumnDef<User>[] = [
     id: "accept",
     header: () => <div className="text-center">Terima</div>,
     cell: ({ row }) => {
-      const { id } = row.original;
+      const { id, name } = row.original;
 
       return (
         <div className="flex justify-center">
@@ -93,14 +92,14 @@ export const columnsWaiting: ColumnDef<User>[] = [
             id={id}
             Icon={X}
             title="Tolak"
-            description="Tindakan ini akan menolak dan menghapus data pendaftaran user"
+            description={`Tindakan ini akan menolak dan menghapus data pendaftaran ${name}`}
             action={rejectUserRegistration}
           />
           <ButtonDialog
             id={id}
             Icon={Check}
             title="Terima"
-            description="Tindakan ini akan menyetujui pendaftaran user menjadi anggota SKI-KMUP"
+            description={`Tindakan ini akan menyetujui pendaftaran ${name} menjadi anggota SKI-KMUP`}
             action={acceptUserRegistration}
           />
         </div>
@@ -109,7 +108,7 @@ export const columnsWaiting: ColumnDef<User>[] = [
   },
 ];
 
-export const columnsAccepted: ColumnDef<User>[] = [
+export const acceptedColumns: ColumnDef<User>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -140,7 +139,6 @@ export const columnsAccepted: ColumnDef<User>[] = [
             return string;
           })
           .join(" ");
-        console.log(formatted);
         return formatted;
       }
     },
