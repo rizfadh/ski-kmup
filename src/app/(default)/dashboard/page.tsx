@@ -1,11 +1,11 @@
 import { auth } from "@/auth";
 import LogoutButton from "@/components/LogoutButton";
 import PostItems from "@/components/PostItems";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { dateFormat } from "@/lib/dateFormatter";
 import { generatePostDummy } from "@/lib/dummyData";
 import { getUserById } from "@/lib/userDb";
-import { Building2, CalendarPlus, Guitar, Mountain } from "lucide-react";
+import { Building2, CalendarPlus, Mountain, Newspaper } from "lucide-react";
 import { ComponentType } from "react";
 
 type DashboradCardProps = {
@@ -35,7 +35,7 @@ export default async function DashboardPage() {
   const postItems = generatePostDummy();
 
   return (
-    <div className="container mt-4 grid grid-cols-1 gap-y-8">
+    <div className="container my-8 grid grid-cols-1 gap-y-8">
       <div>
         <p>Selamat datang,</p>
         <p className="text-3xl font-black">{session.user.name}</p>
@@ -50,7 +50,7 @@ export default async function DashboardPage() {
             title="Bergabung"
             description={dateFormat(userData?.createdAt as Date)}
           />
-          <DashboardCard Icon={Guitar} title="Gitar" description="Main Gitar" />
+          <DashboardCard Icon={Newspaper} title="Postingan" description="0" />
           <DashboardCard
             Icon={Mountain}
             title="Gunung"
@@ -67,7 +67,7 @@ export default async function DashboardPage() {
         <PostItems props={postItems} />
       </div>
       <LogoutButton />
-      <p className="mb-8 text-center text-sm text-muted-foreground">
+      <p className="text-center text-sm text-muted-foreground">
         Webnya masih blom jadi
       </p>
     </div>

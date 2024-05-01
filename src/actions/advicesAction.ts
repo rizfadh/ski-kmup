@@ -21,7 +21,7 @@ export const submitAdvice = async (data: z.infer<typeof AdviceSchema>) => {
       },
     });
 
-    revalidatePath(privateRoutes.advice);
+    revalidatePath(privateRoutes.advices);
     return { error: false, message: "Saran terkirim" };
   } catch {
     return { error: true, message: "Terjadi kesalahan" };
@@ -34,7 +34,7 @@ export const deleteAdvice = async (id: string) => {
       where: { id },
     });
 
-    revalidatePath(privateRoutes.advice);
+    revalidatePath(privateRoutes.advices);
     return { error: false, message: "Saran dihapus" };
   } catch {
     return { error: true, message: "Terjadi kesalahan" };

@@ -1,4 +1,4 @@
-export default function PublicWithoutNavFooterLayout({
+export default function WithoutNavFooterLayout({
   children,
 }: {
   children: React.ReactNode;

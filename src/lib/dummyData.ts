@@ -24,17 +24,17 @@ export const generatePostDummy = () => {
 
   return img.map((img, index) => {
     return {
-      id: index,
-      img,
+      id: index.toString(),
+      imageUrl: img,
       title: `Bayangin liburan disini. ${Array.from({
         length: index,
       })
         .map(() => "Oke. Oke. Oke. Oke. Oke")
         .join(" ")}`,
-      description:
+      content:
         "Bersatu Dalam Islam Bersatu Dalam Islam Bersatu Dalam Islam Bersatu Dalam Islam",
-      date: new Date().toDateString(),
-      author: `John Doe ${index + 1}`,
+      createdAt: new Date(),
+      createdBy: `John Doe ${index + 1}`,
     };
   });
 };

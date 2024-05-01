@@ -19,34 +19,40 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ReactElement } from "react";
+import { ComponentType } from "react";
 import { authRoutes, publicRoutes } from "@/constants/routes";
+import { getRoute } from "@/lib/utils";
 
 export default function NavBar() {
-  const routes: { icon: ReactElement; label: string; href: string }[] = [
+  const routes: {
+    Icon: ComponentType<{ className?: string }>;
+    label: string;
+    href: string;
+  }[] = [
     {
-      icon: <HomeIcon className="h-[1.2rem] w-[1.2rem]" />,
+      Icon: HomeIcon,
       label: "Home",
       href: publicRoutes.home,
     },
     {
-      icon: <NewspaperIcon className="h-[1.2rem] w-[1.2rem]" />,
+      Icon: NewspaperIcon,
       label: "Post",
-      href: publicRoutes.post,
+      href: publicRoutes.posts,
     },
     {
-      icon: <BookUserIcon className="h-[1.2rem] w-[1.2rem]" />,
+      Icon: BookUserIcon,
       label: "Tentang",
       href: publicRoutes.about,
     },
     {
-      icon: <LogInIcon className="h-[1.2rem] w-[1.2rem]" />,
+      Icon: LogInIcon,
       label: "Login",
       href: authRoutes.login,
     },
   ];
 
   const pathname = usePathname();
+  const currentRoute = getRoute(pathname)[0];
 
   return (
     <header className="sticky top-0 z-50 bg-background">
@@ -64,19 +70,23 @@ export default function NavBar() {
                 <SheetTitle>Menu</SheetTitle>
               </SheetHeader>
               <div className="mt-5 flex flex-col gap-5">
-                {routes.map(({ icon, label, href }) => (
-                  <Link
-                    key={label}
-                    href={href}
-                    className={`flex items-center gap-5 ${
-                      pathname === href
-                        ? "text-primary"
-                        : "text-foreground hover:text-muted-foreground"
-                    }`}
-                  >
-                    {icon} {label}
-                  </Link>
-                ))}
+                {routes.map(({ Icon, label, href }) => {
+                  const isActive = "/" + currentRoute === href;
+
+                  return (
+                    <Link
+                      key={href}
+                      href={href}
+                      className={`flex items-center gap-5 ${
+                        isActive
+                          ? "text-primary"
+                          : "text-foreground hover:text-muted-foreground"
+                      }`}
+                    >
+                      <Icon className="h-[1.2rem] w-[1.2rem]" /> {label}
+                    </Link>
+                  );
+                })}
                 <Separator />
                 <ModeToggle />
               </div>
@@ -86,19 +96,23 @@ export default function NavBar() {
         <div className="hidden md:container md:flex md:flex-grow md:items-center md:justify-between md:py-3">
           <h1 className="font-black text-primary">SKI-KMUP</h1>
           <div className="flex items-center gap-5">
-            {routes.map(({ label, href }) => (
-              <Link
-                key={label}
-                href={href}
-                className={
-                  pathname === href
-                    ? "text-primary"
-                    : "text-foreground hover:text-muted-foreground"
-                }
-              >
-                {label}
-              </Link>
-            ))}
+            {routes.map(({ label, href }) => {
+              const isActive = "/" + currentRoute === href;
+
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={
+                    isActive
+                      ? "text-primary"
+                      : "text-foreground hover:text-muted-foreground"
+                  }
+                >
+                  {label}
+                </Link>
+              );
+            })}
           </div>
           <ModeToggle />
         </div>

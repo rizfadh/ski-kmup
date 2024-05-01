@@ -1,13 +1,14 @@
 export const publicRoutes = {
   home: "/",
-  post: "/post",
+  posts: "/posts",
   about: "/about",
 };
 
 export const privateRoutes = {
   dashboard: "/dashboard",
-  registration: "/registration",
-  advice: "/advice",
+  registrations: "/registrations",
+  advices: "/advices",
+  postsNew: "/posts/new",
 };
 
 export const authRoutes = {

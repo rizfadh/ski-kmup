@@ -18,7 +18,7 @@ export const acceptUserRegistration = async (id: string) => {
       },
     });
 
-    revalidatePath(privateRoutes.registration);
+    revalidatePath(privateRoutes.registrations);
     return { error: false, message: "User diterima" };
   } catch {
     return { error: true, message: "Terjadi kesalahan" };
@@ -31,7 +31,7 @@ export const rejectUserRegistration = async (id: string) => {
       where: { id },
     });
 
-    revalidatePath(privateRoutes.registration);
+    revalidatePath(privateRoutes.registrations);
     return { error: false, message: "User ditolak" };
   } catch (error) {
     return { error: true, message: "Terjadi kesalahan" };

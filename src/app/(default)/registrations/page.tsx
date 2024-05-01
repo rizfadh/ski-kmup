@@ -3,7 +3,7 @@ import { DataTable } from "@/components/DataTable";
 import {
   acceptedColumns,
   waitingColumns,
-} from "@/components/tables/registrationColumns";
+} from "@/components/tables/registrationsColumns";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default async function RegistrationPage() {
@@ -13,7 +13,7 @@ export default async function RegistrationPage() {
   ]);
 
   return (
-    <div className="container mt-4 grid grid-cols-1 gap-y-8">
+    <div className="container my-8 grid grid-cols-1 gap-y-8">
       <Tabs defaultValue="waiting">
         <TabsList>
           <TabsTrigger value="waiting">Menunggu</TabsTrigger>

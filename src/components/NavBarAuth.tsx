@@ -2,7 +2,7 @@
 
 import { Separator } from "./ui/separator";
 import { ModeToggle } from "./ModeToggle";
-import { Home, Mail, MenuIcon, User } from "lucide-react";
+import { Home, Mail, MenuIcon, Newspaper, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -12,8 +12,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ComponentPropsWithoutRef, ComponentType, ReactElement } from "react";
-import { privateRoutes } from "@/constants/routes";
-import { cn } from "@/lib/utils";
+import { privateRoutes, publicRoutes } from "@/constants/routes";
+import { cn, getRoute } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
@@ -21,19 +21,16 @@ type NavBarAuthLinkProps = {
   Icon: ComponentType<{ className?: string }>;
   label: string;
   href: string;
+  isActive: boolean;
 };
 
-function NavBarAuthLink({ Icon, label, href }: NavBarAuthLinkProps) {
-  const pathname = usePathname();
-
+function NavBarAuthLink({ Icon, label, href, isActive }: NavBarAuthLinkProps) {
   return (
     <Link
       key={label}
       href={href}
       className={`inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
-        pathname === href
-          ? "bg-primary text-white"
-          : "hover:text-accent-foreground"
+        isActive ? "bg-primary text-white" : "hover:text-accent-foreground"
       }`}
     >
       <Icon className="h-[1.2rem] w-[1.2rem]" /> {label}
@@ -48,7 +45,10 @@ export default function NavBarAuth({
 }: {
   className: NavBarAuthProps;
 }) {
-  const routes: NavBarAuthLinkProps[] = [
+  const pathname = usePathname();
+  const currentRoute = getRoute(pathname)[0];
+
+  const routes = [
     {
       Icon: Home,
       label: "Dashboard",
@@ -57,12 +57,17 @@ export default function NavBarAuth({
     {
       Icon: User,
       label: "Pendaftaran",
-      href: privateRoutes.registration,
+      href: privateRoutes.registrations,
     },
     {
       Icon: Mail,
       label: "Saran",
-      href: privateRoutes.advice,
+      href: privateRoutes.advices,
+    },
+    {
+      Icon: Newspaper,
+      label: "Postingan",
+      href: publicRoutes.posts,
     },
   ];
 
@@ -87,9 +92,19 @@ export default function NavBarAuth({
                 <SheetTitle>Menu</SheetTitle>
               </SheetHeader>
               <div className="mt-4 flex flex-col">
-                {routes.map(({ Icon, label, href }) =>
-                  NavBarAuthLink({ Icon, label, href }),
-                )}
+                {routes.map(({ Icon, label, href }) => {
+                  const isActive = "/" + currentRoute === href;
+
+                  return (
+                    <NavBarAuthLink
+                      key={href}
+                      Icon={Icon}
+                      label={label}
+                      href={href}
+                      isActive={isActive}
+                    />
+                  );
+                })}
               </div>
               <Separator className="my-4" />
               <div className="flex justify-center">
@@ -100,9 +115,19 @@ export default function NavBarAuth({
         </div>
         <div className="mt-4 hidden grid-cols-1 md:grid">
           <p className="mb-4 text-center font-bold">Menu</p>
-          {routes.map(({ Icon, label, href }) =>
-            NavBarAuthLink({ Icon, label, href }),
-          )}
+          {routes.map(({ Icon, label, href }) => {
+            const isActive = "/" + currentRoute === href;
+
+            return (
+              <NavBarAuthLink
+                key={href}
+                Icon={Icon}
+                label={label}
+                href={href}
+                isActive={isActive}
+              />
+            );
+          })}
           <Separator className="my-4" />
           <div className="flex justify-center">
             <ModeToggle />

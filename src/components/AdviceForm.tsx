@@ -35,7 +35,7 @@ import { AdviceSchema } from "@/schemas/AdviceSchema";
 import { useState, useTransition } from "react";
 import FormAlert from "./FormAlert";
 import { type ActionResponse } from "@/types/ActionResponse";
-import { submitAdvice } from "@/actions/adviceAction";
+import { submitAdvice } from "@/actions/advicesAction";
 
 export default function AdviceForm() {
   const [isError, setError] = useState<ActionResponse | null>(null);

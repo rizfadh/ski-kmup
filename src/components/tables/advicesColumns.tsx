@@ -5,7 +5,7 @@ import { ArrowUpDown, Trash } from "lucide-react";
 import { Button } from "../ui/button";
 import { dateFormat } from "@/lib/dateFormatter";
 import ButtonDialog from "../ButtonDialog";
-import { deleteAdvice } from "@/actions/adviceAction";
+import { deleteAdvice } from "@/actions/advicesAction";
 
 export type Advice = {
   id: string;
@@ -56,7 +56,7 @@ export const adviceColumns: ColumnDef<Advice>[] = [
   },
   {
     accessorKey: "advice",
-    header: "Saran",
+    header: () => <div className="min-w-[300px]">Saran</div>,
   },
   {
     id: "actions",

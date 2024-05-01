@@ -6,9 +6,8 @@ import { Check, X, ArrowUpDown } from "lucide-react";
 import {
   acceptUserRegistration,
   rejectUserRegistration,
-} from "@/actions/registerConfirmationAction";
+} from "@/actions/registrationsAction";
 import { Button } from "../ui/button";
-import { userDivision } from "@/constants/userData";
 import { dateFormat } from "@/lib/dateFormatter";
 
 type User = {
@@ -42,23 +41,21 @@ export const waitingColumns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "division",
-    header: "Divisi",
+    header: () => <div className="min-w-[100px]">Divisi</div>,
     cell: ({ row }) => {
       const division = row.getValue("division");
       if (Array.isArray(division)) {
-        const formatted = division
-          .map((value, index) => {
-            const string = `${index + 1}. ${userDivision[value as keyof typeof userDivision]}`;
-            return string;
-          })
-          .join(" ");
+        const formatted = division.map((value, index) => {
+          const string = `${index + 1}. ${value}`;
+          return <p key={index}>{string}</p>;
+        });
         return formatted;
       }
     },
   },
   {
     accessorKey: "reason",
-    header: "Alasan",
+    header: () => <div className="min-w-[300px]">Alasan</div>,
   },
   {
     accessorKey: "createdAt",
@@ -129,23 +126,21 @@ export const acceptedColumns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "division",
-    header: "Divisi",
+    header: () => <div className="min-w-[100px]">Divisi</div>,
     cell: ({ row }) => {
       const division = row.getValue("division");
       if (Array.isArray(division)) {
-        const formatted = division
-          .map((value, index) => {
-            const string = `${index + 1}. ${userDivision[value as keyof typeof userDivision]}`;
-            return string;
-          })
-          .join(" ");
+        const formatted = division.map((value, index) => {
+          const string = `${index + 1}. ${value}`;
+          return <p key={index}>{string}</p>;
+        });
         return formatted;
       }
     },
   },
   {
     accessorKey: "reason",
-    header: "Alasan",
+    header: () => <div className="min-w-[300px]">Alasan</div>,
   },
   {
     accessorKey: "createdAt",
