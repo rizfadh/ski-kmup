@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import LinkButton from "@/components/LinkButton";
-import PostItems from "@/components/PostItems";
+import { PostItems } from "@/components/PostItems";
 import { Card, CardContent } from "@/components/ui/card";
 import { privateRoutes } from "@/constants/routes";
 import { getPosts } from "@/lib/postDb";
@@ -22,12 +22,12 @@ function PostsMenu() {
 }
 
 export default async function PostsPage() {
-  const [posts, session] = await Promise.all([getPosts(false), auth()]);
+  const [posts, session] = await Promise.all([getPosts(true), auth()]);
 
   return (
     <div className="container my-8 grid grid-cols-1 gap-y-8">
       {session ? <PostsMenu /> : null}
-      <PostItems props={posts} />
+      <PostItems posts={posts} />
     </div>
   );
 }

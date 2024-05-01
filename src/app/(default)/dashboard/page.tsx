@@ -1,11 +1,13 @@
 import { auth } from "@/auth";
 import LogoutButton from "@/components/LogoutButton";
-import PostItems from "@/components/PostItems";
+import { PostItemsSide } from "@/components/PostItems";
 import { Card, CardContent } from "@/components/ui/card";
+import { publicRoutes } from "@/constants/routes";
 import { dateFormat } from "@/lib/dateFormatter";
-import { generatePostDummy } from "@/lib/dummyData";
+import { getPosts } from "@/lib/postDb";
 import { getUserById } from "@/lib/userDb";
 import { Building2, CalendarPlus, Mountain, Newspaper } from "lucide-react";
+import Link from "next/link";
 import { ComponentType } from "react";
 
 type DashboradCardProps = {
@@ -31,8 +33,10 @@ export default async function DashboardPage() {
 
   if (!session || !session.user) return null;
 
-  const userData = await getUserById(session.user.id as string);
-  const postItems = generatePostDummy();
+  const [userData, posts] = await Promise.all([
+    getUserById(session.user.id as string),
+    getPosts(true, 4),
+  ]);
 
   return (
     <div className="container my-8 grid grid-cols-1 gap-y-8">
@@ -50,7 +54,11 @@ export default async function DashboardPage() {
             title="Bergabung"
             description={dateFormat(userData?.createdAt as Date)}
           />
-          <DashboardCard Icon={Newspaper} title="Postingan" description="0" />
+          <DashboardCard
+            Icon={Newspaper}
+            title="Postingan"
+            description={userData?._count.Post.toString() ?? "0"}
+          />
           <DashboardCard
             Icon={Mountain}
             title="Gunung"
@@ -64,7 +72,13 @@ export default async function DashboardPage() {
         </pre>
       </div>
       <div className="grid grid-cols-1 gap-3">
-        <PostItems props={postItems} />
+        <div className="flex flex-col justify-between md:flex-row md:items-center">
+          <h2 className="text-2xl font-bold">Postingan Terbaru</h2>
+          <Link href={publicRoutes.posts} className="text-primary">
+            Lihat lainnya &rarr;
+          </Link>
+        </div>
+        <PostItemsSide posts={posts} />
       </div>
       <LogoutButton />
       <p className="text-center text-sm text-muted-foreground">

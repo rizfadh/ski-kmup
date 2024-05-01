@@ -1,13 +1,14 @@
 import HomeCarousel from "@/components/HomeCarousel";
 import AdviceForm from "@/components/AdviceForm";
-import PostItems from "@/components/PostItems";
+import { PostItemsSide } from "@/components/PostItems";
 import { generateCarouselDummy, generatePostDummy } from "@/lib/dummyData";
 import Link from "next/link";
 import { publicRoutes } from "@/constants/routes";
+import { getPosts } from "@/lib/postDb";
 
-export default function HomePage() {
+export default async function HomePage() {
   const carouselDummy = generateCarouselDummy();
-  const postDummy = generatePostDummy();
+  const posts = await getPosts(true, 4);
 
   return (
     <div className="container my-8 grid grid-cols-1 gap-y-8">
@@ -18,7 +19,7 @@ export default function HomePage() {
           Lihat lainnya &rarr;
         </Link>
       </div>
-      <PostItems props={postDummy} />
+      <PostItemsSide posts={posts} />
       <AdviceForm />
     </div>
   );

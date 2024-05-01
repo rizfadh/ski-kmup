@@ -82,7 +82,7 @@ export default function PostForm({ userId }: { userId: string }) {
                 <FormControl>
                   <Input
                     placeholder="Judul"
-                    className="h-auto border-none p-0 text-3xl font-black ring-0 focus-visible:border-none focus-visible:ring-0 focus-visible:ring-transparent lg:text-5xl"
+                    className="h-auto border-none p-0 text-3xl font-black ring-0 focus-visible:border-none focus-visible:ring-0 focus-visible:ring-transparent lg:text-6xl"
                     {...field}
                   />
                 </FormControl>

@@ -2,6 +2,7 @@ export const publicRoutes = {
   home: "/",
   posts: "/posts",
   about: "/about",
+  postDetail: (id: string) => `/posts/${id}`,
 };
 
 export const privateRoutes = {

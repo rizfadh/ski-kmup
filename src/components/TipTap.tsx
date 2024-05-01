@@ -94,7 +94,8 @@ export default function Tiptap({ content, onChange }: TipTapProps) {
     ],
     content: content,
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      const html = editor.getHTML();
+      onChange(html);
     },
     editorProps: {
       attributes: {

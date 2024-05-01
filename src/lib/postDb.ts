@@ -26,9 +26,11 @@ export const newPost = async (data: z.infer<typeof PostSchema>) => {
   }
 };
 
-export const getPosts = async (isAccepted: boolean) => {
+export const getPosts = async (isAccepted: boolean, take?: number) => {
   const posts = await db.post.findMany({
     where: { isAccepted },
+    orderBy: { createdAt: "asc" },
+    take: take ?? undefined,
     select: {
       id: true,
       createdAt: true,
@@ -52,5 +54,23 @@ export const getPosts = async (isAccepted: boolean) => {
       title: post.title,
       isAccepted: post.isAccepted,
     };
+  });
+};
+
+export const getPostById = async (id: string) => {
+  return await db.post.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      createdAt: true,
+      user: {
+        select: {
+          name: true,
+        },
+      },
+      imageUrl: true,
+      title: true,
+      content: true,
+    },
   });
 };

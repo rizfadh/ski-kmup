@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import { authConfig } from "@/auth.config";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "@/lib/db";
-import { getUserByEmail, getUserById } from "@/lib/userDb";
+import { getUserByEmail, getUserByIdAuth } from "@/lib/userDb";
 import Credentials from "next-auth/providers/credentials";
 import { LoginSchema } from "@/schemas/LoginSchema";
 import bcrypt from "bcrypt";
@@ -36,7 +36,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async signIn({ user }) {
       if (!user.id) return false;
 
-      const userExist = await getUserById(user.id);
+      const userExist = await getUserByIdAuth(user.id);
       if (!userExist || !userExist.registerApproval) return false;
 
       if (!userExist.registerApproval.isAccepted) return false;
@@ -59,7 +59,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token }) {
       if (!token.sub) return token;
 
-      const user = await getUserById(token.sub);
+      const user = await getUserByIdAuth(token.sub);
       if (!user) return token;
 
       token.role = user.role;

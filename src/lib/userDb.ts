@@ -4,6 +4,13 @@ export const getUserByEmail = async (email: string) => {
   return await db.user.findUnique({ where: { email } });
 };
 
+export const getUserByIdAuth = async (id: string) => {
+  return await db.user.findUnique({
+    where: { id },
+    select: { role: true, registerApproval: { select: { isAccepted: true } } },
+  });
+};
+
 export const getUserById = async (id: string) => {
   return await db.user.findUnique({
     where: { id },
@@ -11,6 +18,11 @@ export const getUserById = async (id: string) => {
       registerApproval: {
         select: {
           isAccepted: true,
+        },
+      },
+      _count: {
+        select: {
+          Post: { where: { isAccepted: true } },
         },
       },
     },
