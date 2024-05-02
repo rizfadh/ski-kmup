@@ -2,12 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
-import { Home } from "lucide-react";
+import { ArrowLeft, Home } from "lucide-react";
 import { publicRoutes } from "@/constants/routes";
 
 type Props = React.ComponentProps<typeof Button>;
 
-export default function HomeButton({ className, ...props }: Props) {
+export function HomeButton({ className, ...props }: Props) {
   const router = useRouter();
 
   return (
@@ -20,6 +20,23 @@ export default function HomeButton({ className, ...props }: Props) {
       aria-label="Go Home"
     >
       <Home className="h-[1.2rem] w-[1.2rem]" />
+    </Button>
+  );
+}
+
+export function BackButton({ className, ...props }: Props) {
+  const router = useRouter();
+
+  return (
+    <Button
+      className={className}
+      {...props}
+      variant="ghost"
+      size="icon"
+      onClick={() => router.back()}
+      aria-label="Go Home"
+    >
+      <ArrowLeft className="h-[1.2rem] w-[1.2rem]" />
     </Button>
   );
 }

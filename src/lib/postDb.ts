@@ -29,8 +29,8 @@ export const newPost = async (data: z.infer<typeof PostSchema>) => {
 export const getPosts = async (isAccepted: boolean, take?: number) => {
   const posts = await db.post.findMany({
     where: { isAccepted },
-    orderBy: { createdAt: "asc" },
-    take: take ?? undefined,
+    orderBy: { createdAt: "desc" },
+    take: take,
     select: {
       id: true,
       createdAt: true,

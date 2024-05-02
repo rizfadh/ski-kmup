@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/sheet";
 import { ComponentType } from "react";
 import { authRoutes, publicRoutes } from "@/constants/routes";
-import { getRoute } from "@/lib/utils";
+import NavBarLink from "./NavBarLink";
 
 export default function NavBar() {
   const routes: {
@@ -52,7 +52,6 @@ export default function NavBar() {
   ];
 
   const pathname = usePathname();
-  const currentRoute = getRoute(pathname)[0];
 
   return (
     <header className="sticky top-0 z-50 bg-background">
@@ -69,35 +68,29 @@ export default function NavBar() {
               <SheetHeader>
                 <SheetTitle>Menu</SheetTitle>
               </SheetHeader>
-              <div className="mt-5 flex flex-col gap-5">
-                {routes.map(({ Icon, label, href }) => {
-                  const isActive = "/" + currentRoute === href;
-
-                  return (
-                    <Link
-                      key={href}
-                      href={href}
-                      className={`flex items-center gap-5 ${
-                        isActive
-                          ? "text-primary"
-                          : "text-foreground hover:text-muted-foreground"
-                      }`}
-                    >
-                      <Icon className="h-[1.2rem] w-[1.2rem]" /> {label}
-                    </Link>
-                  );
-                })}
-                <Separator />
-                <ModeToggle />
+              <div className="mt-4 flex flex-col">
+                {routes.map(({ Icon, label, href }) => (
+                  <NavBarLink
+                    key={href}
+                    Icon={Icon}
+                    label={label}
+                    href={href}
+                    isActive={pathname === href}
+                  />
+                ))}
+                <Separator className="my-4" />
+                <div className="flex justify-center">
+                  <ModeToggle />
+                </div>
               </div>
             </SheetContent>
           </Sheet>
         </div>
         <div className="hidden md:container md:flex md:flex-grow md:items-center md:justify-between md:py-3">
           <h1 className="font-black text-primary">SKI-KMUP</h1>
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-4">
             {routes.map(({ label, href }) => {
-              const isActive = "/" + currentRoute === href;
+              const isActive = pathname === href;
 
               return (
                 <Link

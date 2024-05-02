@@ -13,7 +13,7 @@ export default async function RegistrationPage() {
   ]);
 
   return (
-    <div className="container my-8 grid grid-cols-1 gap-y-8">
+    <div className="container my-4 grid grid-cols-1 gap-y-4">
       <Tabs defaultValue="waiting">
         <TabsList>
           <TabsTrigger value="waiting">Menunggu</TabsTrigger>

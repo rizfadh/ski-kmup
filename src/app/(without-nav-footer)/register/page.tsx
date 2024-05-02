@@ -1,4 +1,4 @@
-import HomeButton from "@/components/HomeButton";
+import { HomeButton } from "@/components/NavButton";
 import RegsiterForm from "@/components/RegisterForm";
 
 export default function RegisterPage() {

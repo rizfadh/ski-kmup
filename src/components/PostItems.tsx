@@ -14,10 +14,10 @@ type Props = {
 
 export function PostItems({ posts }: { posts: Props[] }) {
   return (
-    <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+    <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
       {posts.map(({ id, imageUrl: img, title, createdAt, createdBy }) => (
         <Link key={id} href={publicRoutes.postDetail(id)}>
-          <Card className="h-full transition-all hover:rotate-2 hover:shadow-lg">
+          <Card className="h-full transition-all hover:rotate-1 hover:shadow-md">
             <CardHeader className="relative h-[200px] w-full p-0">
               <Image
                 src={img}
@@ -27,7 +27,7 @@ export function PostItems({ posts }: { posts: Props[] }) {
                 className="h-auto w-full rounded-t-md object-cover"
               />
             </CardHeader>
-            <CardContent className="p-5">
+            <CardContent className="p-4">
               <div className="space-y-2">
                 <p className="text-primary">{createdBy}</p>
                 <p className="line-clamp-2 font-medium">{title}</p>
@@ -45,7 +45,7 @@ export function PostItems({ posts }: { posts: Props[] }) {
 
 export function PostItemsSide({ posts }: { posts: Props[] }) {
   return (
-    <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
       {posts.map(({ id, imageUrl: img, title, createdAt, createdBy }) => (
         <Link key={id} href={publicRoutes.postDetail(id)}>
           <Card className="h-full overflow-hidden">
@@ -60,7 +60,7 @@ export function PostItemsSide({ posts }: { posts: Props[] }) {
                     className="h-full w-auto object-cover"
                   />
                 </div>
-                <div className="flex-grow basis-[20ch] space-y-2 p-5">
+                <div className="flex-grow basis-[20ch] space-y-2 p-4">
                   <p className="text-primary">{createdBy}</p>
                   <p className="line-clamp-2 font-medium">{title}</p>
                   <p className="text-sm text-muted-foreground">

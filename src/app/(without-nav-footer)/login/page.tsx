@@ -1,4 +1,4 @@
-import HomeButton from "@/components/HomeButton";
+import { HomeButton } from "@/components/NavButton";
 import LoginForm from "@/components/LoginForm";
 
 export default function LoginPage() {

@@ -11,34 +11,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ComponentPropsWithoutRef, ComponentType, ReactElement } from "react";
+import { ComponentType } from "react";
 import { privateRoutes, publicRoutes } from "@/constants/routes";
-import { cn, getRoute } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
-import Link from "next/link";
+import NavBarLink from "./NavBarLink";
 
-type NavBarAuthLinkProps = {
-  Icon: ComponentType<{ className?: string }>;
-  label: string;
-  href: string;
-  isActive: boolean;
-};
-
-function NavBarAuthLink({ Icon, label, href, isActive }: NavBarAuthLinkProps) {
-  return (
-    <Link
-      key={label}
-      href={href}
-      className={`inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
-        isActive ? "bg-primary text-white" : "hover:text-accent-foreground"
-      }`}
-    >
-      <Icon className="h-[1.2rem] w-[1.2rem]" /> {label}
-    </Link>
-  );
-}
-
-type NavBarAuthProps = ComponentPropsWithoutRef<"header">["className"];
+type NavBarAuthProps = ComponentType<{ className?: string }>;
 
 export default function NavBarAuth({
   className,
@@ -46,7 +25,6 @@ export default function NavBarAuth({
   className: NavBarAuthProps;
 }) {
   const pathname = usePathname();
-  const currentRoute = getRoute(pathname)[0];
 
   const routes = [
     {
@@ -92,19 +70,15 @@ export default function NavBarAuth({
                 <SheetTitle>Menu</SheetTitle>
               </SheetHeader>
               <div className="mt-4 flex flex-col">
-                {routes.map(({ Icon, label, href }) => {
-                  const isActive = "/" + currentRoute === href;
-
-                  return (
-                    <NavBarAuthLink
-                      key={href}
-                      Icon={Icon}
-                      label={label}
-                      href={href}
-                      isActive={isActive}
-                    />
-                  );
-                })}
+                {routes.map(({ Icon, label, href }) => (
+                  <NavBarLink
+                    key={href}
+                    Icon={Icon}
+                    label={label}
+                    href={href}
+                    isActive={pathname === href}
+                  />
+                ))}
               </div>
               <Separator className="my-4" />
               <div className="flex justify-center">
@@ -116,15 +90,13 @@ export default function NavBarAuth({
         <div className="mt-4 hidden grid-cols-1 md:grid">
           <p className="mb-4 text-center font-bold">Menu</p>
           {routes.map(({ Icon, label, href }) => {
-            const isActive = "/" + currentRoute === href;
-
             return (
-              <NavBarAuthLink
+              <NavBarLink
                 key={href}
                 Icon={Icon}
                 label={label}
                 href={href}
-                isActive={isActive}
+                isActive={pathname === href}
               />
             );
           })}

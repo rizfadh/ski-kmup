@@ -59,15 +59,15 @@ export default function AdviceForm() {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-      <div className="grid md:justify-center">
-        <h2 className="text-2xl font-bold md:text-center md:text-5xl md:text-primary lg:text-6xl">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <div className="grid content-center gap-4 lg:justify-center lg:gap-8">
+        <h2 className="text-2xl font-bold lg:text-center lg:text-4xl lg:text-primary">
           Punya Saran?
         </h2>
         <Image
           src={suggestion}
           alt="suggestion illustration"
-          className="mt-5 h-auto w-full max-w-[200px] self-center md:max-w-[400px]"
+          className="h-auto w-full max-w-[200px] lg:max-w-[400px]"
         />
       </div>
       <Card>

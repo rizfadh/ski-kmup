@@ -7,7 +7,7 @@ export default async function NewPostPage() {
   if (!session || !session.user) return null;
 
   return (
-    <div className="container my-8 grid grid-cols-1 gap-y-8">
+    <div className="container my-4 grid grid-cols-1 gap-y-4">
       <PostForm userId={session.user.id as string} />
     </div>
   );

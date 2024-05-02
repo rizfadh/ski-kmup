@@ -48,12 +48,9 @@ export default function PostForm({ userId }: { userId: string }) {
   };
 
   return (
-    <div>
+    <div className="prose prose-sm mx-auto dark:prose-invert sm:prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl">
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="prose prose-sm mx-auto space-y-5 dark:prose-invert sm:prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
             name="image"
