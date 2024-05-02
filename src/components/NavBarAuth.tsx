@@ -11,19 +11,17 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ComponentType } from "react";
+import { ComponentPropsWithoutRef, ComponentType } from "react";
 import { privateRoutes, publicRoutes } from "@/constants/routes";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import NavBarLink from "./NavBarLink";
 
-type NavBarAuthProps = ComponentType<{ className?: string }>;
+type NavBarAuthProps = {
+  className: ComponentPropsWithoutRef<"header">["className"];
+};
 
-export default function NavBarAuth({
-  className,
-}: {
-  className: NavBarAuthProps;
-}) {
+export default function NavBarAuth({ className }: NavBarAuthProps) {
   const pathname = usePathname();
 
   const routes = [
