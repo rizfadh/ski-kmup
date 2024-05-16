@@ -18,7 +18,7 @@ export type Posts = {
   createdAt: Date;
 };
 
-function ConfirmCell({ row }: { row: Row<Posts> }) {
+function ConfirmActionCell({ row }: { row: Row<Posts> }) {
   const { id, createdBy } = row.original;
 
   const [isPending, setTransition] = useTransition();
@@ -114,11 +114,11 @@ export const confirmColumns: ColumnDef<Posts>[] = [
   {
     id: "actions",
     header: () => <div className="text-center">Terima</div>,
-    cell: ConfirmCell,
+    cell: ConfirmActionCell,
   },
 ];
 
-function ManageCell({ row }: { row: Row<Posts> }) {
+function ManageActionCell({ row }: { row: Row<Posts> }) {
   const { id, createdBy } = row.original;
 
   const [isPending, setTransition] = useTransition();
@@ -195,6 +195,6 @@ export const manageColumns: ColumnDef<Posts>[] = [
   {
     id: "actions",
     header: () => <div className="text-center">Tindakan</div>,
-    cell: ManageCell,
+    cell: ManageActionCell,
   },
 ];

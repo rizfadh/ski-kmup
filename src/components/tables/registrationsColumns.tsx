@@ -20,7 +20,7 @@ type User = {
   isAccepted: boolean | undefined;
 };
 
-function WaitingCell({ row }: { row: Row<User> }) {
+function WaitingActionCell({ row }: { row: Row<User> }) {
   const { id, name } = row.original;
 
   const [isPending, setTransition] = useTransition();
@@ -131,7 +131,7 @@ export const waitingColumns: ColumnDef<User>[] = [
   {
     id: "accept",
     header: () => <div className="text-center">Terima</div>,
-    cell: WaitingCell,
+    cell: WaitingActionCell,
   },
 ];
 
