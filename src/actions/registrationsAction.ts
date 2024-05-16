@@ -25,13 +25,13 @@ export const acceptUser = async (id: string) => {
   }
 };
 
-export const rejectUser = async (id: string) => {
+export const deleteUser = async (id: string, pathToRevalidate: string) => {
   try {
     await db.user.delete({
       where: { id },
     });
 
-    revalidatePath(privateRoutes.registrations);
+    revalidatePath(pathToRevalidate);
     return { error: false, message: "User ditolak" };
   } catch (error) {
     return { error: true, message: "Terjadi kesalahan" };

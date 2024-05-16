@@ -10,38 +10,25 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "./ui/button";
-import { ComponentProps, ComponentType, useTransition } from "react";
-import { ActionResponse } from "@/types/ActionResponse";
-import { toast } from "./ui/use-toast";
+import { ComponentProps, ComponentType } from "react";
 
 interface Props extends ComponentProps<typeof Button> {
   Icon: ComponentType<{ className?: string }>;
   title: string;
   description: string;
-  action: () => Promise<ActionResponse>;
+  isDisabled: boolean;
+  action: () => void;
 }
 
 export default function ButtonDialog({
   Icon,
   title,
   description,
+  isDisabled,
   action,
   className,
   ...props
 }: Props) {
-  const [isPending, startTransition] = useTransition();
-
-  const onClickHandler = () => {
-    startTransition(async () => {
-      const response = await action();
-      toast({
-        title: response.error ? "Gagal" : "Sukses",
-        description: response.message,
-        variant: response.error ? "destructive" : "default",
-      });
-    });
-  };
-
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -49,7 +36,7 @@ export default function ButtonDialog({
           variant="ghost"
           size="icon"
           className={className}
-          disabled={isPending}
+          disabled={isDisabled}
           {...props}
         >
           <Icon className="h-[1.2rem] w-[1.2rem]" />
@@ -63,9 +50,7 @@ export default function ButtonDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Batal</AlertDialogCancel>
-          <AlertDialogAction onClick={() => onClickHandler()}>
-            Ya
-          </AlertDialogAction>
+          <AlertDialogAction onClick={action}>Ya</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
