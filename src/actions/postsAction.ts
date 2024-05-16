@@ -7,7 +7,12 @@ import { storage } from "@/lib/firebase";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { storageRef } from "@/constants/storageRef";
-import { getDownloadURL } from "firebase-admin/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 import { createId } from "@paralleldrive/cuid2";
 
 export const newPost = async (formData: FormData) => {
@@ -25,17 +30,11 @@ export const newPost = async (formData: FormData) => {
 
     const { id, image, title, content } = validated.data;
     const cuid = createId();
-    const buffer = await image.arrayBuffer();
-    const bf = Buffer.from(buffer);
+    const imageRef = ref(storage, storageRef.postsImages + cuid);
 
-    await storage.file(storageRef.postsImages + cuid).save(bf, {
-      contentType: image.type,
-      gzip: true,
-    });
+    await uploadBytes(imageRef, image);
 
-    const imageUrl = await getDownloadURL(
-      storage.file(storageRef.postsImages + cuid),
-    );
+    const imageUrl = await getDownloadURL(imageRef);
 
     await db.post.create({
       data: {
@@ -70,7 +69,9 @@ export const deletePost = async (data: z.infer<typeof DeletePostSchema>) => {
       where: { id },
     });
 
-    await storage.file(storageRef.postsImages + id).delete();
+    const imageRef = ref(storage, storageRef.postsImages + id);
+
+    await deleteObject(imageRef);
 
     revalidatePath(pathToRevalidate);
     return { error: false, message: "Postingan berhasil dihapus" };

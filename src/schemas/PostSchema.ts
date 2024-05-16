@@ -37,10 +37,3 @@ export const DeletePostSchema = z.object({
   id: z.string().min(1, { message: "Id tidak boleh kosong" }),
   pathToRevalidate: z.string().min(1, { message: "Path tidak boleh kosong" }),
 });
-
-export const PostActionSchema = z.object({
-  id: z.string().min(1, { message: "Id tidak boleh kosong" }),
-  imageUrl: z.string().min(1, { message: "URL gambar tidak boleh kosong" }),
-  title: z.string().trim().min(1, { message: "Judul tidak boleh kosong" }),
-  content: z.string().trim().min(1, { message: "Konten tidak boleh kosong" }),
-});

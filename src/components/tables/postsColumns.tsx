@@ -68,9 +68,9 @@ export const postsConfirmColumns: ColumnDef<Posts>[] = [
             Icon={X}
             title="Tolak Postingan"
             description={`Postingan dari ${createdBy} akan dihapus`}
-            action={async () => {
+            action={() => {
               const data = { id, pathToRevalidate: privateRoutes.postsConfirm };
-              return await deletePost(data);
+              return deletePost(data);
             }}
           />
           <ButtonDialog
@@ -78,7 +78,7 @@ export const postsConfirmColumns: ColumnDef<Posts>[] = [
             Icon={Check}
             title="Terima Postingan"
             description={`Postingan dari ${createdBy} akan tampil di publik`}
-            action={async () => await acceptPost(id)}
+            action={() => acceptPost(id)}
           />
         </div>
       );
