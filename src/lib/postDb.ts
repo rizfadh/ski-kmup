@@ -1,30 +1,4 @@
-import { storageRef } from "@/constants/storageRef";
-import { storage } from "@/lib/firebase";
-import { PostSchema } from "@/schemas/PostSchema";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { z } from "zod";
-import { newPostAction } from "@/actions/postsAction";
 import { db } from "./db";
-
-export const newPost = async (data: z.infer<typeof PostSchema>) => {
-  const validated = PostSchema.safeParse(data);
-
-  if (!validated.success) return { error: true, message: "Invalid fields" };
-
-  try {
-    const { id, image, title, content } = validated.data;
-
-    const imageRef = ref(storage, storageRef.postsImages + image.name);
-    const uploadImage = await uploadBytes(imageRef, image);
-    const imageUrl = await getDownloadURL(uploadImage.ref);
-
-    await newPostAction({ id, imageUrl, title, content });
-
-    return { error: false, message: "Postingan berhasil dibuat" };
-  } catch {
-    return { error: true, message: "Terjadi kesalahan" };
-  }
-};
 
 export const getPosts = async (isAccepted: boolean, take?: number) => {
   const posts = await db.post.findMany({
@@ -57,9 +31,9 @@ export const getPosts = async (isAccepted: boolean, take?: number) => {
   });
 };
 
-export const getPostById = async (id: string) => {
+export const getPostById = async (id: string, isAccepted?: boolean) => {
   return await db.post.findUnique({
-    where: { id },
+    where: { id, isAccepted },
     select: {
       id: true,
       createdAt: true,

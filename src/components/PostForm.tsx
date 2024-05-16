@@ -1,5 +1,3 @@
-"use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -12,17 +10,22 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useTransition } from "react";
+import { Dispatch, SetStateAction, useTransition } from "react";
 import {
   ACCEPTED_IMAGE_MIME_TYPES,
   PostFormSchema,
 } from "@/schemas/PostSchema";
 import Tiptap from "./TipTap";
-import { newPost } from "@/lib/postDb";
+import { newPost } from "@/actions/postsAction";
 import { useRouter } from "next/navigation";
 import { toast } from "./ui/use-toast";
 
-export default function PostForm({ userId }: { userId: string }) {
+type Props = {
+  userId: string;
+  setImagePreview: Dispatch<SetStateAction<File | undefined>>;
+};
+
+export default function PostForm({ userId, setImagePreview }: Props) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -36,7 +39,14 @@ export default function PostForm({ userId }: { userId: string }) {
 
   const onSubmit = (data: z.infer<typeof PostFormSchema>) => {
     startTransition(async () => {
-      const response = await newPost({ id: userId, ...data });
+      const formData = new FormData();
+      formData.append("id", userId);
+      formData.append("image", data.image);
+      formData.append("title", data.title);
+      formData.append("content", data.content);
+
+      const response = await newPost(formData);
+
       toast({
         title: response.error ? "Gagal" : "Sukses",
         description: response.message,
@@ -48,62 +58,61 @@ export default function PostForm({ userId }: { userId: string }) {
   };
 
   return (
-    <div className="prose prose-sm mx-auto dark:prose-invert sm:prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="image"
-            render={({ field: { value, onChange, ...field } }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    type="file"
-                    accept={ACCEPTED_IMAGE_MIME_TYPES.join(",")}
-                    onChange={(e) => {
-                      if (!e.target.files) return;
-                      onChange(e.target.files[0]);
-                    }}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    placeholder="Judul"
-                    className="h-auto border-none p-0 text-3xl font-black ring-0 focus-visible:border-none focus-visible:ring-0 focus-visible:ring-transparent lg:text-6xl"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="content"
-            render={({ field: { value, onChange } }) => (
-              <FormItem>
-                <FormControl>
-                  <Tiptap content={value} onChange={onChange} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" disabled={isPending}>
-            Post
-          </Button>
-        </form>
-      </Form>
-    </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="image"
+          render={({ field: { value, onChange, ...field } }) => (
+            <FormItem>
+              <FormControl>
+                <Input
+                  type="file"
+                  accept={ACCEPTED_IMAGE_MIME_TYPES.join(",")}
+                  onChange={(e) => {
+                    if (!e.target.files) return;
+                    onChange(e.target.files[0]);
+                    setImagePreview(e.target.files[0]);
+                  }}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input
+                  placeholder="Judul"
+                  className="h-auto border-none p-0 text-3xl font-black ring-0 focus-visible:border-none focus-visible:ring-0 focus-visible:ring-transparent lg:text-6xl"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="content"
+          render={({ field: { value, onChange } }) => (
+            <FormItem>
+              <FormControl>
+                <Tiptap content={value} onChange={onChange} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" disabled={isPending}>
+          Post
+        </Button>
+      </form>
+    </Form>
   );
 }

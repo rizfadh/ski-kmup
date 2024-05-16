@@ -10,6 +10,8 @@ export const privateRoutes = {
   registrations: "/registrations",
   advices: "/advices",
   postsNew: "/posts/new",
+  postsConfirm: "/posts/confirm",
+  postsManage: "/posts/manage",
 };
 
 export const authRoutes = {

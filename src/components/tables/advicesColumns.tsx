@@ -15,7 +15,7 @@ export type Advice = {
   createdAt: Date;
 };
 
-export const adviceColumns: ColumnDef<Advice>[] = [
+export const advicesColumns: ColumnDef<Advice>[] = [
   {
     accessorKey: "email",
     header: ({ column }) => {
@@ -24,7 +24,7 @@ export const adviceColumns: ColumnDef<Advice>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Nama
+          Email
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );

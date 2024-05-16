@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import PostForm from "@/components/PostForm";
+import PostEditor from "@/components/PostEditor";
 
 export default async function NewPostPage() {
   const session = await auth();
@@ -8,7 +8,7 @@ export default async function NewPostPage() {
 
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">
-      <PostForm userId={session.user.id as string} />
+      <PostEditor userId={session.user.id as string} />
     </div>
   );
 }

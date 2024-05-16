@@ -15,15 +15,13 @@ import { ActionResponse } from "@/types/ActionResponse";
 import { toast } from "./ui/use-toast";
 
 interface Props extends ComponentProps<typeof Button> {
-  id: string;
   Icon: ComponentType<{ className?: string }>;
   title: string;
   description: string;
-  action: (id: string) => Promise<ActionResponse>;
+  action: () => Promise<ActionResponse>;
 }
 
 export default function ButtonDialog({
-  id,
   Icon,
   title,
   description,
@@ -33,9 +31,9 @@ export default function ButtonDialog({
 }: Props) {
   const [isPending, startTransition] = useTransition();
 
-  const onClickHandler = (id: string) => {
+  const onClickHandler = () => {
     startTransition(async () => {
-      const response = await action(id);
+      const response = await action();
       toast({
         title: response.error ? "Gagal" : "Sukses",
         description: response.message,
@@ -65,7 +63,7 @@ export default function ButtonDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Batal</AlertDialogCancel>
-          <AlertDialogAction onClick={() => onClickHandler(id)}>
+          <AlertDialogAction onClick={() => onClickHandler()}>
             Ya
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -1,58 +1,39 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import ButtonDialog from "../ButtonDialog";
-import { Check, X, ArrowUpDown } from "lucide-react";
-import { acceptUser, rejectUser } from "@/actions/registrationsAction";
+import { ArrowUpDown, Check, Trash, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { dateFormat } from "@/lib/dateFormatter";
+import ButtonDialog from "../ButtonDialog";
+import { acceptPost } from "@/actions/postsAction";
+import { privateRoutes } from "@/constants/routes";
+import { deletePost } from "@/actions/postsAction";
 
-type User = {
+export type Posts = {
   id: string;
-  name: string;
-  email: string;
+  createdBy: string;
+  title: string;
   createdAt: Date;
-  division: string[] | undefined;
-  reason: string | undefined;
-  isAccepted: boolean | undefined;
 };
 
-export const waitingColumns: ColumnDef<User>[] = [
+export const postsConfirmColumns: ColumnDef<Posts>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "createdBy",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Nama
+          Dibuat oleh
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
   },
   {
-    accessorKey: "email",
-    header: "Email",
-  },
-  {
-    accessorKey: "division",
-    header: () => <div className="min-w-[100px]">Divisi</div>,
-    cell: ({ row }) => {
-      const division = row.getValue("division");
-      if (Array.isArray(division)) {
-        const formatted = division.map((value, index) => {
-          const string = `${index + 1}. ${value}`;
-          return <p key={index}>{string}</p>;
-        });
-        return formatted;
-      }
-    },
-  },
-  {
-    accessorKey: "reason",
-    header: () => <div className="min-w-[300px]">Alasan</div>,
+    accessorKey: "title",
+    header: () => <div className="min-w-[200px]">Judul</div>,
   },
   {
     accessorKey: "createdAt",
@@ -75,26 +56,29 @@ export const waitingColumns: ColumnDef<User>[] = [
     },
   },
   {
-    id: "accept",
+    id: "actions",
     header: () => <div className="text-center">Terima</div>,
     cell: ({ row }) => {
-      const { id, name } = row.original;
+      const { id, createdBy } = row.original;
 
       return (
         <div className="flex justify-center">
           <ButtonDialog
             id={id}
             Icon={X}
-            title="Tolak"
-            description={`Tindakan ini akan menolak dan menghapus data pendaftaran ${name}`}
-            action={rejectUser}
+            title="Tolak Postingan"
+            description={`Postingan dari ${createdBy} akan dihapus`}
+            action={async () => {
+              const data = { id, pathToRevalidate: privateRoutes.postsConfirm };
+              return await deletePost(data);
+            }}
           />
           <ButtonDialog
             id={id}
             Icon={Check}
-            title="Terima"
-            description={`Tindakan ini akan menyetujui pendaftaran ${name} menjadi anggota SKI-KMUP`}
-            action={acceptUser}
+            title="Terima Postingan"
+            description={`Postingan dari ${createdBy} akan tampil di publik`}
+            action={async () => await acceptPost(id)}
           />
         </div>
       );
@@ -102,42 +86,25 @@ export const waitingColumns: ColumnDef<User>[] = [
   },
 ];
 
-export const acceptedColumns: ColumnDef<User>[] = [
+export const postsManageColumns: ColumnDef<Posts>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "createdBy",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Nama
+          Dibuat oleh
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
   },
+
   {
-    accessorKey: "email",
-    header: "Email",
-  },
-  {
-    accessorKey: "division",
-    header: () => <div className="min-w-[100px]">Divisi</div>,
-    cell: ({ row }) => {
-      const division = row.getValue("division");
-      if (Array.isArray(division)) {
-        const formatted = division.map((value, index) => {
-          const string = `${index + 1}. ${value}`;
-          return <p key={index}>{string}</p>;
-        });
-        return formatted;
-      }
-    },
-  },
-  {
-    accessorKey: "reason",
-    header: () => <div className="min-w-[300px]">Alasan</div>,
+    accessorKey: "title",
+    header: () => <div className="min-w-[200px]">Judul</div>,
   },
   {
     accessorKey: "createdAt",
@@ -157,6 +124,28 @@ export const acceptedColumns: ColumnDef<User>[] = [
       if (date instanceof Date) {
         return dateFormat(date);
       }
+    },
+  },
+  {
+    id: "actions",
+    header: () => <div className="text-center">Tindakan</div>,
+    cell: ({ row }) => {
+      const { id, createdBy } = row.original;
+
+      return (
+        <div className="flex justify-center">
+          <ButtonDialog
+            id={id}
+            Icon={X}
+            title="Hapus Postingan"
+            description={`Postingan dari ${createdBy} akan dihapus`}
+            action={async () => {
+              const data = { id, pathToRevalidate: privateRoutes.postsConfirm };
+              return await deletePost(data);
+            }}
+          />
+        </div>
+      );
     },
   },
 ];

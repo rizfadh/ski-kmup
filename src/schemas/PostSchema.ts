@@ -20,7 +20,7 @@ export const PostFormSchema = z.object({
   content: z.string().trim().min(1, { message: "Konten tidak boleh kosong" }),
 });
 
-export const PostSchema = z.object({
+export const NewPostSchema = z.object({
   id: z.string().min(1, { message: "Id tidak boleh kosong" }),
   image: z
     .instanceof(File, { message: "Gambar Tidak boleh kosong" })
@@ -31,6 +31,11 @@ export const PostSchema = z.object({
     ),
   title: z.string().trim().min(1, { message: "Judul tidak boleh kosong" }),
   content: z.string().trim().min(1, { message: "Konten tidak boleh kosong" }),
+});
+
+export const DeletePostSchema = z.object({
+  id: z.string().min(1, { message: "Id tidak boleh kosong" }),
+  pathToRevalidate: z.string().min(1, { message: "Path tidak boleh kosong" }),
 });
 
 export const PostActionSchema = z.object({

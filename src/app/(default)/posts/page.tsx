@@ -13,7 +13,11 @@ function PostsMenu() {
         <LinkButton href={privateRoutes.postsNew} variant="ghost" size="icon">
           <PlusCircle className="h-[1.5rem] w-[1.5rem]" />
         </LinkButton>
-        <LinkButton href="#" variant="ghost" size="icon">
+        <LinkButton
+          href={privateRoutes.postsConfirm}
+          variant="ghost"
+          size="icon"
+        >
           <FileCheck className="h-[1.5rem] w-[1.5rem]" />
         </LinkButton>
       </CardContent>
@@ -23,10 +27,10 @@ function PostsMenu() {
 
 export default async function PostsPage() {
   const [posts, session] = await Promise.all([getPosts(true), auth()]);
-
+  const isLoggedIn = !session || !session.user;
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">
-      {session ? <PostsMenu /> : null}
+      {isLoggedIn ? null : <PostsMenu />}
       <PostItems posts={posts} />
     </div>
   );

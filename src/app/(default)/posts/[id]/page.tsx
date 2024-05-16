@@ -10,7 +10,7 @@ export default async function PostDetailPage({
 }: {
   params: { id: string };
 }) {
-  const post = await getPostById(params.id);
+  const post = await getPostById(params.id, true);
 
   if (!post) notFound();
 

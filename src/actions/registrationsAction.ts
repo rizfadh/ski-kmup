@@ -4,7 +4,7 @@ import { privateRoutes } from "@/constants/routes";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
-export const acceptUserRegistration = async (id: string) => {
+export const acceptUser = async (id: string) => {
   try {
     await db.user.update({
       where: { id },
@@ -25,7 +25,7 @@ export const acceptUserRegistration = async (id: string) => {
   }
 };
 
-export const rejectUserRegistration = async (id: string) => {
+export const rejectUser = async (id: string) => {
   try {
     await db.user.delete({
       where: { id },
