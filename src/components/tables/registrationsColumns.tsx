@@ -2,13 +2,13 @@
 
 import { ColumnDef, Row } from "@tanstack/react-table";
 import ButtonDialog from "../ButtonDialog";
-import { Check, X, ArrowUpDown } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { acceptUser, deleteUser } from "@/actions/registrationsAction";
-import { Button } from "../ui/button";
 import { dateFormat } from "@/lib/dateFormatter";
 import { useTransition } from "react";
 import { privateRoutes } from "@/constants/routes";
 import { toast } from "../ui/use-toast";
+import { ColumnHeaderSort } from "./ColumnHeaderSort";
 
 type User = {
   id: string;
@@ -74,17 +74,7 @@ function WaitingActionCell({ row }: { row: Row<User> }) {
 export const waitingColumns: ColumnDef<User>[] = [
   {
     accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Nama
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => <ColumnHeaderSort column={column} title="Nama" />,
   },
   {
     accessorKey: "email",
@@ -110,17 +100,9 @@ export const waitingColumns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Tanggal
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <ColumnHeaderSort column={column} title="Tgl daftar" />
+    ),
     cell: ({ row }) => {
       const date = row.getValue("createdAt");
       if (date instanceof Date) {
@@ -138,17 +120,7 @@ export const waitingColumns: ColumnDef<User>[] = [
 export const acceptedColumns: ColumnDef<User>[] = [
   {
     accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Nama
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => <ColumnHeaderSort column={column} title="Nama" />,
   },
   {
     accessorKey: "email",
@@ -174,17 +146,9 @@ export const acceptedColumns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Tanggal
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <ColumnHeaderSort column={column} title="Tgl daftar" />
+    ),
     cell: ({ row }) => {
       const date = row.getValue("createdAt");
       if (date instanceof Date) {

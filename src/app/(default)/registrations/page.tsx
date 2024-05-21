@@ -20,10 +20,14 @@ export default async function RegistrationPage() {
           <TabsTrigger value="accepted">Diterima</TabsTrigger>
         </TabsList>
         <TabsContent value="waiting">
-          <DataTable columns={waitingColumns} data={waiting} />
+          <DataTable columns={waitingColumns} data={waiting} searchBy="name" />
         </TabsContent>
         <TabsContent value="accepted">
-          <DataTable columns={acceptedColumns} data={accepted} />
+          <DataTable
+            columns={acceptedColumns}
+            data={accepted}
+            searchBy="name"
+          />
         </TabsContent>
       </Tabs>
     </div>

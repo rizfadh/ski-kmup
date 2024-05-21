@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef, Row } from "@tanstack/react-table";
-import { ArrowUpDown, Check, Trash, X } from "lucide-react";
+import { ArrowUpDown, Check, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { dateFormat } from "@/lib/dateFormatter";
 import ButtonDialog from "../ButtonDialog";
@@ -10,6 +10,7 @@ import { privateRoutes } from "@/constants/routes";
 import { deletePost } from "@/actions/postsAction";
 import { useTransition } from "react";
 import { toast } from "../ui/use-toast";
+import { ColumnHeaderSort } from "./ColumnHeaderSort";
 
 export type Posts = {
   id: string;
@@ -27,7 +28,7 @@ function ConfirmActionCell({ row }: { row: Row<Posts> }) {
     setTransition(async () => {
       const response = await deletePost({
         id,
-        pathToRevalidate: privateRoutes.postsConfirm,
+        pathToRevalidate: privateRoutes.postsManage,
       });
 
       toast({
@@ -75,17 +76,9 @@ function ConfirmActionCell({ row }: { row: Row<Posts> }) {
 export const confirmColumns: ColumnDef<Posts>[] = [
   {
     accessorKey: "createdBy",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Dibuat oleh
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <ColumnHeaderSort column={column} title="Dibuat oleh" />
+    ),
   },
   {
     accessorKey: "title",
@@ -93,17 +86,9 @@ export const confirmColumns: ColumnDef<Posts>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Tanggal
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <ColumnHeaderSort column={column} title="Tgl buat" />
+    ),
     cell: ({ row }) => {
       const date = row.getValue("createdAt");
       if (date instanceof Date) {
@@ -127,7 +112,7 @@ function ManageActionCell({ row }: { row: Row<Posts> }) {
     setTransition(async () => {
       const response = await deletePost({
         id,
-        pathToRevalidate: privateRoutes.postsConfirm,
+        pathToRevalidate: privateRoutes.postsManage,
       });
 
       toast({
@@ -155,17 +140,9 @@ function ManageActionCell({ row }: { row: Row<Posts> }) {
 export const manageColumns: ColumnDef<Posts>[] = [
   {
     accessorKey: "createdBy",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Dibuat oleh
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <ColumnHeaderSort column={column} title="Dibuat oleh" />
+    ),
   },
 
   {
@@ -174,17 +151,9 @@ export const manageColumns: ColumnDef<Posts>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Tanggal
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <ColumnHeaderSort column={column} title="Tgl buat" />
+    ),
     cell: ({ row }) => {
       const date = row.getValue("createdAt");
       if (date instanceof Date) {
@@ -194,7 +163,7 @@ export const manageColumns: ColumnDef<Posts>[] = [
   },
   {
     id: "actions",
-    header: () => <div className="text-center">Tindakan</div>,
+    header: () => <div className="text-center">Aksi</div>,
     cell: ManageActionCell,
   },
 ];

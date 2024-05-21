@@ -46,7 +46,7 @@ export const newPost = async (formData: FormData) => {
       },
     });
 
-    revalidatePath(privateRoutes.postsConfirm);
+    revalidatePath(privateRoutes.postsManage);
     return {
       error: false,
       message:
@@ -89,7 +89,7 @@ export const acceptPost = async (id: string) => {
       },
     });
 
-    revalidatePath(privateRoutes.postsConfirm);
+    revalidatePath(privateRoutes.postsManage);
     return { error: false, message: "Postingan berhasil diterima" };
   } catch {
     return { error: true, message: "Terjadi kesalahan" };

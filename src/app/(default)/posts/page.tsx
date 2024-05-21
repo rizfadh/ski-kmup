@@ -4,7 +4,7 @@ import { PostItems } from "@/components/PostItems";
 import { Card, CardContent } from "@/components/ui/card";
 import { privateRoutes } from "@/constants/routes";
 import { getPosts } from "@/lib/postDb";
-import { FileCheck, PlusCircle } from "lucide-react";
+import { PlusCircle, ListChecks } from "lucide-react";
 
 function PostsMenu() {
   return (
@@ -14,11 +14,11 @@ function PostsMenu() {
           <PlusCircle className="h-[1.5rem] w-[1.5rem]" />
         </LinkButton>
         <LinkButton
-          href={privateRoutes.postsConfirm}
+          href={privateRoutes.postsManage}
           variant="ghost"
           size="icon"
         >
-          <FileCheck className="h-[1.5rem] w-[1.5rem]" />
+          <ListChecks className="h-[1.5rem] w-[1.5rem]" />
         </LinkButton>
       </CardContent>
     </Card>

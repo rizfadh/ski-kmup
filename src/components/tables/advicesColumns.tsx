@@ -8,6 +8,7 @@ import ButtonDialog from "../ButtonDialog";
 import { deleteAdvice } from "@/actions/advicesAction";
 import { useTransition } from "react";
 import { toast } from "../ui/use-toast";
+import { ColumnHeaderSort } from "./ColumnHeaderSort";
 
 export type Advice = {
   id: string;
@@ -51,31 +52,13 @@ function AdvicesActionCell({ row }: { row: Row<Advice> }) {
 export const advicesColumns: ColumnDef<Advice>[] = [
   {
     accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => <ColumnHeaderSort column={column} title="Email" />,
   },
   {
     accessorKey: "createdAt",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Tanggal
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <ColumnHeaderSort column={column} title="Tgl kirim" />
+    ),
     cell: ({ row }) => {
       const date = row.getValue("createdAt");
       if (date instanceof Date) {
@@ -93,7 +76,7 @@ export const advicesColumns: ColumnDef<Advice>[] = [
   },
   {
     id: "actions",
-    header: () => <div className="text-center">Tindakan</div>,
+    header: () => <div className="text-center">Aksi</div>,
     cell: AdvicesActionCell,
   },
 ];
