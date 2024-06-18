@@ -24,6 +24,7 @@ export default async function PostsManagePage() {
             columns={manageColumns}
             data={postsedPosts}
             searchBy="title"
+            searchPlaceholder="Judul"
           />
         </TabsContent>
         <TabsContent value="waiting">
@@ -31,6 +32,7 @@ export default async function PostsManagePage() {
             columns={confirmColumns}
             data={waitingPosts}
             searchBy="title"
+            searchPlaceholder="Judul"
           />
         </TabsContent>
       </Tabs>

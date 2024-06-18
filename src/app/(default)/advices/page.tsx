@@ -7,7 +7,12 @@ export default async function AdvicePage() {
 
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">
-      <DataTable columns={advicesColumns} data={advices} searchBy="email" />
+      <DataTable
+        columns={advicesColumns}
+        data={advices}
+        searchBy="email"
+        searchPlaceholder="Email"
+      />
     </div>
   );
 }

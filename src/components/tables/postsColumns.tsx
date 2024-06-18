@@ -1,16 +1,17 @@
 "use client";
 
 import { ColumnDef, Row } from "@tanstack/react-table";
-import { ArrowUpDown, Check, X } from "lucide-react";
-import { Button } from "../ui/button";
+import { Check, FilePen, Trash, X } from "lucide-react";
 import { dateFormat } from "@/lib/dateFormatter";
 import ButtonDialog from "../ButtonDialog";
 import { acceptPost } from "@/actions/postsAction";
-import { privateRoutes } from "@/constants/routes";
+import { privateRoutes, publicRoutes } from "@/constants/routes";
 import { deletePost } from "@/actions/postsAction";
 import { useTransition } from "react";
 import { toast } from "../ui/use-toast";
 import { ColumnHeaderSort } from "./ColumnHeaderSort";
+import Link from "next/link";
+import LinkButton from "../LinkButton";
 
 export type Posts = {
   id: string;
@@ -83,6 +84,14 @@ export const confirmColumns: ColumnDef<Posts>[] = [
   {
     accessorKey: "title",
     header: () => <div className="min-w-[200px]">Judul</div>,
+    cell: ({ row }) => {
+      const data = row.original;
+      return (
+        <Link className="underline" href={privateRoutes.postDraft(data.id)}>
+          {data.title}
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "createdAt",
@@ -125,9 +134,12 @@ function ManageActionCell({ row }: { row: Row<Posts> }) {
 
   return (
     <div className="flex justify-center">
+      <LinkButton href={privateRoutes.postEdit(id)} variant="ghost" size="icon">
+        <FilePen className="h-[1.2rem] w-[1.2rem]" />
+      </LinkButton>
       <ButtonDialog
         id={id}
-        Icon={X}
+        Icon={Trash}
         title="Hapus Postingan"
         description={`Postingan dari ${createdBy} akan dihapus`}
         isDisabled={isPending}
@@ -148,6 +160,14 @@ export const manageColumns: ColumnDef<Posts>[] = [
   {
     accessorKey: "title",
     header: () => <div className="min-w-[200px]">Judul</div>,
+    cell: ({ row }) => {
+      const data = row.original;
+      return (
+        <Link className="underline" href={publicRoutes.postDetail(data.id)}>
+          {data.title}
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "createdAt",

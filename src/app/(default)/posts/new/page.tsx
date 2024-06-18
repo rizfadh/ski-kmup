@@ -8,7 +8,7 @@ export default async function NewPostPage() {
 
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">
-      <PostEditor userId={session.user.id as string} />
+      <PostEditor type="NEW" id={session.user.id as string} />
     </div>
   );
 }

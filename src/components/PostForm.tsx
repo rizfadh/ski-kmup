@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { ZodType, z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -19,33 +19,47 @@ import Tiptap from "./TipTap";
 import { newPost } from "@/actions/postsAction";
 import { useRouter } from "next/navigation";
 import { toast } from "./ui/use-toast";
+import { ActionResponse } from "@/types/ActionResponse";
 
 type Props = {
-  userId: string;
-  setImagePreview: Dispatch<SetStateAction<File | undefined>>;
+  id: string;
+  Schema: ZodType;
+  setImagePreview: Dispatch<SetStateAction<String | undefined>>;
+  title?: string;
+  content?: string;
+  submitAction: (formData: FormData) => Promise<ActionResponse>;
+  toRoute: string;
 };
 
-export default function PostForm({ userId, setImagePreview }: Props) {
+export default function PostForm({
+  id,
+  Schema,
+  setImagePreview,
+  title,
+  content,
+  submitAction,
+  toRoute,
+}: Props) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof PostFormSchema>>({
-    resolver: zodResolver(PostFormSchema),
+  const form = useForm<z.infer<typeof Schema>>({
+    resolver: zodResolver(Schema),
     defaultValues: {
-      title: "",
-      content: "",
+      title,
+      content,
     },
   });
 
-  const onSubmit = (data: z.infer<typeof PostFormSchema>) => {
+  const onSubmit = (data: z.infer<typeof Schema>) => {
     startTransition(async () => {
       const formData = new FormData();
-      formData.append("id", userId);
+      formData.append("id", id);
       formData.append("image", data.image);
       formData.append("title", data.title);
       formData.append("content", data.content);
 
-      const response = await newPost(formData);
+      const response = await submitAction(formData);
 
       toast({
         title: response.error ? "Gagal" : "Sukses",
@@ -53,7 +67,7 @@ export default function PostForm({ userId, setImagePreview }: Props) {
         variant: response.error ? "destructive" : "default",
       });
 
-      if (!response.error) router.push("/posts");
+      if (!response.error) router.push(toRoute);
     });
   };
 
@@ -72,7 +86,7 @@ export default function PostForm({ userId, setImagePreview }: Props) {
                   onChange={(e) => {
                     if (!e.target.files) return;
                     onChange(e.target.files[0]);
-                    setImagePreview(e.target.files[0]);
+                    setImagePreview(URL.createObjectURL(e.target.files[0]));
                   }}
                   {...field}
                 />

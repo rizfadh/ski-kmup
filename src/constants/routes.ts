@@ -11,7 +11,8 @@ export const privateRoutes = {
   advices: "/advices",
   postsNew: "/posts/new",
   postsManage: "/posts/manage",
-  postDraft: (id: string) => `posts/draft/${id}`,
+  postDraft: (id: string) => `/posts/draft/${id}`,
+  postEdit: (id: string) => `/posts/edit/${id}`,
 };
 
 export const authRoutes = {

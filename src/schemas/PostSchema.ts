@@ -20,6 +20,19 @@ export const PostFormSchema = z.object({
   content: z.string().trim().min(1, { message: "Konten tidak boleh kosong" }),
 });
 
+export const PostFormUpdateSchema = z.object({
+  image: z
+    .instanceof(File)
+    .refine((file) => file.size <= MAX_FILE_SIZE, "Ukuran maksimum 500KB")
+    .refine(
+      (file) => ACCEPTED_IMAGE_MIME_TYPES.includes(file.type),
+      "Hanya .jpg, .jpeg, .png and .webp yang didukung",
+    )
+    .optional(),
+  title: z.string().trim().min(1, { message: "Judul tidak boleh kosong" }),
+  content: z.string().trim().min(1, { message: "Konten tidak boleh kosong" }),
+});
+
 export const NewPostSchema = z.object({
   id: z.string().min(1, { message: "Id tidak boleh kosong" }),
   image: z
@@ -29,6 +42,20 @@ export const NewPostSchema = z.object({
       (file) => ACCEPTED_IMAGE_MIME_TYPES.includes(file.type),
       "Hanya .jpg, .jpeg, .png and .webp yang didukung",
     ),
+  title: z.string().trim().min(1, { message: "Judul tidak boleh kosong" }),
+  content: z.string().trim().min(1, { message: "Konten tidak boleh kosong" }),
+});
+
+export const UpdatePostSchema = z.object({
+  id: z.string().min(1, { message: "Id tidak boleh kosong" }),
+  image: z
+    .instanceof(File)
+    .refine((file) => file.size <= MAX_FILE_SIZE, "Ukuran maksimum 500KB")
+    .refine(
+      (file) => ACCEPTED_IMAGE_MIME_TYPES.includes(file.type),
+      "Hanya .jpg, .jpeg, .png and .webp yang didukung",
+    )
+    .optional(),
   title: z.string().trim().min(1, { message: "Judul tidak boleh kosong" }),
   content: z.string().trim().min(1, { message: "Konten tidak boleh kosong" }),
 });
