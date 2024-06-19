@@ -1,7 +1,7 @@
 "use server";
 
-import { privateRoutes } from "@/constants/routes";
-import { db } from "@/lib/db";
+import { privateRoutes, publicRoutes } from "@/constants/routes";
+import db from "@/lib/db";
 import {
   DeletePostSchema,
   NewPostSchema,
@@ -146,6 +146,120 @@ export const acceptPost = async (id: string) => {
     revalidatePath(privateRoutes.postsManage);
     return { error: false, message: "Postingan berhasil diterima" };
   } catch {
+    return { error: true, message: "Terjadi kesalahan" };
+  }
+};
+
+export const likePost = async (userId: string, postId: string) => {
+  try {
+    const postLike = await db.postLike.findUnique({
+      where: {
+        userId_postId: {
+          userId,
+          postId,
+        },
+      },
+    });
+
+    if (postLike?.like === true) {
+      await db.postLike.delete({
+        where: {
+          userId_postId: {
+            userId,
+            postId,
+          },
+        },
+      });
+
+      revalidatePath(publicRoutes.postDetail(postId));
+      return { error: false, message: "Like berhasil dihapus" };
+    }
+
+    if (postLike?.like === false) {
+      await db.postLike.update({
+        where: {
+          userId_postId: {
+            userId,
+            postId,
+          },
+        },
+        data: {
+          like: true,
+        },
+      });
+
+      revalidatePath(publicRoutes.postDetail(postId));
+      return { error: false, message: "Postingan berhasil dilike" };
+    }
+
+    await db.postLike.create({
+      data: {
+        userId,
+        postId,
+        like: true,
+      },
+    });
+
+    revalidatePath(publicRoutes.postDetail(postId));
+    return { error: false, message: "Postingan berhasil dilike" };
+  } catch (error) {
+    return { error: true, message: "Terjadi kesalahan" };
+  }
+};
+
+export const dislikePost = async (userId: string, postId: string) => {
+  try {
+    const postLike = await db.postLike.findUnique({
+      where: {
+        userId_postId: {
+          userId,
+          postId,
+        },
+      },
+    });
+
+    if (postLike?.like === false) {
+      await db.postLike.delete({
+        where: {
+          userId_postId: {
+            userId,
+            postId,
+          },
+        },
+      });
+
+      revalidatePath(publicRoutes.postDetail(postId));
+      return { error: false, message: "Dislike berhasil dihapus" };
+    }
+
+    if (postLike?.like === true) {
+      await db.postLike.update({
+        where: {
+          userId_postId: {
+            userId,
+            postId,
+          },
+        },
+        data: {
+          like: false,
+        },
+      });
+
+      revalidatePath(publicRoutes.postDetail(postId));
+      return { error: false, message: "Postingan berhasil didislike" };
+    }
+
+    await db.postLike.create({
+      data: {
+        userId,
+        postId,
+        like: false,
+      },
+    });
+
+    revalidatePath(publicRoutes.postDetail(postId));
+    return { error: false, message: "Postingan berhasil didislike" };
+  } catch (error) {
     return { error: true, message: "Terjadi kesalahan" };
   }
 };

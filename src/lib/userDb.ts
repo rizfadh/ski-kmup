@@ -1,4 +1,4 @@
-import { db } from "./db";
+import db from "./db";
 
 export const getUserByEmail = async (email: string) => {
   return await db.user.findUnique({ where: { email } });
@@ -22,7 +22,7 @@ export const getUserById = async (id: string) => {
       },
       _count: {
         select: {
-          Post: { where: { isAccepted: true } },
+          post: { where: { isAccepted: true } },
         },
       },
     },

@@ -1,6 +1,8 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { auth } from "@/auth";
+import { PostLike, PostLikeButton } from "@/components/PostLike";
+import { Separator } from "@/components/ui/separator";
 import { dateFormat } from "@/lib/dateFormatter";
-import { getPostById } from "@/lib/postDb";
+import { getPostById, getPostLikesById, isLikedByUser } from "@/lib/postDb";
 import parse from "html-react-parser";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -10,9 +12,41 @@ export default async function PostDetailPage({
 }: {
   params: { id: string };
 }) {
-  const post = await getPostById(params.id, true);
+  const [post, session, postLikes] = await Promise.all([
+    getPostById(params.id, true),
+    auth(),
+    getPostLikesById(params.id),
+  ]);
 
   if (!post) notFound();
+
+  if (!session || !session.user)
+    return (
+      <div className="container my-8 grid grid-cols-1 gap-y-8">
+        <div className="prose prose-sm mx-auto dark:prose-invert sm:prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl">
+          <Image
+            src={post.imageUrl}
+            width="1024"
+            height="576"
+            alt={post.title}
+            className="h-auto w-full rounded-md shadow-md"
+            priority
+          />
+          <h1>{post.title}</h1>
+          <div className="not-prose">
+            <div className="text-sm text-muted-foreground lg:text-base">
+              <p className="font-bold text-primary">{post.user.name}</p>
+              <p>{dateFormat(post.createdAt)}</p>
+            </div>
+            <Separator className="my-2" />
+            <PostLike likes={postLikes.likes} dislikes={postLikes.dislikes} />
+          </div>
+          {parse(post.content)}
+        </div>
+      </div>
+    );
+
+  const isLiked = await isLikedByUser(session.user.id as string, params.id);
 
   return (
     <div className="container my-8 grid grid-cols-1 gap-y-8">
@@ -27,13 +61,18 @@ export default async function PostDetailPage({
         />
         <h1>{post.title}</h1>
         <div className="not-prose">
-          <Card className="w-fit">
-            <CardContent className="flex gap-5 px-5 py-3 text-sm text-muted-foreground lg:text-base">
-              <p>{post.user.name}</p>
-              <span>&bull;</span>
-              <p>{dateFormat(post.createdAt)}</p>
-            </CardContent>
-          </Card>
+          <div className="text-sm text-muted-foreground lg:text-base">
+            <p className="font-bold text-primary">{post.user.name}</p>
+            <p>{dateFormat(post.createdAt)}</p>
+          </div>
+          <Separator className="my-2" />
+          <PostLikeButton
+            isLiked={isLiked}
+            likes={postLikes.likes}
+            dislikes={postLikes.dislikes}
+            userId={session.user.id as string}
+            postId={post.id}
+          />
         </div>
         {parse(post.content)}
       </div>

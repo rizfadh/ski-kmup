@@ -1,7 +1,7 @@
 "use server";
 
 import { privateRoutes } from "@/constants/routes";
-import { db } from "@/lib/db";
+import db from "@/lib/db";
 import { AdviceSchema } from "@/schemas/AdviceSchema";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";

@@ -58,7 +58,7 @@ export default async function DashboardPage() {
         <DashboardCard
           Icon={Newspaper}
           title="Postingan"
-          description={userData?._count.Post.toString() ?? "0"}
+          description={userData?._count.post.toString() ?? "0"}
         />
         <DashboardCard
           Icon={Mountain}

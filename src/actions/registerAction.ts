@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import bcrypt from "bcrypt";
-import { db } from "@/lib/db";
+import db from "@/lib/db";
 import { ActionResponse } from "@/types/ActionResponse";
 import { RegisterSchema } from "@/schemas/RegisterSchema";
 import { getUserByEmail } from "@/lib/userDb";

@@ -1,7 +1,7 @@
 "use server";
 
 import { privateRoutes } from "@/constants/routes";
-import { db } from "@/lib/db";
+import db from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
 export const acceptUser = async (id: string) => {
