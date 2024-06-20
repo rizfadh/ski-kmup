@@ -14,23 +14,23 @@ export default async function PostsManagePage() {
 
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">
-      <Tabs defaultValue="posted">
+      <Tabs defaultValue="waiting">
         <TabsList>
-          <TabsTrigger value="posted">Diposting</TabsTrigger>
           <TabsTrigger value="waiting">Menunggu</TabsTrigger>
+          <TabsTrigger value="posted">Diposting</TabsTrigger>
         </TabsList>
-        <TabsContent value="posted">
-          <DataTable
-            columns={manageColumns}
-            data={postsedPosts}
-            searchBy="title"
-            searchPlaceholder="Judul"
-          />
-        </TabsContent>
         <TabsContent value="waiting">
           <DataTable
             columns={confirmColumns}
             data={waitingPosts}
+            searchBy="title"
+            searchPlaceholder="Judul"
+          />
+        </TabsContent>
+        <TabsContent value="posted">
+          <DataTable
+            columns={manageColumns}
+            data={postsedPosts}
             searchBy="title"
             searchPlaceholder="Judul"
           />

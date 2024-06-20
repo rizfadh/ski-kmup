@@ -35,7 +35,7 @@ export default function PostEditor({
           width="1024"
           height="576"
           alt="Image preview"
-          className="not-prose mb-4 h-auto w-full rounded-md shadow-md"
+          className="not-prose mb-4 rounded-md shadow-md"
           priority
         />
         <PostForm
