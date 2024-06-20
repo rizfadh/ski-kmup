@@ -29,16 +29,22 @@ model User {
   faculty       String
   major         String
   image         String?
-  position      String?
 
-  role             UserRole          @default(PASSIVE)
   registerApproval RegisterApproval?
+  userPosition     UserPosition?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   post     Post[]
   postLike PostLike[]
+}
+
+model UserPosition {
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String   @id
+  title  String?
+  role   UserRole @default(PASSIVE)
 }
 
 model RegisterApproval {

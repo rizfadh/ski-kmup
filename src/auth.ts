@@ -60,9 +60,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (!token.sub) return token;
 
       const user = await getUserByIdAuth(token.sub);
-      if (!user) return token;
+      if (!user || !user.userPosition) return token;
 
-      token.role = user.role;
+      token.role = user.userPosition.role;
 
       return token;
     },

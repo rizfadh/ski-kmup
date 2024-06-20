@@ -48,7 +48,7 @@ export default async function DashboardPage() {
         <DashboardCard
           Icon={Building2}
           title="Jabatan"
-          description={userData?.position ?? "Tidak ada"}
+          description={userData?.userPosition?.title ?? "Tidak ada"}
         />
         <DashboardCard
           Icon={CalendarPlus}

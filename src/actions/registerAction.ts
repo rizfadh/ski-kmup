@@ -49,9 +49,6 @@ export const register = async (
           },
         },
       },
-      include: {
-        registerApproval: true,
-      },
     });
     return { error: false, message: "Daftar berhasil" };
   } catch {

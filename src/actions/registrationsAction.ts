@@ -15,6 +15,9 @@ export const acceptUser = async (id: string) => {
             acceptedAt: new Date(),
           },
         },
+        userPosition: {
+          create: {},
+        },
       },
     });
 
