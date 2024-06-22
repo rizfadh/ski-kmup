@@ -4,6 +4,8 @@ export const getUserByEmail = async (email: string) => {
   return await db.user.findUnique({
     select: {
       id: true,
+      name: true,
+      email: true,
       password: true,
     },
     where: { email },
