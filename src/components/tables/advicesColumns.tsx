@@ -1,9 +1,8 @@
 "use client";
 
 import { ColumnDef, Row } from "@tanstack/react-table";
-import { ArrowUpDown, Trash } from "lucide-react";
-import { Button } from "../ui/button";
-import { dateFormat } from "@/lib/dateFormatter";
+import { Trash } from "lucide-react";
+import { dateFormat } from "@/lib/formatter";
 import ButtonDialog from "../ButtonDialog";
 import { deleteAdvice } from "@/actions/advicesAction";
 import { useTransition } from "react";

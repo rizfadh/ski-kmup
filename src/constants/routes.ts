@@ -13,6 +13,10 @@ export const privateRoutes = {
   postsManage: "/posts/manage",
   postDraft: (id: string) => `/posts/draft/${id}`,
   postEdit: (id: string) => `/posts/edit/${id}`,
+  cash: "/cash",
+  cashPayment: "/cash/payment",
+  cashPaymentStatus: "/cash/payment/status",
+  cashPaymentHistory: "/cash/payment/history",
 };
 
 export const authRoutes = {

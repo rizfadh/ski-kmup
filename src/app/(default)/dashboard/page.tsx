@@ -3,7 +3,7 @@ import LogoutButton from "@/components/LogoutButton";
 import { PostItemsSide } from "@/components/PostItems";
 import { Card, CardContent } from "@/components/ui/card";
 import { publicRoutes } from "@/constants/routes";
-import { dateFormat } from "@/lib/dateFormatter";
+import { dateFormat } from "@/lib/formatter";
 import { getPosts } from "@/lib/postDb";
 import { getUserById } from "@/lib/userDb";
 import { Building2, CalendarPlus, Mountain, Newspaper } from "lucide-react";

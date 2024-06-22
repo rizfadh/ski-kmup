@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator";
-import { dateFormat } from "@/lib/dateFormatter";
+import { dateFormat } from "@/lib/formatter";
 import { getPostById } from "@/lib/postDb";
 import parse from "html-react-parser";
 import Image from "next/image";

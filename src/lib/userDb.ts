@@ -1,7 +1,13 @@
 import db from "./db";
 
 export const getUserByEmail = async (email: string) => {
-  return await db.user.findUnique({ where: { email } });
+  return await db.user.findUnique({
+    select: {
+      id: true,
+      password: true,
+    },
+    where: { email },
+  });
 };
 
 export const getUserByIdAuth = async (id: string) => {

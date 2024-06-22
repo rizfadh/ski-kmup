@@ -13,11 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserRole {
-  ADMIN
-  PASSIVE
-}
-
 model User {
   id            String    @id @default(cuid())
   name          String
@@ -36,8 +31,15 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  post     Post[]
-  postLike PostLike[]
+  post        Post[]
+  postLike    PostLike[]
+  cashPayment CashPayment[]
+}
+
+enum UserRole {
+  ADMIN
+  PASSIVE
+  ACTIVE
 }
 
 model UserPosition {
@@ -88,4 +90,28 @@ model PostLike {
   postId String
 
   @@id([userId, postId])
+}
+
+model CashPayment {
+  id     String   @id @default(cuid())
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  due    DateTime
+  amount Int
+  month  String
+  paid   Boolean  @default(false)
+
+  cashPaymentHistory CashPaymentHistory[]
+}
+
+model CashPaymentHistory {
+  id String @id @default(cuid())
+
+  cashPayment CashPayment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  paymentId   String
+
+  status      String
+  paymentType String
+  amount      Int
+  time        DateTime
 }

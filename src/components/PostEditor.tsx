@@ -27,7 +27,7 @@ export default function PostEditor({
     imageUrl,
   );
 
-  if (type === "NEW")
+  if (type === "NEW") {
     return (
       <div className="prose prose-sm mx-auto dark:prose-invert sm:prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl">
         <Image
@@ -49,6 +49,7 @@ export default function PostEditor({
         />
       </div>
     );
+  }
 
   return (
     <div className="prose prose-sm mx-auto dark:prose-invert sm:prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl">

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardHeader } from "./ui/card";
-import { dateFormat } from "@/lib/dateFormatter";
+import { dateFormat } from "@/lib/formatter";
 import { publicRoutes } from "@/constants/routes";
 
 type Props = {

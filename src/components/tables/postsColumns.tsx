@@ -2,7 +2,7 @@
 
 import { ColumnDef, Row } from "@tanstack/react-table";
 import { Check, FilePen, Trash, X } from "lucide-react";
-import { dateFormat } from "@/lib/dateFormatter";
+import { dateFormat } from "@/lib/formatter";
 import ButtonDialog from "../ButtonDialog";
 import { acceptPost } from "@/actions/postsAction";
 import { privateRoutes, publicRoutes } from "@/constants/routes";

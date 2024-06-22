@@ -4,7 +4,7 @@ import { ColumnDef, Row } from "@tanstack/react-table";
 import ButtonDialog from "../ButtonDialog";
 import { Check, X } from "lucide-react";
 import { acceptUser, deleteUser } from "@/actions/registrationsAction";
-import { dateFormat } from "@/lib/dateFormatter";
+import { dateFormat } from "@/lib/formatter";
 import { useTransition } from "react";
 import { privateRoutes } from "@/constants/routes";
 import { toast } from "../ui/use-toast";
