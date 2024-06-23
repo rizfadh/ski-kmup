@@ -3,8 +3,12 @@
 import { privateRoutes } from "@/constants/routes";
 import { dateFormatMonth } from "@/lib/formatter";
 import db from "@/lib/db";
-import { CashMidtransSchema, CashSetSchema } from "@/schemas/CashSchema";
-import { UserRole } from "@prisma/client";
+import {
+  CashInOutSchema,
+  CashMidtransSchema,
+  CashSetSchema,
+} from "@/schemas/CashSchema";
+import { CashInOutType, UserRole } from "@prisma/client";
 import { add } from "date-fns";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -107,6 +111,86 @@ export const cashMidtrans = async (
     const token = await snap.createTransactionToken(parameter);
 
     return { error: false, token };
+  } catch {
+    return { error: true, message: "Terjadi kesalahan" };
+  }
+};
+
+export const addCashInOut = async (
+  type: CashInOutType,
+  id: string,
+  data: z.infer<typeof CashInOutSchema>,
+) => {
+  try {
+    const validated = CashInOutSchema.safeParse(data);
+
+    if (!validated.success) return { error: true, message: "Invalid fields" };
+
+    const { description, amount, date } = validated.data;
+
+    await db.cashInOut.create({
+      data: {
+        userId: id,
+        type,
+        description,
+        amount,
+        date,
+      },
+    });
+
+    const path =
+      type === CashInOutType.IN ? privateRoutes.cashIn : privateRoutes.cashOut;
+
+    revalidatePath(path);
+
+    return { error: false, message: "Kas masuk berhasil ditambahkan" };
+  } catch {
+    return { error: true, message: "Terjadi kesalahan" };
+  }
+};
+
+export const deleteCashInOut = async (type: CashInOutType, id: string) => {
+  try {
+    await db.cashInOut.delete({ where: { id } });
+
+    const path =
+      type === CashInOutType.IN ? privateRoutes.cashIn : privateRoutes.cashOut;
+
+    revalidatePath(path);
+
+    return { error: false, message: "Kas masuk berhasil dihapus" };
+  } catch {
+    return { error: true, message: "Terjadi kesalahan" };
+  }
+};
+
+export const updateCashInOut = async (
+  type: CashInOutType,
+  id: string,
+  data: z.infer<typeof CashInOutSchema>,
+) => {
+  try {
+    const validated = CashInOutSchema.safeParse(data);
+
+    if (!validated.success) return { error: true, message: "Invalid fields" };
+
+    const { description, amount, date } = validated.data;
+
+    await db.cashInOut.update({
+      where: { id },
+      data: {
+        description,
+        amount,
+        date,
+      },
+    });
+
+    const path =
+      type === CashInOutType.IN ? privateRoutes.cashIn : privateRoutes.cashOut;
+
+    revalidatePath(path);
+
+    return { error: false, message: "Kas masuk berhasil diupdate" };
   } catch {
     return { error: true, message: "Terjadi kesalahan" };
   }

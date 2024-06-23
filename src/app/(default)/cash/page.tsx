@@ -23,12 +23,12 @@ export default async function CashPage() {
             Bayar <CreditCard className="h-[1.2rem] w-[1.2rem]" />
           </span>
         </LinkButton>
-        <LinkButton variant="outline" href="#">
+        <LinkButton variant="outline" href={privateRoutes.cashIn}>
           <span className="flex items-center gap-2">
             Kas Masuk <ArrowRightToLine className="h-[1.2rem] w-[1.2rem]" />
           </span>
         </LinkButton>
-        <LinkButton variant="outline" href="#">
+        <LinkButton variant="outline" href={privateRoutes.cashOut}>
           <span className="flex items-center gap-2">
             Kas Keluar <ArrowLeftFromLine className="h-[1.2rem] w-[1.2rem]" />
           </span>

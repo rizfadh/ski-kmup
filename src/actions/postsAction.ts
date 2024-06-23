@@ -19,7 +19,7 @@ import {
 } from "firebase/storage";
 import { createId } from "@paralleldrive/cuid2";
 
-export const newPost = async (formData: FormData) => {
+export const addPost = async (formData: FormData) => {
   try {
     const data = {
       id: formData.get("id"),

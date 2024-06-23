@@ -17,6 +17,8 @@ export const privateRoutes = {
   cashPayment: "/cash/payment",
   cashPaymentStatus: "/cash/payment/status",
   cashPaymentHistory: "/cash/payment/history",
+  cashIn: "/cash/in",
+  cashOut: "/cash/out",
 };
 
 export const authRoutes = {

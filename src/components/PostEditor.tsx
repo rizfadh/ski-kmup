@@ -4,7 +4,7 @@ import { useState } from "react";
 import PostForm from "./PostForm";
 import Image from "next/image";
 import imageEmpty from "../../public/add-image.svg";
-import { newPost, updatePost } from "@/actions/postsAction";
+import { addPost, updatePost } from "@/actions/postsAction";
 import { privateRoutes, publicRoutes } from "@/constants/routes";
 import { PostFormSchema, PostFormUpdateSchema } from "@/schemas/PostSchema";
 
@@ -44,7 +44,7 @@ export default function PostEditor({
           setImagePreview={setImagePreview}
           title=""
           content=""
-          submitAction={newPost}
+          submitAction={addPost}
           toRoute={publicRoutes.posts}
         />
       </div>

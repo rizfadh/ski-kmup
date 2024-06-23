@@ -34,6 +34,7 @@ model User {
   post        Post[]
   postLike    PostLike[]
   cashPayment CashPayment[]
+  cashInOut   CashInOut[]
 }
 
 enum UserRole {
@@ -114,4 +115,22 @@ model CashPaymentHistory {
   paymentType String
   amount      Int
   time        DateTime
+}
+
+enum CashInOutType {
+  IN
+  OUT
+}
+
+model CashInOut {
+  id String @id @default(cuid())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  type        CashInOutType
+  description String
+  amount      Int
+  date        DateTime
+  createdAt   DateTime      @default(now())
 }

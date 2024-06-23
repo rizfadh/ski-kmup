@@ -1,12 +1,24 @@
 import { auth } from "@/auth";
+import { CashInAddFormDialog } from "@/components/CashInOutFormDialog";
+import { DataTable } from "@/components/DataTable";
+import { cashInColumns } from "@/components/tables/cashColumns";
+import { getCashIn } from "@/lib/cashDb";
 
 export default async function CashInPage() {
-  const session = await auth();
+  const [session, cashIn] = await Promise.all([auth(), getCashIn()]);
   if (!session || !session.user) return null;
 
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">
-      <p>IN</p>
+      <div className="flex gap-2">
+        <CashInAddFormDialog id={session.user.id as string} />
+      </div>
+      <DataTable
+        columns={cashInColumns}
+        data={cashIn}
+        searchBy="description"
+        searchPlaceholder="Deskripsi"
+      />
     </div>
   );
 }

@@ -7,11 +7,13 @@ import {
   dateFormat,
   dateFormatWithTime,
 } from "@/lib/formatter";
-import ButtonDialog from "../ButtonDialog";
-import { deleteAdvice } from "@/actions/advicesAction";
 import { useTransition } from "react";
 import { toast } from "../ui/use-toast";
 import { ColumnHeaderSort } from "./ColumnHeaderSort";
+import { deleteCashInOut } from "@/actions/cashAction";
+import ButtonDialog from "@/components/ButtonDialog";
+import { CashInUpdateFormDialog } from "../CashInOutFormDialog";
+import { CashInOutType } from "@prisma/client";
 
 export type CashHistory = {
   id: string;
@@ -91,5 +93,93 @@ export const paymentHistoryColumns: ColumnDef<CashHistory>[] = [
         return <div className="text-center">{dateFormatWithTime(date)}</div>;
       }
     },
+  },
+];
+
+export type CashIn = {
+  id: string;
+  description: string;
+  amount: number;
+  date: Date;
+  createdBy: string;
+};
+
+function CashInCell({ row }: { row: Row<CashIn> }) {
+  const { id, description, amount, date } = row.original;
+
+  const [isPending, setTransition] = useTransition();
+
+  const deleteCashInHandler = () => {
+    setTransition(async () => {
+      const response = await deleteCashInOut(CashInOutType.IN, id);
+
+      toast({
+        title: response.error ? "Gagal" : "Sukses",
+        description: response.message,
+        variant: response.error ? "destructive" : "default",
+      });
+    });
+  };
+
+  return (
+    <div className="flex justify-center">
+      <CashInUpdateFormDialog
+        id={id}
+        description={description}
+        amount={amount}
+        date={date}
+      />
+      <ButtonDialog
+        id={id}
+        Icon={Trash}
+        title="Hapus Kas Masuk"
+        description={`${description} akan dihapus`}
+        isDisabled={isPending}
+        action={deleteCashInHandler}
+      />
+    </div>
+  );
+}
+
+export const cashInColumns: ColumnDef<CashIn>[] = [
+  {
+    accessorKey: "description",
+    header: () => <div className="min-w-[200px]">Deskripsi</div>,
+  },
+  {
+    accessorKey: "amount",
+    header: "Nominal",
+    cell: ({ row }) => {
+      const amount = row.getValue("amount") as number;
+
+      return currencyFormat(amount);
+    },
+  },
+  {
+    accessorKey: "date",
+    header: ({ column }) => (
+      <ColumnHeaderSort
+        column={column}
+        title="Tanggal"
+        className="min-w-[150px] justify-center"
+      />
+    ),
+    cell: ({ row }) => {
+      const date = row.getValue("date");
+      if (date instanceof Date) {
+        return <div className="text-center">{dateFormat(date)}</div>;
+      }
+    },
+  },
+  {
+    accessorKey: "createdBy",
+    header: ({ column }) => (
+      <ColumnHeaderSort column={column} title="Dibuat oleh" />
+    ),
+  },
+  {
+    id: "actions",
+    header: () => <div className="text-center">Aksi</div>,
+    cell: CashInCell,
   },
 ];

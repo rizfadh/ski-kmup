@@ -19,6 +19,10 @@ export const dateFormatMonth = (date: Date) => {
   });
 };
 
+export const dateFormatInput = (date: Date) => {
+  return format(date, "yyyy-MM-dd");
+};
+
 export const currencyFormat = (amount: number) => {
   const formatter = new Intl.NumberFormat("id-ID", {
     style: "currency",

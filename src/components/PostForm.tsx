@@ -16,7 +16,7 @@ import {
   PostFormSchema,
 } from "@/schemas/PostSchema";
 import Tiptap from "./TipTap";
-import { newPost } from "@/actions/postsAction";
+import { addPost } from "@/actions/postsAction";
 import { useRouter } from "next/navigation";
 import { toast } from "./ui/use-toast";
 import { ActionResponse } from "@/types/ActionResponse";
