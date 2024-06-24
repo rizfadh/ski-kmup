@@ -1,11 +1,24 @@
+import { auth } from "@/auth";
 import CashSetForm from "@/components/CashSetForm";
 import LinkButton from "@/components/LinkButton";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { privateRoutes } from "@/constants/routes";
-import { isCashAmountExist } from "@/lib/cashDb";
+import { getCashInOutInfo, getCashInfo, isCashAmountExist } from "@/lib/cashDb";
+import { currencyFormat } from "@/lib/formatter";
 import { ArrowLeftFromLine, ArrowRightToLine, CreditCard } from "lucide-react";
 
 export default async function CashPage() {
-  const cashExist = await isCashAmountExist();
+  const [session, cashExist] = await Promise.all([auth(), isCashAmountExist()]);
+
+  if (!session || !session.user) return null;
 
   if (!cashExist) {
     return (
@@ -14,6 +27,10 @@ export default async function CashPage() {
       </div>
     );
   }
+
+  const { cashIn, cashOut, amount, months, userCashInfo } = await getCashInfo(
+    session.user.id as string,
+  );
 
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">
@@ -34,6 +51,107 @@ export default async function CashPage() {
           </span>
         </LinkButton>
       </div>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Kas Masuk</CardTitle>
+            <CardDescription>Periode ini</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-4xl font-bold lg:text-5xl">
+              {currencyFormat(cashIn.cashPeriod)}
+            </p>
+          </CardContent>
+          <CardFooter>
+            <div>
+              <p className="text-sm text-muted-foreground">Bulan ini</p>
+              <p className="font-bold">{currencyFormat(cashIn.cashMonth)}</p>
+            </div>
+          </CardFooter>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Kas Keluar</CardTitle>
+            <CardDescription>Periode ini</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-4xl font-bold lg:text-5xl">
+              {currencyFormat(cashOut.cashPeriod)}
+            </p>
+          </CardContent>
+          <CardFooter>
+            <div>
+              <p className="text-sm text-muted-foreground">Bulan ini</p>
+              <p className="font-bold">{currencyFormat(cashOut.cashMonth)}</p>
+            </div>
+          </CardFooter>
+        </Card>
+      </div>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Biaya Iuran Kas</CardTitle>
+            <CardDescription>Nominal yang dibayar perbulan</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-4xl font-bold lg:text-5xl">
+              {currencyFormat(amount)}
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Lama Iuran Kas</CardTitle>
+            <CardDescription>Jumlah bulan kas periode ini</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-4xl font-bold lg:text-5xl">{months} Bulan</p>
+          </CardContent>
+        </Card>
+      </div>
+      <Card>
+        <CardContent className="grid grid-cols-1 gap-6 p-6 lg:grid-cols-2 lg:gap-4">
+          <div className="lg:pr-6">
+            <div className="space-y-1.5">
+              <CardTitle>Iuran Kas Kamu</CardTitle>
+              <CardDescription>Yang sudah dibayar</CardDescription>
+            </div>
+            <div className="pt-6">
+              <p>
+                <span className="text-4xl font-bold lg:text-5xl">
+                  {userCashInfo.monthsPaid}
+                </span>
+                /{userCashInfo.monthsTotal} bulan
+              </p>
+              <p className="mt-6">
+                {currencyFormat(userCashInfo.monthsPaidAmount)} dari total{" "}
+                {currencyFormat(userCashInfo.monthsTotalAmount)}
+              </p>
+              <Progress
+                className="mt-3"
+                value={
+                  (userCashInfo.monthsPaid / userCashInfo.monthsTotal) * 100
+                }
+              />
+            </div>
+          </div>
+          <div className="lg:pl-6">
+            <div className="space-y-1.5">
+              <CardTitle>Telat bayar</CardTitle>
+              <CardDescription>Kas yang telat dibayar</CardDescription>
+            </div>
+            <div className="pt-6">
+              <p className="text-4xl font-bold lg:text-5xl">
+                {userCashInfo.monthsLate} bulan
+              </p>
+              <p className="mt-6">Hutang yang harus dibayar</p>
+              <p className="mt-2 font-bold">
+                {currencyFormat(userCashInfo.monthsLateAmount)}
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

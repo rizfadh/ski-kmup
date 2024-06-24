@@ -1,8 +1,16 @@
 import { auth } from "@/auth";
 import LogoutButton from "@/components/LogoutButton";
 import { PostItemsSide } from "@/components/PostItems";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardDescription,
+  CardTitle,
+} from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { publicRoutes } from "@/constants/routes";
+import { getCashPaidLate } from "@/lib/cashDb";
 import { dateFormat } from "@/lib/formatter";
 import { getPosts } from "@/lib/postDb";
 import { getUserById } from "@/lib/userDb";
@@ -33,9 +41,10 @@ export default async function DashboardPage() {
 
   if (!session || !session.user) return null;
 
-  const [userData, posts] = await Promise.all([
+  const [userData, posts, cashInfo] = await Promise.all([
     getUserById(session.user.id as string),
     getPosts(true, 4),
+    getCashPaidLate(session.user.id as string),
   ]);
 
   return (
@@ -66,9 +75,30 @@ export default async function DashboardPage() {
           description="Salak Bogor"
         />
       </div>
-      <pre className="overflow-x-auto rounded-md bg-slate-950 p-4">
-        <code className="text-white">{JSON.stringify(userData, null, 2)}</code>
-      </pre>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Iuran Kas Kamu</CardTitle>
+            <CardDescription>Yang sudah dibayar</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p>
+              <span className="text-4xl font-bold lg:text-5xl">
+                {cashInfo.paid}
+              </span>
+              /{cashInfo.months} bulan
+            </p>
+            <p className="mt-6">
+              Telat bayar:{" "}
+              <span className="font-bold">{cashInfo.late} bulan</span>
+            </p>
+            <Progress
+              className="mt-3"
+              value={(cashInfo.paid / cashInfo.months) * 100}
+            />
+          </CardContent>
+        </Card>
+      </div>
       <div className="flex flex-col justify-between md:flex-row md:items-center">
         <h2 className="text-2xl font-bold">Postingan Terbaru</h2>
         <Link href={publicRoutes.posts} className="text-primary">
