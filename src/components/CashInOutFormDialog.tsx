@@ -30,15 +30,17 @@ import { toast } from "./ui/use-toast";
 import { dateFormatInput } from "@/lib/formatter";
 import { CashInOutType } from "@prisma/client";
 
-interface CashInAddFormDialogProps extends ComponentProps<typeof Button> {
+interface CashInOutAddFormDialogProps extends ComponentProps<typeof Button> {
   id: string;
+  cashType: CashInOutType;
 }
 
-export function CashInAddFormDialog({
+export function CashInOutAddFormDialog({
   id,
+  cashType,
   className,
   ...props
-}: CashInAddFormDialogProps) {
+}: CashInOutAddFormDialogProps) {
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -57,7 +59,7 @@ export function CashInAddFormDialog({
 
       const dateInput = new Date(date);
 
-      const response = await addCashInOut(CashInOutType.IN, id, {
+      const response = await addCashInOut(id, cashType, {
         description,
         amount: amount as number,
         date: dateInput,
@@ -87,9 +89,11 @@ export function CashInAddFormDialog({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Tambah Kas Masuk</DialogTitle>
+          <DialogTitle>
+            Tambah Kas {cashType === "IN" ? "Masuk" : "Keluar"}
+          </DialogTitle>
           <DialogDescription>
-            Masukan data kas masuk yang ingin ditambahkan
+            Masukan data kas yang ingin ditambahkan
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -147,21 +151,23 @@ export function CashInAddFormDialog({
   );
 }
 
-interface CashInUpdateFormDialogProps extends ComponentProps<typeof Button> {
+interface CashInOutUpdateFormDialogProps extends ComponentProps<typeof Button> {
   id: string;
+  cashType: CashInOutType;
   description: string;
   amount: number;
   date: Date;
 }
 
-export function CashInUpdateFormDialog({
+export function CashInOutUpdateFormDialog({
   id,
+  cashType,
   description,
   amount,
   date,
   className,
   ...props
-}: CashInUpdateFormDialogProps) {
+}: CashInOutUpdateFormDialogProps) {
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -184,7 +190,7 @@ export function CashInUpdateFormDialog({
 
       const dateInput = new Date(date);
 
-      const response = await updateCashInOut(CashInOutType.IN, id, {
+      const response = await updateCashInOut(id, cashType, {
         description,
         amount: amount as number,
         date: dateInput,
@@ -214,9 +220,11 @@ export function CashInUpdateFormDialog({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Update Kas Masuk</DialogTitle>
+          <DialogTitle>
+            Update Kas {cashType === "IN" ? "Masuk" : "Keluar"}
+          </DialogTitle>
           <DialogDescription>
-            Masukan data kas masuk yang ingin diupdate
+            Masukan data kas yang ingin diupdate
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

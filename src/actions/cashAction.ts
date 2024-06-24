@@ -117,8 +117,8 @@ export const cashMidtrans = async (
 };
 
 export const addCashInOut = async (
-  type: CashInOutType,
   id: string,
+  type: CashInOutType,
   data: z.infer<typeof CashInOutSchema>,
 ) => {
   try {
@@ -138,35 +138,33 @@ export const addCashInOut = async (
       },
     });
 
-    const path =
-      type === CashInOutType.IN ? privateRoutes.cashIn : privateRoutes.cashOut;
+    const path = type === "IN" ? privateRoutes.cashIn : privateRoutes.cashOut;
 
     revalidatePath(path);
 
-    return { error: false, message: "Kas masuk berhasil ditambahkan" };
+    return { error: false, message: "Kas berhasil ditambahkan" };
   } catch {
     return { error: true, message: "Terjadi kesalahan" };
   }
 };
 
-export const deleteCashInOut = async (type: CashInOutType, id: string) => {
+export const deleteCashInOut = async (id: string, type: CashInOutType) => {
   try {
     await db.cashInOut.delete({ where: { id } });
 
-    const path =
-      type === CashInOutType.IN ? privateRoutes.cashIn : privateRoutes.cashOut;
+    const path = type === "IN" ? privateRoutes.cashIn : privateRoutes.cashOut;
 
     revalidatePath(path);
 
-    return { error: false, message: "Kas masuk berhasil dihapus" };
+    return { error: false, message: "Kas berhasil dihapus" };
   } catch {
     return { error: true, message: "Terjadi kesalahan" };
   }
 };
 
 export const updateCashInOut = async (
-  type: CashInOutType,
   id: string,
+  type: CashInOutType,
   data: z.infer<typeof CashInOutSchema>,
 ) => {
   try {
@@ -185,12 +183,11 @@ export const updateCashInOut = async (
       },
     });
 
-    const path =
-      type === CashInOutType.IN ? privateRoutes.cashIn : privateRoutes.cashOut;
+    const path = type === "IN" ? privateRoutes.cashIn : privateRoutes.cashOut;
 
     revalidatePath(path);
 
-    return { error: false, message: "Kas masuk berhasil diupdate" };
+    return { error: false, message: "Kas berhasil diupdate" };
   } catch {
     return { error: true, message: "Terjadi kesalahan" };
   }

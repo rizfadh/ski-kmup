@@ -32,9 +32,9 @@ export const getUserCashHistory = async (id: string) => {
   });
 };
 
-export const getCashIn = async () => {
+export const getCashInOut = async (type: CashInOutType) => {
   const cashIn = await db.cashInOut.findMany({
-    where: { type: CashInOutType.IN },
+    where: { type },
     orderBy: { createdAt: "desc" },
     include: {
       user: {
@@ -48,6 +48,7 @@ export const getCashIn = async () => {
   return cashIn.map((cash) => {
     return {
       id: cash.id,
+      type: cash.type,
       description: cash.description,
       amount: cash.amount,
       date: cash.date,

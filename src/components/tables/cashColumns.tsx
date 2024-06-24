@@ -12,7 +12,7 @@ import { toast } from "../ui/use-toast";
 import { ColumnHeaderSort } from "./ColumnHeaderSort";
 import { deleteCashInOut } from "@/actions/cashAction";
 import ButtonDialog from "@/components/ButtonDialog";
-import { CashInUpdateFormDialog } from "../CashInOutFormDialog";
+import { CashInOutUpdateFormDialog } from "../CashInOutFormDialog";
 import { CashInOutType } from "@prisma/client";
 
 export type CashHistory = {
@@ -96,22 +96,23 @@ export const paymentHistoryColumns: ColumnDef<CashHistory>[] = [
   },
 ];
 
-export type CashIn = {
+export type CashInOut = {
   id: string;
+  type: CashInOutType;
   description: string;
   amount: number;
   date: Date;
   createdBy: string;
 };
 
-function CashInCell({ row }: { row: Row<CashIn> }) {
-  const { id, description, amount, date } = row.original;
+function CashInOutCell({ row }: { row: Row<CashInOut> }) {
+  const { id, type, description, amount, date } = row.original;
 
   const [isPending, setTransition] = useTransition();
 
   const deleteCashInHandler = () => {
     setTransition(async () => {
-      const response = await deleteCashInOut(CashInOutType.IN, id);
+      const response = await deleteCashInOut(id, type);
 
       toast({
         title: response.error ? "Gagal" : "Sukses",
@@ -123,8 +124,9 @@ function CashInCell({ row }: { row: Row<CashIn> }) {
 
   return (
     <div className="flex justify-center">
-      <CashInUpdateFormDialog
+      <CashInOutUpdateFormDialog
         id={id}
+        cashType={type}
         description={description}
         amount={amount}
         date={date}
@@ -141,7 +143,7 @@ function CashInCell({ row }: { row: Row<CashIn> }) {
   );
 }
 
-export const cashInColumns: ColumnDef<CashIn>[] = [
+export const cashInColumns: ColumnDef<CashInOut>[] = [
   {
     accessorKey: "description",
     header: () => <div className="min-w-[200px]">Deskripsi</div>,
@@ -180,6 +182,6 @@ export const cashInColumns: ColumnDef<CashIn>[] = [
   {
     id: "actions",
     header: () => <div className="text-center">Aksi</div>,
-    cell: CashInCell,
+    cell: CashInOutCell,
   },
 ];
