@@ -13,21 +13,22 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { CashSetFormSchema } from "@/schemas/CashSchema";
 import { setCash } from "@/actions/cashAction";
 import { toast } from "./ui/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { Settings2 } from "lucide-react";
 
-type Props = React.ComponentProps<typeof Card>;
-
-export default function CashSetForm({ className, ...props }: Props) {
+export default function CashSetForm({ disabled }: { disabled: boolean }) {
+  const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof CashSetFormSchema>>({
@@ -55,15 +56,28 @@ export default function CashSetForm({ className, ...props }: Props) {
     });
   }
 
+  if (disabled) {
+    return (
+      <Button variant="outline" className="flex gap-2" disabled>
+        Atur Iuran Kas <Settings2 className="h-[1.2rem] w-[1.2rem]" />
+      </Button>
+    );
+  }
+
   return (
-    <Card className={className} {...props}>
-      <CardHeader>
-        <CardTitle>Iuran Kas</CardTitle>
-        <CardDescription>
-          Kas yang harus dibayar untuk periode ini
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline" className="flex gap-2">
+          Atur Iuran Kas <Settings2 className="h-[1.2rem] w-[1.2rem]" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Iuran Kas</DialogTitle>
+          <DialogDescription>
+            Kas yang harus dibayar untuk periode ini
+          </DialogDescription>
+        </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
             <FormField
@@ -97,7 +111,7 @@ export default function CashSetForm({ className, ...props }: Props) {
             </Button>
           </form>
         </Form>
-      </CardContent>
-    </Card>
+      </DialogContent>
+    </Dialog>
   );
 }

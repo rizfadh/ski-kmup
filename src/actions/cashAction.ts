@@ -12,10 +12,11 @@ import { CashInOutType, UserRole } from "@prisma/client";
 import { add } from "date-fns";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { auth } from "@/auth";
+import { isCashSet } from "@/lib/cashDb";
 
 // @ts-ignore
 import midtransClient from "midtrans-client";
-import { auth } from "@/auth";
 
 export const setCash = async (data: z.infer<typeof CashSetSchema>) => {
   try {
@@ -25,7 +26,9 @@ export const setCash = async (data: z.infer<typeof CashSetSchema>) => {
 
     const { amount, months } = validated.data;
 
-    await db.cashPayment.deleteMany();
+    const cashSet = await isCashSet();
+
+    if (cashSet) return { error: true, message: "Iuran kas sudah diatur" };
 
     const users = await db.user.findMany({
       select: {
@@ -62,7 +65,7 @@ export const setCash = async (data: z.infer<typeof CashSetSchema>) => {
 
     await Promise.all(setCashPayment);
 
-    revalidatePath(privateRoutes.cash);
+    revalidatePath(privateRoutes.cashManage);
     return { error: false, message: "Iuran kas berhasil ditetapkan" };
   } catch {
     return { error: true, message: "Terjadi kesalahan" };
@@ -188,6 +191,33 @@ export const updateCashInOut = async (
     revalidatePath(path);
 
     return { error: false, message: "Kas berhasil diupdate" };
+  } catch {
+    return { error: true, message: "Terjadi kesalahan" };
+  }
+};
+
+export const setUserCashPaid = async (id: string) => {
+  try {
+    const cash = await db.cashPayment.update({
+      where: { id },
+      data: {
+        paid: true,
+      },
+    });
+
+    await db.cashPaymentHistory.create({
+      data: {
+        paymentId: id,
+        amount: cash.amount,
+        status: "Sukses",
+        paymentType: "Bendahara",
+        time: new Date(),
+      },
+    });
+
+    revalidatePath(privateRoutes.cashManageUser(id));
+
+    return { error: false, message: "Kas berhasil diubah" };
   } catch {
     return { error: true, message: "Terjadi kesalahan" };
   }

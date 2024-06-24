@@ -1,27 +1,28 @@
 import { auth } from "@/auth";
 import LinkButton from "@/components/LinkButton";
 import { PostItems } from "@/components/PostItems";
-import { Card, CardContent } from "@/components/ui/card";
 import { privateRoutes } from "@/constants/routes";
 import { getPosts } from "@/lib/postDb";
 import { PlusCircle, ListChecks } from "lucide-react";
 
 function PostsMenu() {
   return (
-    <Card className="w-fit">
-      <CardContent className="space-x-2 p-2">
-        <LinkButton href={privateRoutes.postsNew} variant="ghost" size="icon">
-          <PlusCircle className="h-[1.5rem] w-[1.5rem]" />
-        </LinkButton>
-        <LinkButton
-          href={privateRoutes.postsManage}
-          variant="ghost"
-          size="icon"
-        >
-          <ListChecks className="h-[1.5rem] w-[1.5rem]" />
-        </LinkButton>
-      </CardContent>
-    </Card>
+    <div className="flex gap-2">
+      <LinkButton
+        href={privateRoutes.postsNew}
+        variant="outline"
+        className="flex items-center gap-2"
+      >
+        Buat <PlusCircle className="h-[1.2rem] w-[1.2rem]" />
+      </LinkButton>
+      <LinkButton
+        href={privateRoutes.postsManage}
+        variant="outline"
+        className="flex items-center gap-2"
+      >
+        Atur <ListChecks className="h-[1.5rem] w-[1.5rem]" />
+      </LinkButton>
+    </div>
   );
 }
 

@@ -1,5 +1,4 @@
 import { auth } from "@/auth";
-import CashSetForm from "@/components/CashSetForm";
 import LinkButton from "@/components/LinkButton";
 import {
   Card,
@@ -11,29 +10,40 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { privateRoutes } from "@/constants/routes";
-import { getCashInOutInfo, getCashInfo, isCashAmountExist } from "@/lib/cashDb";
+import { getCashInfo, isCashSet } from "@/lib/cashDb";
 import { currencyFormat } from "@/lib/formatter";
-import { ArrowLeftFromLine, ArrowRightToLine, CreditCard } from "lucide-react";
+import {
+  ArrowLeftFromLine,
+  ArrowRightToLine,
+  CreditCard,
+  Settings,
+} from "lucide-react";
+import Link from "next/link";
 
 export default async function CashPage() {
-  const [session, cashExist] = await Promise.all([auth(), isCashAmountExist()]);
+  const session = await auth();
 
   if (!session || !session.user) return null;
 
-  if (!cashExist) {
-    return (
-      <div className="container flex min-h-screen items-center justify-center">
-        <CashSetForm />
-      </div>
-    );
-  }
+  const [cashSet, cashInfo] = await Promise.all([
+    isCashSet(),
+    getCashInfo(session.user.id as string),
+  ]);
 
-  const { cashIn, cashOut, amount, months, userCashInfo } = await getCashInfo(
-    session.user.id as string,
-  );
+  const { cashIn, cashOut, amount, months, userCashInfo } = cashInfo;
 
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">
+      {cashSet ? null : (
+        <div className="w-fit rounded-md bg-destructive px-6 py-3 text-destructive-foreground">
+          <p className="flex items-center gap-2">
+            Iuran kas belum diatur, harap atur
+            <Link href={privateRoutes.cashManage} className="underline">
+              disini
+            </Link>
+          </p>
+        </div>
+      )}
       <div className="flex flex-col gap-2 sm:flex-row">
         <LinkButton variant="outline" href={privateRoutes.cashPayment}>
           <span className="flex items-center gap-2">
@@ -48,6 +58,12 @@ export default async function CashPage() {
         <LinkButton variant="outline" href={privateRoutes.cashOut}>
           <span className="flex items-center gap-2">
             Kas Keluar <ArrowLeftFromLine className="h-[1.2rem] w-[1.2rem]" />
+          </span>
+        </LinkButton>
+        <LinkButton variant="outline" href={privateRoutes.cashManage}>
+          <span className="flex items-center gap-2">
+            Atur Pembayaran
+            <Settings className="h-[1.2rem] w-[1.2rem]" />
           </span>
         </LinkButton>
       </div>

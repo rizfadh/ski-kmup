@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef, Row } from "@tanstack/react-table";
-import { Trash } from "lucide-react";
+import { CreditCard, Trash } from "lucide-react";
 import {
   currencyFormat,
   dateFormat,
@@ -14,6 +14,8 @@ import { deleteCashInOut } from "@/actions/cashAction";
 import ButtonDialog from "@/components/ButtonDialog";
 import { CashInOutUpdateFormDialog } from "../CashInOutFormDialog";
 import { CashInOutType } from "@prisma/client";
+import LinkButton from "../LinkButton";
+import { privateRoutes } from "@/constants/routes";
 
 export type CashHistory = {
   id: string;
@@ -183,5 +185,59 @@ export const cashInColumns: ColumnDef<CashInOut>[] = [
     id: "actions",
     header: () => <div className="text-center">Aksi</div>,
     cell: CashInOutCell,
+  },
+];
+
+export type CashManage = {
+  id: string;
+  name: string;
+  paid: string[];
+  unPaid: string[];
+};
+
+export const cashManageColumns: ColumnDef<CashManage>[] = [
+  {
+    accessorKey: "name",
+    header: ({ column }) => (
+      <ColumnHeaderSort
+        column={column}
+        title="Nama"
+        className="min-w-[150px]"
+      />
+    ),
+  },
+  {
+    accessorKey: "paid",
+    header: () => <div>Sudah bayar</div>,
+    cell: ({ row }) => {
+      const paid = row.getValue("paid") as string[];
+      return <div className="w-[300px]">{paid.join(", ")}</div>;
+    },
+  },
+  {
+    accessorKey: "unPaid",
+    header: () => <div>Belum bayar</div>,
+    cell: ({ row }) => {
+      const unPaid = row.getValue("unPaid") as string[];
+      return <div className="w-[300px]">{unPaid.join(", ")}</div>;
+    },
+  },
+  {
+    id: "actions",
+    header: () => <div className="text-center">Aksi</div>,
+    cell: ({ row }) => {
+      const { id } = row.original;
+      return (
+        <div className="flex justify-center">
+          <LinkButton
+            href={privateRoutes.cashManageUser(id)}
+            variant="outline"
+            className="flex items-center gap-2"
+          >
+            Atur <CreditCard className="h-[1.2rem] w-[1.2rem]" />
+          </LinkButton>
+        </div>
+      );
+    },
   },
 ];

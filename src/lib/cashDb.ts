@@ -1,8 +1,8 @@
-import { CashInOutType } from "@prisma/client";
+import { CashInOutType, UserRole } from "@prisma/client";
 import db from "./db";
 import { endOfMonth, startOfMonth } from "date-fns";
 
-export const isCashAmountExist = async () => {
+export const isCashSet = async () => {
   const cash = await db.cashPayment.findFirst();
   return !!cash;
 };
@@ -155,4 +155,40 @@ export const getCashInfo = async (id: string) => {
     months,
     userCashInfo,
   };
+};
+
+export const getAllUserCash = async () => {
+  const userCash = await db.user.findMany({
+    where: {
+      userPosition: {
+        role: {
+          notIn: [UserRole.PASSIVE, UserRole.ADMIN],
+        },
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      cashPayment: {
+        select: {
+          month: true,
+          paid: true,
+        },
+        orderBy: { due: "asc" },
+      },
+    },
+  });
+
+  return userCash.map((cash) => {
+    return {
+      id: cash.id,
+      name: cash.name,
+      paid: cash.cashPayment
+        .filter((payment) => payment.paid)
+        .map((payment) => payment.month),
+      unPaid: cash.cashPayment
+        .filter((payment) => !payment.paid)
+        .map((payment) => payment.month),
+    };
+  });
 };

@@ -40,7 +40,11 @@ export default function CashPayButton({ id, amount, month }: Props) {
   };
 
   return (
-    <Button onClick={midtransPaymentHandler} disabled={isPending}>
+    <Button
+      variant="outline"
+      onClick={midtransPaymentHandler}
+      disabled={isPending}
+    >
       Bayar
     </Button>
   );
