@@ -2,7 +2,15 @@
 
 import { Separator } from "./ui/separator";
 import { ModeToggle } from "./ModeToggle";
-import { Home, Mail, MenuIcon, Newspaper, User, Wallet } from "lucide-react";
+import {
+  Briefcase,
+  Home,
+  Mail,
+  MenuIcon,
+  Newspaper,
+  User,
+  Wallet,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -39,6 +47,11 @@ export default function NavBarAuth({ className }: NavBarAuthProps) {
       Icon: Wallet,
       label: "Kas",
       href: privateRoutes.cash,
+    },
+    {
+      Icon: Briefcase,
+      label: "Program Kerja",
+      href: privateRoutes.program,
     },
     {
       Icon: Newspaper,

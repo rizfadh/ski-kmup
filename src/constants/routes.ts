@@ -21,6 +21,9 @@ export const privateRoutes = {
   cashOut: "/cash/out",
   cashManage: "/cash/manage",
   cashManageUser: (id: string) => `/cash/manage/${id}`,
+  program: "/program",
+  programManage: "/program/manage",
+  programManagePlan: "/program/manage/plan",
 };
 
 export const authRoutes = {

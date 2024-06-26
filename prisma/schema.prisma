@@ -39,21 +39,28 @@ model User {
 
 enum UserRole {
   ADMIN
+  CHAIRMAN
+  TREASURER
+  SECRETARY
+  HEADOFDIVISION
+  HEADOFKPSDM
+  HEADOFMEDCEN
   PASSIVE
   ACTIVE
 }
 
 model UserPosition {
-  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String   @id
-  title  String?
-  role   UserRole @default(PASSIVE)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @id
+
+  title String?
+  role  UserRole @default(PASSIVE)
 }
 
 model RegisterApproval {
-  id       String   @id @default(cuid())
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId   String   @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @id
+
   division String[]
   reason   String
 
@@ -70,9 +77,11 @@ model Advice {
 }
 
 model Post {
-  id         String   @id @default(cuid())
-  user       User     @relation(fields: [createdBy], references: [id])
-  createdBy  String
+  id String @id @default(cuid())
+
+  user      User   @relation(fields: [createdBy], references: [id])
+  createdBy String
+
   imageUrl   String
   title      String
   content    String
@@ -84,19 +93,23 @@ model Post {
 }
 
 model PostLike {
-  like   Boolean
-  user   User    @relation(fields: [userId], references: [id])
+  like Boolean
+
+  user   User   @relation(fields: [userId], references: [id])
   userId String
-  post   Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String
 
   @@id([userId, postId])
 }
 
 model CashPayment {
-  id     String   @id @default(cuid())
-  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id String @id @default(cuid())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
+
   due    DateTime
   amount Int
   month  String
@@ -133,4 +146,41 @@ model CashInOut {
   amount      Int
   date        DateTime
   createdAt   DateTime      @default(now())
+}
+
+model WorkProgram {
+  id       String   @id @default(cuid())
+  name     String
+  division String
+  date     DateTime
+
+  workProgramPlan   WorkProgramPlan?
+  workProgramNeeds  workProgramNeeds[]
+  workProgramReport WorkProgramReport?
+}
+
+model WorkProgramReport {
+  workProgram   WorkProgram @relation(fields: [workProgramId], references: [id], onDelete: Cascade)
+  workProgramId String      @id
+
+  implemented Boolean?
+  proofUrl    String?
+}
+
+model WorkProgramPlan {
+  workProgram   WorkProgram @relation(fields: [workProgramId], references: [id], onDelete: Cascade)
+  workProgramId String      @id
+
+  chairmanConfirm  Boolean?
+  treasurerConfirm Boolean?
+  secretaryConfirm Boolean?
+}
+
+model workProgramNeeds {
+  id     String @id @default(cuid())
+  name   String
+  amount Int
+
+  workProgram   WorkProgram @relation(fields: [workProgramId], references: [id], onDelete: Cascade)
+  workProgramId String
 }
