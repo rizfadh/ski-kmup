@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef, Row } from "@tanstack/react-table";
-import { CreditCard, Trash } from "lucide-react";
+import { CreditCard, Trash, Wallet } from "lucide-react";
 import {
   currencyFormat,
   dateFormat,
@@ -234,7 +234,7 @@ export const cashManageColumns: ColumnDef<CashManage>[] = [
             variant="outline"
             className="flex items-center gap-2"
           >
-            Atur <CreditCard className="h-[1.2rem] w-[1.2rem]" />
+            Atur <Wallet className="h-[1.2rem] w-[1.2rem]" />
           </LinkButton>
         </div>
       );

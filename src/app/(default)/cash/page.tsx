@@ -62,7 +62,7 @@ export default async function CashPage() {
         </LinkButton>
         <LinkButton variant="outline" href={privateRoutes.cashManage}>
           <span className="flex items-center gap-2">
-            Atur Pembayaran
+            Kelola Pembayaran
             <Settings className="h-[1.2rem] w-[1.2rem]" />
           </span>
         </LinkButton>

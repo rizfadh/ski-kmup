@@ -109,8 +109,8 @@ export async function POST(req: Request) {
     });
 
     return new Response("Success", { status: 200 });
-  } catch (error) {
-    console.log(error);
+  } catch (e) {
+    console.log(e);
     return new Response("Error", { status: 500 });
   }
 }

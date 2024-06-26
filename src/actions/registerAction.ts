@@ -51,7 +51,8 @@ export const register = async (
       },
     });
     return { error: false, message: "Daftar berhasil" };
-  } catch {
+  } catch (e) {
+    console.log(e);
     return { error: true, message: "Daftar gagal" };
   }
 };

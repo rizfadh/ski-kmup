@@ -67,7 +67,8 @@ export const setCash = async (data: z.infer<typeof CashSetSchema>) => {
 
     revalidatePath(privateRoutes.cashManage);
     return { error: false, message: "Iuran kas berhasil ditetapkan" };
-  } catch {
+  } catch (e) {
+    console.log(e);
     return { error: true, message: "Terjadi kesalahan" };
   }
 };
@@ -114,7 +115,8 @@ export const cashMidtrans = async (
     const token = await snap.createTransactionToken(parameter);
 
     return { error: false, token };
-  } catch {
+  } catch (e) {
+    console.log(e);
     return { error: true, message: "Terjadi kesalahan" };
   }
 };
@@ -146,7 +148,8 @@ export const addCashInOut = async (
     revalidatePath(path);
 
     return { error: false, message: "Kas berhasil ditambahkan" };
-  } catch {
+  } catch (e) {
+    console.log(e);
     return { error: true, message: "Terjadi kesalahan" };
   }
 };
@@ -160,7 +163,8 @@ export const deleteCashInOut = async (id: string, type: CashInOutType) => {
     revalidatePath(path);
 
     return { error: false, message: "Kas berhasil dihapus" };
-  } catch {
+  } catch (e) {
+    console.log(e);
     return { error: true, message: "Terjadi kesalahan" };
   }
 };
@@ -191,7 +195,8 @@ export const updateCashInOut = async (
     revalidatePath(path);
 
     return { error: false, message: "Kas berhasil diupdate" };
-  } catch {
+  } catch (e) {
+    console.log(e);
     return { error: true, message: "Terjadi kesalahan" };
   }
 };
@@ -218,7 +223,8 @@ export const setUserCashPaid = async (id: string) => {
     revalidatePath(privateRoutes.cashManageUser(id));
 
     return { error: false, message: "Kas berhasil diubah" };
-  } catch {
+  } catch (e) {
+    console.log(e);
     return { error: true, message: "Terjadi kesalahan" };
   }
 };

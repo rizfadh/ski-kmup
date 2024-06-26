@@ -20,7 +20,7 @@ function PostsMenu() {
         variant="outline"
         className="flex items-center gap-2"
       >
-        Atur <ListChecks className="h-[1.5rem] w-[1.5rem]" />
+        Kelola <ListChecks className="h-[1.5rem] w-[1.5rem]" />
       </LinkButton>
     </div>
   );

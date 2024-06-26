@@ -55,7 +55,8 @@ export const addPost = async (formData: FormData) => {
       message:
         "Postingan berhasil dibuat, menunggu persetujuan divisi Media Center",
     };
-  } catch {
+  } catch (e) {
+    console.log(e);
     return { error: true, message: "Terjadi kesalahan" };
   }
 };
@@ -106,7 +107,8 @@ export const updatePost = async (formData: FormData) => {
       error: false,
       message: "Postingan berhasil diupdate",
     };
-  } catch {
+  } catch (e) {
+    console.log(e);
     return { error: true, message: "Terjadi kesalahan" };
   }
 };
@@ -129,7 +131,8 @@ export const deletePost = async (data: z.infer<typeof DeletePostSchema>) => {
 
     revalidatePath(pathToRevalidate);
     return { error: false, message: "Postingan berhasil dihapus" };
-  } catch {
+  } catch (e) {
+    console.log(e);
     return { error: true, message: "Terjadi kesalahan" };
   }
 };
@@ -145,7 +148,8 @@ export const acceptPost = async (id: string) => {
 
     revalidatePath(privateRoutes.postsManage);
     return { error: false, message: "Postingan berhasil diterima" };
-  } catch {
+  } catch (e) {
+    console.log(e);
     return { error: true, message: "Terjadi kesalahan" };
   }
 };
@@ -202,7 +206,8 @@ export const likePost = async (userId: string, postId: string) => {
 
     revalidatePath(publicRoutes.postDetail(postId));
     return { error: false, message: "Postingan berhasil dilike" };
-  } catch (error) {
+  } catch (e) {
+    console.log(e);
     return { error: true, message: "Terjadi kesalahan" };
   }
 };
@@ -259,7 +264,8 @@ export const dislikePost = async (userId: string, postId: string) => {
 
     revalidatePath(publicRoutes.postDetail(postId));
     return { error: false, message: "Postingan berhasil didislike" };
-  } catch (error) {
+  } catch (e) {
+    console.log(e);
     return { error: true, message: "Terjadi kesalahan" };
   }
 };

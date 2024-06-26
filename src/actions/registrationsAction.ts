@@ -23,7 +23,8 @@ export const acceptUser = async (id: string) => {
 
     revalidatePath(privateRoutes.registrations);
     return { error: false, message: "User diterima" };
-  } catch {
+  } catch (e) {
+    console.log(e);
     return { error: true, message: "Terjadi kesalahan" };
   }
 };
@@ -36,7 +37,8 @@ export const deleteUser = async (id: string, pathToRevalidate: string) => {
 
     revalidatePath(pathToRevalidate);
     return { error: false, message: "User ditolak" };
-  } catch (error) {
+  } catch (e) {
+    console.log(e);
     return { error: true, message: "Terjadi kesalahan" };
   }
 };

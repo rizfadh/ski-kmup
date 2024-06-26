@@ -16,6 +16,11 @@ export default async function ProgramPage() {
             Kelola <Settings className="h-[1.2rem] w-[1.2rem]" />
           </span>
         </LinkButton>
+        <LinkButton variant="outline" href={privateRoutes.programManage}>
+          <span className="flex items-center gap-2">
+            Konfirmasi <Settings className="h-[1.2rem] w-[1.2rem]" />
+          </span>
+        </LinkButton>
       </div>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         UNDER CONSTRUCTION
