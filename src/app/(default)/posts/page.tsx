@@ -1,7 +1,7 @@
-import { auth } from "@/auth";
 import LinkButton from "@/components/LinkButton";
 import { PostItems } from "@/components/PostItems";
 import { privateRoutes } from "@/constants/routes";
+import getSession from "@/lib/getSession";
 import { getPosts } from "@/lib/postDb";
 import { PlusCircle, ListChecks } from "lucide-react";
 
@@ -27,7 +27,7 @@ function PostsMenu() {
 }
 
 export default async function PostsPage() {
-  const [posts, session] = await Promise.all([getPosts(true), auth()]);
+  const [posts, session] = await Promise.all([getPosts(true), getSession()]);
   const isLoggedIn = !session || !session.user;
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">

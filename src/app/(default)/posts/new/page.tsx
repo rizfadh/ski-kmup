@@ -1,8 +1,8 @@
-import { auth } from "@/auth";
 import PostEditor from "@/components/PostEditor";
+import getSession from "@/lib/getSession";
 
 export default async function NewPostPage() {
-  const session = await auth();
+  const session = await getSession();
 
   if (!session || !session.user) return null;
 

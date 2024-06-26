@@ -1,10 +1,10 @@
 import { getUserCashHistory } from "@/lib/cashDb";
-import { auth } from "@/auth";
 import { DataTable } from "@/components/DataTable";
 import { paymentHistoryColumns } from "@/components/tables/cashColumns";
+import getSession from "@/lib/getSession";
 
 export default async function CashPaymentHistoryPage() {
-  const session = await auth();
+  const session = await getSession();
   if (!session || !session.user) return null;
 
   const cashHistory = await getUserCashHistory(session.user.id as string);

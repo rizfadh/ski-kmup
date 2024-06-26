@@ -12,11 +12,11 @@ import { CashInOutType, UserRole } from "@prisma/client";
 import { add } from "date-fns";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { auth } from "@/auth";
 import { isCashSet } from "@/lib/cashDb";
 
 // @ts-ignore
 import midtransClient from "midtrans-client";
+import getSession from "@/lib/getSession";
 
 export const setCash = async (data: z.infer<typeof CashSetSchema>) => {
   try {
@@ -82,7 +82,7 @@ export const cashMidtrans = async (
 
     const { id, amount, month } = validated.data;
 
-    const session = await auth();
+    const session = await getSession();
     if (!session || !session.user)
       return { error: true, message: "Unauthorized" };
 

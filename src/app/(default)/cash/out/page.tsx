@@ -1,11 +1,14 @@
-import { auth } from "@/auth";
 import { CashInOutAddFormDialog } from "@/components/CashInOutFormDialog";
 import { DataTable } from "@/components/DataTable";
 import { cashInColumns } from "@/components/tables/cashColumns";
 import { getCashInOut } from "@/lib/cashDb";
+import getSession from "@/lib/getSession";
 
 export default async function CashOutPage() {
-  const [session, cashOut] = await Promise.all([auth(), getCashInOut("OUT")]);
+  const [session, cashOut] = await Promise.all([
+    getSession(),
+    getCashInOut("OUT"),
+  ]);
   if (!session || !session.user) return null;
 
   return (

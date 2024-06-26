@@ -1,7 +1,7 @@
-import { auth } from "@/auth";
 import { PostLike, PostLikeButton } from "@/components/PostLike";
 import { Separator } from "@/components/ui/separator";
 import { dateFormat } from "@/lib/formatter";
+import getSession from "@/lib/getSession";
 import { getPostById, getPostLikesById, isLikedByUser } from "@/lib/postDb";
 import parse from "html-react-parser";
 import Image from "next/image";
@@ -14,7 +14,7 @@ export default async function PostDetailPage({
 }) {
   const [post, session, postLikes] = await Promise.all([
     getPostById(params.id, true),
-    auth(),
+    getSession(),
     getPostLikesById(params.id),
   ]);
 

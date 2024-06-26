@@ -1,9 +1,9 @@
 import LinkButton from "@/components/LinkButton";
 import { privateRoutes } from "@/constants/routes";
 import getSession from "@/lib/getSession";
-import { NotebookPen } from "lucide-react";
+import { CirclePlus } from "lucide-react";
 
-export default async function ProgramManagePage() {
+export default async function ProgramManagePlanPage() {
   const session = await getSession();
 
   if (!session || !session.user) return null;
@@ -11,9 +11,9 @@ export default async function ProgramManagePage() {
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">
       <div className="flex flex-col gap-2 sm:flex-row">
-        <LinkButton variant="outline" href={privateRoutes.programManagePlan}>
+        <LinkButton variant="outline" href={privateRoutes.programManage}>
           <span className="flex items-center gap-2">
-            Ajukan <NotebookPen className="h-[1.2rem] w-[1.2rem]" />
+            Buat <CirclePlus className="h-[1.2rem] w-[1.2rem]" />
           </span>
         </LinkButton>
       </div>

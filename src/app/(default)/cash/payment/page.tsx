@@ -1,5 +1,5 @@
 import LinkButton from "@/components/LinkButton";
-import { Check, History } from "lucide-react";
+import { History } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -9,14 +9,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getUserCash } from "@/lib/cashDb";
-import { auth } from "@/auth";
 import { currencyFormat } from "@/lib/formatter";
 import CashPayButton from "@/components/CashPayButton";
 import MidtransScriptLoader from "@/components/MidtransScriptLoader";
 import { privateRoutes } from "@/constants/routes";
+import getSession from "@/lib/getSession";
 
 export default async function CashPaymentPage() {
-  const session = await auth();
+  const session = await getSession();
   if (!session || !session.user) return null;
 
   const cashPayment = await getUserCash(session.user.id as string);

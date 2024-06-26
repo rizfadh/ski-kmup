@@ -1,10 +1,10 @@
-import { auth } from "@/auth";
 import LinkButton from "@/components/LinkButton";
 import { privateRoutes } from "@/constants/routes";
+import getSession from "@/lib/getSession";
 import { Settings } from "lucide-react";
 
 export default async function ProgramPage() {
-  const session = await auth();
+  const session = await getSession();
 
   if (!session || !session.user) return null;
 

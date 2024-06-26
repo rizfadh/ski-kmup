@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import LinkButton from "@/components/LinkButton";
 import {
   Card,
@@ -12,6 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { privateRoutes } from "@/constants/routes";
 import { getCashInfo, isCashSet } from "@/lib/cashDb";
 import { currencyFormat } from "@/lib/formatter";
+import getSession from "@/lib/getSession";
 import {
   ArrowLeftFromLine,
   ArrowRightToLine,
@@ -21,7 +21,7 @@ import {
 import Link from "next/link";
 
 export default async function CashPage() {
-  const session = await auth();
+  const session = await getSession();
 
   if (!session || !session.user) return null;
 

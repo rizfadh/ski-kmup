@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import LogoutButton from "@/components/LogoutButton";
 import { PostItemsSide } from "@/components/PostItems";
 import {
@@ -12,6 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { publicRoutes } from "@/constants/routes";
 import { getCashPaidLate } from "@/lib/cashDb";
 import { dateFormat } from "@/lib/formatter";
+import getSession from "@/lib/getSession";
 import { getPosts } from "@/lib/postDb";
 import { getUserById } from "@/lib/userDb";
 import { Building2, CalendarPlus, Mountain, Newspaper } from "lucide-react";
@@ -37,7 +37,7 @@ function DashboardCard({ Icon, title, description }: DashboradCardProps) {
 }
 
 export default async function DashboardPage() {
-  const session = await auth();
+  const session = await getSession();
 
   if (!session || !session.user) return null;
 
