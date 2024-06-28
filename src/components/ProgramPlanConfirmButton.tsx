@@ -14,17 +14,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
-import { Trash } from "lucide-react";
+import { Check } from "lucide-react";
 import { deleteProgramPlan } from "@/actions/programAction";
 
 type Props = {
   id: string;
 };
 
-export default function ProgramPlanDeleteButton({ id }: Props) {
+export function ProgramPlanConfirmButton({ id }: Props) {
   const [isPending, setTransition] = useTransition();
 
-  const deleteHandler = () => {
+  const confirmHandler = () => {
     setTransition(async () => {
       const response = await deleteProgramPlan(id);
 
@@ -40,19 +40,19 @@ export default function ProgramPlanDeleteButton({ id }: Props) {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="outline" size="icon" disabled={isPending}>
-          <Trash className="h-[1.2rem] w-[1.2rem]" />
+          <Check className="h-[1.2rem] w-[1.2rem]" />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Hapus Rencana Program Kerja</AlertDialogTitle>
+          <AlertDialogTitle>Konfirmasi Rencana Program Kerja</AlertDialogTitle>
           <AlertDialogDescription>
-            Yakin ingin menghapus program kerja ini?
+            Yakin ingin menyetujui program kerja ini?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Batal</AlertDialogCancel>
-          <AlertDialogAction onClick={deleteHandler}>Ya</AlertDialogAction>
+          <AlertDialogAction onClick={confirmHandler}>Ya</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

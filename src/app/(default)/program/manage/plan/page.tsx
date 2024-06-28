@@ -1,3 +1,4 @@
+import PlanConfirmIcon from "@/components/PlanConfirmIcon";
 import { ProgramAddFormDialog } from "@/components/ProgramAddFormDialog";
 import ProgramPlanDeleteButton from "@/components/ProgramPlanDeleteButton";
 import {
@@ -10,19 +11,7 @@ import {
 } from "@/components/ui/table";
 import { currencyFormat, dateFormat } from "@/lib/formatter";
 import getSession from "@/lib/getSession";
-import { getProgramPlans } from "@/lib/programDb";
-import { Check, CircleHelp, X } from "lucide-react";
-
-function PlanConfirm({ isConfirmed }: { isConfirmed?: boolean | null }) {
-  if (isConfirmed) {
-    return <Check className="h-[1.2rem] w-[1.2rem]" />;
-  }
-
-  if (isConfirmed === false) {
-    return <X className="h-[1.2rem] w-[1.2rem]" />;
-  }
-  return <CircleHelp className="h-[1.2rem] w-[1.2rem]" />;
-}
+import { getDivisionProgramPlans } from "@/lib/programDb";
 
 type PlanDeleteVisibleProps = {
   id: string;
@@ -50,7 +39,7 @@ export default async function ProgramManagePlanPage() {
 
   if (!session || !session.user) return null;
 
-  const programPlans = await getProgramPlans(session.user.id as string);
+  const programPlans = await getDivisionProgramPlans(session.user.id as string);
 
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">
@@ -92,13 +81,13 @@ export default async function ProgramManagePlanPage() {
               </TableCell>
               <TableCell>
                 <div className="flex gap-2">
-                  <PlanConfirm
+                  <PlanConfirmIcon
                     isConfirmed={plan.workProgramPlan?.chairmanConfirm}
                   />
-                  <PlanConfirm
+                  <PlanConfirmIcon
                     isConfirmed={plan.workProgramPlan?.secretaryConfirm}
                   />
-                  <PlanConfirm
+                  <PlanConfirmIcon
                     isConfirmed={plan.workProgramPlan?.treasurerConfirm}
                   />
                 </div>

@@ -174,3 +174,83 @@ export const setProgramNotImplemented = async (id: string) => {
     return { error: true, message: "Terjadi kesalahan" };
   }
 };
+
+export const confirmProgramPlan = async (
+  userId: string,
+  programId: string,
+  confirmation: boolean,
+) => {
+  try {
+    const program = await db.workProgramPlan.findUnique({
+      where: { workProgramId: programId },
+    });
+
+    const userRole = await db.user.findUnique({
+      where: { id: userId },
+      select: { userPosition: { select: { role: true } } },
+    });
+
+    if (!program) {
+      return { error: true, message: "Program kerja tidak ditemukan" };
+    }
+
+    if (!userRole || !userRole.userPosition) {
+      return { error: true, message: "User tidak ditemukan" };
+    }
+
+    const { role } = userRole.userPosition;
+
+    if (role === "CHAIRMAN") {
+      if (program.chairmanConfirm !== null) {
+        return { error: true, message: "Program kerja sudah diatur" };
+      }
+
+      await db.workProgramPlan.update({
+        where: { workProgramId: programId },
+        data: {
+          chairmanConfirm: confirmation,
+        },
+      });
+
+      revalidatePath(privateRoutes.programConfirm);
+      return { error: false, message: "Konfirmasi program kerja berhasil" };
+    }
+
+    if (role === "TREASURER") {
+      if (program.treasurerConfirm !== null) {
+        return { error: true, message: "Program kerja sudah diatur" };
+      }
+
+      await db.workProgramPlan.update({
+        where: { workProgramId: programId },
+        data: {
+          treasurerConfirm: confirmation,
+        },
+      });
+
+      revalidatePath(privateRoutes.programConfirm);
+      return { error: false, message: "Konfirmasi program kerja berhasil" };
+    }
+
+    if (role === "SECRETARY") {
+      if (program.secretaryConfirm !== null) {
+        return { error: true, message: "Program kerja sudah diatur" };
+      }
+
+      await db.workProgramPlan.update({
+        where: { workProgramId: programId },
+        data: {
+          secretaryConfirm: confirmation,
+        },
+      });
+
+      revalidatePath(privateRoutes.programConfirm);
+      return { error: false, message: "Konfirmasi program kerja berhasil" };
+    }
+
+    return { error: true, message: "Tidak memiliki izin" };
+  } catch (e) {
+    console.log(e);
+    return { error: true, message: "Terjadi kesalahan" };
+  }
+};
