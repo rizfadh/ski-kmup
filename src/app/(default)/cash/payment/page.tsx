@@ -32,33 +32,45 @@ export default async function CashPaymentPage() {
             </span>
           </LinkButton>
         </div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="font-bold">Bulan</TableHead>
-              <TableHead className="font-bold">Nominal</TableHead>
-              <TableHead className="font-bold">Status</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {cashPayment.map((cash) => (
-              <TableRow key={cash.id}>
-                <TableCell>{cash.month}</TableCell>
-                <TableCell>{currencyFormat(cash.amount)}</TableCell>
-                <TableCell>{cash.paid ? "Lunas" : "Belum dibayar"}</TableCell>
-                <TableCell className="flex justify-center">
-                  {cash.paid ? null : (
-                    <CashPayButton
-                      id={cash.id}
-                      amount={cash.amount}
-                      month={cash.month}
-                    />
-                  )}
-                </TableCell>
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="font-bold">Bulan</TableHead>
+                <TableHead className="font-bold">Nominal</TableHead>
+                <TableHead className="font-bold">Status</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {cashPayment.length === 0 && (
+                <TableRow>
+                  <TableCell
+                    colSpan={3}
+                    className="h-24 text-center text-muted-foreground"
+                  >
+                    Tidak ada data
+                  </TableCell>
+                </TableRow>
+              )}
+              {cashPayment.map((cash) => (
+                <TableRow key={cash.id}>
+                  <TableCell>{cash.month}</TableCell>
+                  <TableCell>{currencyFormat(cash.amount)}</TableCell>
+                  <TableCell>{cash.paid ? "Lunas" : "Belum dibayar"}</TableCell>
+                  <TableCell className="flex justify-center">
+                    {cash.paid ? null : (
+                      <CashPayButton
+                        id={cash.id}
+                        amount={cash.amount}
+                        month={cash.month}
+                      />
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </>
   );

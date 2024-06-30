@@ -31,11 +31,12 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  post        Post[]
-  postLike    PostLike[]
-  cashPayment CashPayment[]
-  cashInOut   CashInOut[]
-  WorkProgram WorkProgram[]
+  post                 Post[]
+  postLike             PostLike[]
+  cashPayment          CashPayment[]
+  cashInOut            CashInOut[]
+  workProgram          WorkProgram[]
+  accountabilityReport AccountablityReport?
 }
 
 enum UserRole {
@@ -161,7 +162,7 @@ model WorkProgram {
   date     DateTime
 
   workProgramPlan   WorkProgramPlan?
-  workProgramNeeds  workProgramNeeds[]
+  workProgramNeeds  WorkProgramNeeds[]
   workProgramReport WorkProgramReport?
 }
 
@@ -182,11 +183,21 @@ model WorkProgramPlan {
   secretaryConfirm Boolean?
 }
 
-model workProgramNeeds {
+model WorkProgramNeeds {
   id     String @id @default(cuid())
   name   String
   amount Int
 
   workProgram   WorkProgram @relation(fields: [workProgramId], references: [id], onDelete: Cascade)
   workProgramId String
+}
+
+model AccountablityReport {
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @id
+
+  type             String
+  documentUrl      String
+  secretaryConfirm Boolean?
+  createdAt        DateTime @default(now())
 }

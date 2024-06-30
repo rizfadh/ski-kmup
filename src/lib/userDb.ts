@@ -27,7 +27,7 @@ export const getUserById = async (id: string) => {
     where: { id },
     include: {
       userPosition: {
-        select: { title: true },
+        select: { title: true, division: true },
       },
       _count: {
         select: {

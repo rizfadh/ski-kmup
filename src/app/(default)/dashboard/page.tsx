@@ -13,8 +13,14 @@ import { getCashPaidLate } from "@/lib/cashDb";
 import { dateFormat } from "@/lib/formatter";
 import getSession from "@/lib/getSession";
 import { getPosts } from "@/lib/postDb";
+import { getClosestProgram } from "@/lib/programDb";
 import { getUserById } from "@/lib/userDb";
-import { Building2, CalendarPlus, Mountain, Newspaper } from "lucide-react";
+import {
+  Building2,
+  CalendarPlus,
+  CircleArrowRight,
+  Newspaper,
+} from "lucide-react";
 import Link from "next/link";
 import { ComponentType } from "react";
 
@@ -41,10 +47,11 @@ export default async function DashboardPage() {
 
   if (!session || !session.user) return null;
 
-  const [userData, posts, cashInfo] = await Promise.all([
+  const [userData, posts, cashInfo, closestProgram] = await Promise.all([
     getUserById(session.user.id as string),
     getPosts(true, 4),
     getCashPaidLate(session.user.id as string),
+    getClosestProgram(),
   ]);
 
   return (
@@ -57,7 +64,11 @@ export default async function DashboardPage() {
         <DashboardCard
           Icon={Building2}
           title="Jabatan"
-          description={userData?.userPosition?.title ?? "Tidak ada"}
+          description={
+            userData?.userPosition?.title
+              ? `${userData.userPosition.title} ${userData.userPosition.division}`
+              : "Tidak ada"
+          }
         />
         <DashboardCard
           Icon={CalendarPlus}
@@ -68,11 +79,6 @@ export default async function DashboardPage() {
           Icon={Newspaper}
           title="Postingan"
           description={userData?._count.post.toString() ?? "0"}
-        />
-        <DashboardCard
-          Icon={Mountain}
-          title="Gunung"
-          description="Salak Bogor"
         />
       </div>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -98,6 +104,37 @@ export default async function DashboardPage() {
             />
           </CardContent>
         </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Program Kerja</CardTitle>
+            <CardDescription>Terdekat dari sekarang</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {closestProgram[0] ? (
+              <>
+                <p>{dateFormat(closestProgram[0].date)}</p>
+                <p className="text-4xl font-bold lg:text-5xl">
+                  {closestProgram[0].name}
+                </p>
+                <p className="mt-6 flex items-center">
+                  <CircleArrowRight className="mr-2" />
+                  Next
+                  {closestProgram[1] ? (
+                    <span className="ml-1 font-bold">
+                      {closestProgram[1].name}
+                    </span>
+                  ) : (
+                    <span className="ml-1 text-muted-foreground">
+                      Tidak ada
+                    </span>
+                  )}
+                </p>
+              </>
+            ) : (
+              <p className="text-muted-foreground">Tidak ada</p>
+            )}
+          </CardContent>
+        </Card>
       </div>
       <div className="flex flex-col justify-between md:flex-row md:items-center">
         <h2 className="text-2xl font-bold">Postingan Terbaru</h2>
@@ -106,8 +143,9 @@ export default async function DashboardPage() {
         </Link>
       </div>
       <PostItemsSide posts={posts} />
-      <LogoutButton />
-      <p className="text-sm text-muted-foreground">Webnya masih blom jadi</p>
+      <div className="flex justify-end">
+        <LogoutButton />
+      </div>
     </div>
   );
 }

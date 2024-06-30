@@ -22,28 +22,30 @@ export default async function CashManageUserPage({
 
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="font-bold">Bulan</TableHead>
-            <TableHead className="font-bold">Nominal</TableHead>
-            <TableHead className="font-bold">Status</TableHead>
-            <TableHead className="text-center font-bold">Atur</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {userCash.map((cash) => (
-            <TableRow key={cash.id}>
-              <TableCell>{cash.month}</TableCell>
-              <TableCell>{currencyFormat(cash.amount)}</TableCell>
-              <TableCell>{cash.paid ? "Lunas" : "Belum dibayar"}</TableCell>
-              <TableCell className="flex justify-center">
-                {cash.paid ? null : <CashSetPaidButton id={cash.id} />}
-              </TableCell>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="font-bold">Bulan</TableHead>
+              <TableHead className="font-bold">Nominal</TableHead>
+              <TableHead className="font-bold">Status</TableHead>
+              <TableHead className="text-center font-bold">Atur</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {userCash.map((cash) => (
+              <TableRow key={cash.id}>
+                <TableCell>{cash.month}</TableCell>
+                <TableCell>{currencyFormat(cash.amount)}</TableCell>
+                <TableCell>{cash.paid ? "Lunas" : "Belum dibayar"}</TableCell>
+                <TableCell className="flex justify-center">
+                  {cash.paid ? null : <CashSetPaidButton id={cash.id} />}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

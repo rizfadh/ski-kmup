@@ -25,6 +25,9 @@ export const privateRoutes = {
   programManage: "/program/manage",
   programManagePlan: "/program/manage/plan",
   programConfirm: "/program/confirm",
+  report: "/report",
+  reportManage: "/report/manage",
+  reportConfirm: "/report/confirm",
 };
 
 export const authRoutes = {

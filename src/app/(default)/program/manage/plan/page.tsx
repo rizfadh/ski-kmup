@@ -46,62 +46,64 @@ export default async function ProgramManagePlanPage() {
       <div className="flex flex-col gap-2 sm:flex-row">
         <ProgramAddFormDialog id={session.user.id as string} />
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="font-bold">Nama</TableHead>
-            <TableHead className="font-bold">Divisi</TableHead>
-            <TableHead className="font-bold">Tanggal</TableHead>
-            <TableHead className="font-bold">Keperluan</TableHead>
-            <TableHead className="font-bold">Konfirmasi</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {programPlans.length === 0 && (
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableCell
-                colSpan={5}
-                className="h-24 text-center text-muted-foreground"
-              >
-                Belum ada program
-              </TableCell>
+              <TableHead className="font-bold">Nama</TableHead>
+              <TableHead className="font-bold">Divisi</TableHead>
+              <TableHead className="font-bold">Tanggal</TableHead>
+              <TableHead className="font-bold">Keperluan</TableHead>
+              <TableHead className="font-bold">Konfirmasi</TableHead>
             </TableRow>
-          )}
-          {programPlans.map((plan) => (
-            <TableRow key={plan.id}>
-              <TableCell>{plan.name}</TableCell>
-              <TableCell>{plan.division}</TableCell>
-              <TableCell>{dateFormat(plan.date)}</TableCell>
-              <TableCell>
-                {plan.workProgramNeeds.map((need) => (
-                  <p key={need.id} className="min-w-[300px]">
-                    {need.name} - {currencyFormat(need.amount)}
-                  </p>
-                ))}
-              </TableCell>
-              <TableCell>
-                <div className="flex gap-2">
-                  <PlanConfirmIcon
-                    isConfirmed={plan.workProgramPlan?.chairmanConfirm}
+          </TableHeader>
+          <TableBody>
+            {programPlans.length === 0 && (
+              <TableRow>
+                <TableCell
+                  colSpan={5}
+                  className="h-24 text-center text-muted-foreground"
+                >
+                  Belum ada program
+                </TableCell>
+              </TableRow>
+            )}
+            {programPlans.map((plan) => (
+              <TableRow key={plan.id}>
+                <TableCell>{plan.name}</TableCell>
+                <TableCell>{plan.division}</TableCell>
+                <TableCell>{dateFormat(plan.date)}</TableCell>
+                <TableCell>
+                  {plan.workProgramNeeds.map((need) => (
+                    <p key={need.id} className="min-w-[300px]">
+                      {need.name} - {currencyFormat(need.amount)}
+                    </p>
+                  ))}
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-2">
+                    <PlanConfirmIcon
+                      isConfirmed={plan.workProgramPlan?.chairmanConfirm}
+                    />
+                    <PlanConfirmIcon
+                      isConfirmed={plan.workProgramPlan?.secretaryConfirm}
+                    />
+                    <PlanConfirmIcon
+                      isConfirmed={plan.workProgramPlan?.treasurerConfirm}
+                    />
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <PlanDeleteVisible
+                    id={plan.id}
+                    confirmation={plan.workProgramPlan}
                   />
-                  <PlanConfirmIcon
-                    isConfirmed={plan.workProgramPlan?.secretaryConfirm}
-                  />
-                  <PlanConfirmIcon
-                    isConfirmed={plan.workProgramPlan?.treasurerConfirm}
-                  />
-                </div>
-              </TableCell>
-              <TableCell>
-                <PlanDeleteVisible
-                  id={plan.id}
-                  confirmation={plan.workProgramPlan}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

@@ -222,70 +222,74 @@ export function ProgramTable({ divisionPrograms }: ProgramTableProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="font-bold">Nama</TableHead>
-            <TableHead className="font-bold">Divisi</TableHead>
-            <TableHead className="font-bold">Tanggal</TableHead>
-            <TableHead className="font-bold">Keperluan</TableHead>
-            <TableHead className="text-center font-bold">Bukti</TableHead>
-            <TableHead className="text-center font-bold">Terlaksana</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {divisionPrograms.length === 0 && (
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableCell
-                colSpan={6}
-                className="h-24 text-center text-muted-foreground"
-              >
-                Belum ada program
-              </TableCell>
+              <TableHead className="font-bold">Nama</TableHead>
+              <TableHead className="font-bold">Divisi</TableHead>
+              <TableHead className="font-bold">Tanggal</TableHead>
+              <TableHead className="font-bold">Keperluan</TableHead>
+              <TableHead className="text-center font-bold">Bukti</TableHead>
+              <TableHead className="text-center font-bold">
+                Terlaksana
+              </TableHead>
             </TableRow>
-          )}
-          {divisionPrograms.map((plan) => (
-            <TableRow key={plan.id}>
-              <TableCell>{plan.name}</TableCell>
-              <TableCell>{plan.division}</TableCell>
-              <TableCell>{dateFormat(plan.date)}</TableCell>
-              <TableCell>
-                {plan.workProgramNeeds.map((need) => (
-                  <p key={need.id} className="min-w-[300px]">
-                    {need.name} - {currencyFormat(need.amount)}
-                  </p>
-                ))}
-              </TableCell>
-              <TableCell>
-                <div className="flex justify-center">
-                  {plan.workProgramReport?.proofUrl ? (
-                    <LinkButton
-                      variant="outline"
-                      size="icon"
-                      href={plan.workProgramReport.proofUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <FileText className="h-[1.2rem] w-[1.2rem]" />
-                    </LinkButton>
-                  ) : (
-                    <Button variant="outline" size="icon" disabled>
-                      <FileText className="h-[1.2rem] w-[1.2rem] text-muted-foreground" />
-                    </Button>
-                  )}
-                </div>
-              </TableCell>
-              <TableCell>
-                <ConfirmationButton
-                  implemented={plan.workProgramReport?.implemented}
-                  confirmationHandler={confirmationHandler}
-                  program={plan}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {divisionPrograms.length === 0 && (
+              <TableRow>
+                <TableCell
+                  colSpan={6}
+                  className="h-24 text-center text-muted-foreground"
+                >
+                  Belum ada program
+                </TableCell>
+              </TableRow>
+            )}
+            {divisionPrograms.map((plan) => (
+              <TableRow key={plan.id}>
+                <TableCell>{plan.name}</TableCell>
+                <TableCell>{plan.division}</TableCell>
+                <TableCell>{dateFormat(plan.date)}</TableCell>
+                <TableCell>
+                  {plan.workProgramNeeds.map((need) => (
+                    <p key={need.id} className="min-w-[300px]">
+                      {need.name} - {currencyFormat(need.amount)}
+                    </p>
+                  ))}
+                </TableCell>
+                <TableCell>
+                  <div className="flex justify-center">
+                    {plan.workProgramReport?.proofUrl ? (
+                      <LinkButton
+                        variant="outline"
+                        size="icon"
+                        href={plan.workProgramReport.proofUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <FileText className="h-[1.2rem] w-[1.2rem]" />
+                      </LinkButton>
+                    ) : (
+                      <Button variant="outline" size="icon" disabled>
+                        <FileText className="h-[1.2rem] w-[1.2rem] text-muted-foreground" />
+                      </Button>
+                    )}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <ConfirmationButton
+                    implemented={plan.workProgramReport?.implemented}
+                    confirmationHandler={confirmationHandler}
+                    program={plan}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </>
   );
 }

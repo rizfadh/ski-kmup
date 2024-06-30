@@ -8,6 +8,7 @@ import {
   Mail,
   MenuIcon,
   Newspaper,
+  NotebookText,
   User,
   Wallet,
 } from "lucide-react";
@@ -52,6 +53,11 @@ export default function NavBarAuth({ className }: NavBarAuthProps) {
       Icon: Briefcase,
       label: "Program Kerja",
       href: privateRoutes.program,
+    },
+    {
+      Icon: NotebookText,
+      label: "LPJ",
+      href: privateRoutes.report,
     },
     {
       Icon: Newspaper,

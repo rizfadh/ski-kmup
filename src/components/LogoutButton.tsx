@@ -16,12 +16,12 @@ export default function LogoutButton({ className, ...props }: Props) {
     >
       <Button
         type="submit"
-        variant="secondary"
+        variant="outline"
         className={cn("w-fit gap-2", className)}
         {...props}
       >
-        <LogOut className="h-[1.2rem] w-[1.2rem]" />
         Logout
+        <LogOut className="h-[1.2rem] w-[1.2rem]" />
       </Button>
     </form>
   );
