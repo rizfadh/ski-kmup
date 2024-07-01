@@ -24,7 +24,7 @@ import {
   AlertDialogTitle,
 } from "./ui/alert-dialog";
 import { confirmProgramPlan } from "@/actions/programAction";
-import PlanConfirmIcon from "./PlanConfirmIcon";
+import ConfirmationIcon from "./ConfirmationIcon";
 import { UserRole } from "@prisma/client";
 
 type ProgramPlan = {
@@ -202,13 +202,13 @@ export function ProgramPlanConfirmTable({
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-2">
-                    <PlanConfirmIcon
+                    <ConfirmationIcon
                       isConfirmed={plan.workProgramPlan?.chairmanConfirm}
                     />
-                    <PlanConfirmIcon
+                    <ConfirmationIcon
                       isConfirmed={plan.workProgramPlan?.secretaryConfirm}
                     />
-                    <PlanConfirmIcon
+                    <ConfirmationIcon
                       isConfirmed={plan.workProgramPlan?.treasurerConfirm}
                     />
                   </div>

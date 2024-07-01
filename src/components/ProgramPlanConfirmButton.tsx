@@ -22,10 +22,10 @@ type Props = {
 };
 
 export function ProgramPlanConfirmButton({ id }: Props) {
-  const [isPending, setTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const confirmHandler = () => {
-    setTransition(async () => {
+    startTransition(async () => {
       const response = await deleteProgramPlan(id);
 
       toast({

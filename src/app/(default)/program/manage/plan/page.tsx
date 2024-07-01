@@ -1,4 +1,4 @@
-import PlanConfirmIcon from "@/components/PlanConfirmIcon";
+import ConfirmationIcon from "@/components/ConfirmIcon";
 import { ProgramAddFormDialog } from "@/components/ProgramAddFormDialog";
 import ProgramPlanDeleteButton from "@/components/ProgramPlanDeleteButton";
 import {
@@ -82,13 +82,13 @@ export default async function ProgramManagePlanPage() {
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-2">
-                    <PlanConfirmIcon
+                    <ConfirmationIcon
                       isConfirmed={plan.workProgramPlan?.chairmanConfirm}
                     />
-                    <PlanConfirmIcon
+                    <ConfirmationIcon
                       isConfirmed={plan.workProgramPlan?.secretaryConfirm}
                     />
-                    <PlanConfirmIcon
+                    <ConfirmationIcon
                       isConfirmed={plan.workProgramPlan?.treasurerConfirm}
                     />
                   </div>

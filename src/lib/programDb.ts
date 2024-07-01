@@ -1,9 +1,4 @@
-import {
-  differenceInMilliseconds,
-  endOfMonth,
-  isAfter,
-  startOfMonth,
-} from "date-fns";
+import { endOfMonth, startOfMonth } from "date-fns";
 import db from "./db";
 
 export const getDivisionProgramPlans = async (id: string) => {

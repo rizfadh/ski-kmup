@@ -8,13 +8,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { privateRoutes } from "@/constants/routes";
+import { dateFormat } from "@/lib/formatter";
 import getSession from "@/lib/getSession";
-import { CircleCheck, Settings } from "lucide-react";
+import { getReport } from "@/lib/reportDb";
+import { CircleCheck, FileText, Settings } from "lucide-react";
 
-export default async function ProgramPage() {
+export default async function ReportPage() {
   const session = await getSession();
 
   if (!session || !session.user) return null;
+
+  const reports = await getReport();
 
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">
@@ -34,42 +38,42 @@ export default async function ProgramPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="font-bold">Divisi</TableHead>
+              <TableHead className="font-bold">Jenis</TableHead>
               <TableHead className="font-bold">Tanggal</TableHead>
-              <TableHead className="font-bold">LPJ</TableHead>
+              <TableHead className="text-center font-bold">LPJ</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>Syiar</TableCell>
-              <TableCell>12 Agt 2024</TableCell>
-              <TableCell>LPJ</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>KPSDM</TableCell>
-              <TableCell>12 Agt 2024</TableCell>
-              <TableCell>LPJ</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Kemuslimahan</TableCell>
-              <TableCell>12 Agt 2024</TableCell>
-              <TableCell>LPJ</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Medcen</TableCell>
-              <TableCell>12 Agt 2024</TableCell>
-              <TableCell>LPJ</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Sarpras</TableCell>
-              <TableCell>12 Agt 2024</TableCell>
-              <TableCell>LPJ</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Corporation</TableCell>
-              <TableCell>12 Agt 2024</TableCell>
-              <TableCell>LPJ</TableCell>
-            </TableRow>
+            {reports.length === 0 ? (
+              <TableRow>
+                <TableCell
+                  colSpan={3}
+                  className="h-24 text-center text-muted-foreground"
+                >
+                  Belum ada LPJ
+                </TableCell>
+              </TableRow>
+            ) : (
+              reports.map((report) => (
+                <TableRow key={report.userId}>
+                  <TableCell>{report.type}</TableCell>
+                  <TableCell>{dateFormat(report.createdAt)}</TableCell>
+                  <TableCell>
+                    <div className="flex justify-center">
+                      <LinkButton
+                        variant="outline"
+                        size="icon"
+                        href={report.reportUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <FileText className="h-[1.2rem] w-[1.2rem]" />
+                      </LinkButton>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

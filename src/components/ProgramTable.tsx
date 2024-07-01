@@ -25,7 +25,7 @@ import { Check, FileText, X } from "lucide-react";
 import { toast } from "./ui/use-toast";
 import {
   ACCEPTED_DOC_MIME_TYPES,
-  ProgramProofSchema,
+  DocumentSchema,
 } from "@/schemas/ProgramSchema";
 import {
   Table,
@@ -113,11 +113,11 @@ export function ProgramTable({ divisionPrograms }: ProgramTableProps) {
   const [program, setProgram] = useState<Program | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof ProgramProofSchema>>({
-    resolver: zodResolver(ProgramProofSchema),
+  const form = useForm<z.infer<typeof DocumentSchema>>({
+    resolver: zodResolver(DocumentSchema),
   });
 
-  function onSubmit(data: z.infer<typeof ProgramProofSchema>) {
+  function onSubmit(data: z.infer<typeof DocumentSchema>) {
     startTransition(async () => {
       const formData = new FormData();
       formData.append("pdf", data.pdf);

@@ -4,7 +4,7 @@ import { privateRoutes } from "@/constants/routes";
 import db from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { ProgramPlanSchema, ProgramProofSchema } from "@/schemas/ProgramSchema";
+import { ProgramPlanSchema, DocumentSchema } from "@/schemas/ProgramSchema";
 import { createId } from "@paralleldrive/cuid2";
 import { storage } from "@/lib/firebase";
 import { storageRef } from "@/constants/storageRef";
@@ -108,7 +108,7 @@ export const setProgramImplemented = async (id: string, formData: FormData) => {
       pdf: formData.get("pdf"),
     };
 
-    const validated = ProgramProofSchema.safeParse(data);
+    const validated = DocumentSchema.safeParse(data);
 
     if (!validated.success) return { error: true, message: "Invalid fields" };
 

@@ -65,9 +65,11 @@ export default async function DashboardPage() {
           Icon={Building2}
           title="Jabatan"
           description={
-            userData?.userPosition?.title
+            userData?.userPosition?.division
               ? `${userData.userPosition.title} ${userData.userPosition.division}`
-              : "Tidak ada"
+              : userData?.userPosition?.title
+                ? userData.userPosition.title
+                : "Tidak ada"
           }
         />
         <DashboardCard

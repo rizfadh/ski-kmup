@@ -197,7 +197,7 @@ model AccountablityReport {
   userId String @id
 
   type             String
-  documentUrl      String
+  reportUrl        String
   secretaryConfirm Boolean?
   createdAt        DateTime @default(now())
 }

@@ -28,7 +28,7 @@ export const ProgramPlanSchema = z.object({
 const MAX_FILE_SIZE = 1024 * 500;
 export const ACCEPTED_DOC_MIME_TYPES = "application/pdf";
 
-export const ProgramProofSchema = z.object({
+export const DocumentSchema = z.object({
   pdf: z
     .instanceof(File, { message: "PDF Tidak boleh kosong" })
     .refine((file) => file.size <= MAX_FILE_SIZE, "Ukuran maksimum 500KB")

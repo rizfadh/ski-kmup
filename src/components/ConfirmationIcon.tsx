@@ -1,6 +1,6 @@
 import { Check, CircleHelp, X } from "lucide-react";
 
-export default function PlanConfirmIcon({
+export default function ConfirmationIcon({
   isConfirmed,
 }: {
   isConfirmed?: boolean | null;

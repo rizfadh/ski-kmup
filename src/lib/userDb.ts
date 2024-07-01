@@ -38,6 +38,12 @@ export const getUserById = async (id: string) => {
   });
 };
 
+export const getUserPosition = async (id: string) => {
+  return await db.userPosition.findUnique({
+    where: { userId: id },
+  });
+};
+
 export const getUsersRegistrationStatus = async (isAccepted: boolean) => {
   const res = await db.user.findMany({
     where: { registerApproval: { isAccepted } },
