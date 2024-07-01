@@ -1,4 +1,4 @@
-import ConfirmationIcon from "@/components/ConfirmIcon";
+import ConfirmationIcon from "@/components/ConfirmationIcon";
 import { ProgramAddFormDialog } from "@/components/ProgramAddFormDialog";
 import ProgramPlanDeleteButton from "@/components/ProgramPlanDeleteButton";
 import {
