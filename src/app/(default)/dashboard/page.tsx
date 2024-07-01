@@ -118,13 +118,13 @@ export default async function DashboardPage() {
                 <p className="text-4xl font-bold lg:text-5xl">
                   {closestProgram[0].name}
                 </p>
-                <p className="mt-6 flex items-center">
-                  <CircleArrowRight className="mr-2" />
-                  Next
+                <p className="mt-6 flex flex-col gap-2 sm:flex-row">
+                  <span className="flex items-center gap-2">
+                    <CircleArrowRight className="h-[1.2rem] w-[1.2rem]" />
+                    Next
+                  </span>
                   {closestProgram[1] ? (
-                    <span className="ml-1 font-bold">
-                      {closestProgram[1].name}
-                    </span>
+                    <span className="font-bold">{closestProgram[1].name}</span>
                   ) : (
                     <span className="ml-1 text-muted-foreground">
                       Tidak ada

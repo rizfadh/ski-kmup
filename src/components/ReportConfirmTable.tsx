@@ -26,22 +26,10 @@ import {
 import ConfirmationIcon from "./ConfirmationIcon";
 import { confirmReport } from "@/actions/reportAction";
 import LinkButton from "./LinkButton";
-
-type Report = {
-  userId: string;
-  type: string;
-  reportUrl: string;
-  secretaryConfirm: boolean | null;
-  createdAt: Date;
-};
-
-type ReportConfirmTableProps = {
-  userId: string;
-  reports: Report[];
-};
+import { UserRole } from "@prisma/client";
 
 type ConfirmationButtonProps = {
-  confirmed: boolean | null;
+  confirmed: boolean | null | undefined;
   dialogHandler: (report: Report, confirmation: boolean) => void;
   report: Report;
 };
@@ -77,10 +65,33 @@ function ConfirmationButton({
       </div>
     );
   }
+
+  return null;
 }
+
+const userConfirm = (userRole: UserRole, report: Report) => {
+  if (userRole === "TREASURER") return report.treasurerConfirm;
+  if (userRole === "SECRETARY") return report.secretaryConfirm;
+};
+
+type Report = {
+  userId: string;
+  type: string;
+  reportUrl: string;
+  secretaryConfirm: boolean | null;
+  treasurerConfirm: boolean | null;
+  createdAt: Date;
+};
+
+type ReportConfirmTableProps = {
+  userId: string;
+  userRole: UserRole;
+  reports: Report[];
+};
 
 export function ReportConfirmTable({
   userId,
+  userRole,
   reports,
 }: ReportConfirmTableProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -188,11 +199,12 @@ export function ReportConfirmTable({
                 <TableCell>
                   <div className="flex justify-center gap-2">
                     <ConfirmationIcon isConfirmed={report.secretaryConfirm} />
+                    <ConfirmationIcon isConfirmed={report.treasurerConfirm} />
                   </div>
                 </TableCell>
                 <TableCell>
                   <ConfirmationButton
-                    confirmed={report.secretaryConfirm}
+                    confirmed={userConfirm(userRole, report)}
                     dialogHandler={dialogHandler}
                     report={report}
                   />

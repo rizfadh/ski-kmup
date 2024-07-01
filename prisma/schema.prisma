@@ -199,5 +199,6 @@ model AccountablityReport {
   type             String
   reportUrl        String
   secretaryConfirm Boolean?
+  treasurerConfirm Boolean?
   createdAt        DateTime @default(now())
 }

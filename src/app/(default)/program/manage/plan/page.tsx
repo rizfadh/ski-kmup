@@ -70,9 +70,13 @@ export default async function ProgramManagePlanPage() {
             )}
             {programPlans.map((plan) => (
               <TableRow key={plan.id}>
-                <TableCell>{plan.name}</TableCell>
+                <TableCell>
+                  <p className="min-w-[100px]">{plan.name}</p>
+                </TableCell>
                 <TableCell>{plan.division}</TableCell>
-                <TableCell>{dateFormat(plan.date)}</TableCell>
+                <TableCell>
+                  <p className="min-w-[100px]">{dateFormat(plan.date)}</p>
+                </TableCell>
                 <TableCell>
                   {plan.workProgramNeeds.map((need) => (
                     <p key={need.id} className="min-w-[300px]">

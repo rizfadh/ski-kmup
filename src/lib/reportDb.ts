@@ -14,6 +14,7 @@ export const getReport = async () => {
   return await db.accountablityReport.findMany({
     where: {
       secretaryConfirm: true,
+      treasurerConfirm: true,
     },
   });
 };

@@ -20,11 +20,49 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ComponentPropsWithoutRef, ComponentType } from "react";
+import { ComponentPropsWithoutRef, ComponentType, useMemo } from "react";
 import { privateRoutes, publicRoutes } from "@/constants/routes";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import NavBarLink from "./NavBarLink";
+
+const routes = [
+  {
+    Icon: Home,
+    label: "Dashboard",
+    href: privateRoutes.dashboard,
+  },
+  {
+    Icon: User,
+    label: "Pendaftaran",
+    href: privateRoutes.registrations,
+  },
+  {
+    Icon: Wallet,
+    label: "Kas",
+    href: privateRoutes.cash,
+  },
+  {
+    Icon: Briefcase,
+    label: "Program Kerja",
+    href: privateRoutes.program,
+  },
+  {
+    Icon: NotebookText,
+    label: "LPJ",
+    href: privateRoutes.report,
+  },
+  {
+    Icon: Newspaper,
+    label: "Postingan",
+    href: publicRoutes.posts,
+  },
+  {
+    Icon: Mail,
+    label: "Saran",
+    href: privateRoutes.advices,
+  },
+];
 
 type NavBarAuthProps = {
   className: ComponentPropsWithoutRef<"header">["className"];
@@ -32,44 +70,19 @@ type NavBarAuthProps = {
 
 export default function NavBarAuth({ className }: NavBarAuthProps) {
   const pathname = usePathname();
-
-  const routes = [
-    {
-      Icon: Home,
-      label: "Dashboard",
-      href: privateRoutes.dashboard,
-    },
-    {
-      Icon: User,
-      label: "Pendaftaran",
-      href: privateRoutes.registrations,
-    },
-    {
-      Icon: Wallet,
-      label: "Kas",
-      href: privateRoutes.cash,
-    },
-    {
-      Icon: Briefcase,
-      label: "Program Kerja",
-      href: privateRoutes.program,
-    },
-    {
-      Icon: NotebookText,
-      label: "LPJ",
-      href: privateRoutes.report,
-    },
-    {
-      Icon: Newspaper,
-      label: "Postingan",
-      href: publicRoutes.posts,
-    },
-    {
-      Icon: Mail,
-      label: "Saran",
-      href: privateRoutes.advices,
-    },
-  ];
+  const activeRoute = useMemo(
+    () =>
+      routes.map(({ Icon, label, href }) => (
+        <NavBarLink
+          key={href}
+          Icon={Icon}
+          label={label}
+          href={href}
+          isActive={pathname === href}
+        />
+      )),
+    [pathname],
+  );
 
   return (
     <header
@@ -91,17 +104,7 @@ export default function NavBarAuth({ className }: NavBarAuthProps) {
               <SheetHeader>
                 <SheetTitle>Menu</SheetTitle>
               </SheetHeader>
-              <div className="mt-4 flex flex-col">
-                {routes.map(({ Icon, label, href }) => (
-                  <NavBarLink
-                    key={href}
-                    Icon={Icon}
-                    label={label}
-                    href={href}
-                    isActive={pathname === href}
-                  />
-                ))}
-              </div>
+              <div className="mt-4 flex flex-col">{activeRoute}</div>
               <Separator className="my-4" />
               <div className="flex justify-center">
                 <ModeToggle />
@@ -111,17 +114,7 @@ export default function NavBarAuth({ className }: NavBarAuthProps) {
         </div>
         <div className="mt-4 hidden grid-cols-1 md:grid">
           <p className="mb-4 text-center font-bold">Menu</p>
-          {routes.map(({ Icon, label, href }) => {
-            return (
-              <NavBarLink
-                key={href}
-                Icon={Icon}
-                label={label}
-                href={href}
-                isActive={pathname === href}
-              />
-            );
-          })}
+          {activeRoute}
           <Separator className="my-4" />
           <div className="flex justify-center">
             <ModeToggle />

@@ -13,6 +13,7 @@ export default async function ProgramConfirmPage() {
     <div className="container my-4 grid grid-cols-1 gap-y-4">
       <ReportConfirmTable
         userId={session.user.id as string}
+        userRole={session.user.role}
         reports={reports}
       />
     </div>

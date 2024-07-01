@@ -94,7 +94,10 @@ export default async function ProgramPage() {
               </p>
               <div className="mt-6">
                 {programsInformation.thisMonth.programs.map((program) => (
-                  <div className="flex justify-between" key={program.id}>
+                  <div
+                    className="flex flex-col justify-between sm:flex-row"
+                    key={program.id}
+                  >
                     <p>{program.name}</p>
                     <p className="font-bold">{dateFormat(program.date)}</p>
                   </div>
@@ -108,44 +111,53 @@ export default async function ProgramPage() {
               <CardDescription>Info proker periode ini</CardDescription>
             </div>
             <div className="pt-6">
-              <div className="flex justify-between font-bold">
+              <div className="flex flex-wrap justify-between font-bold">
                 <p>Jumlah Proker</p>
                 <p>{programsInformation.information.count}</p>
               </div>
               <Separator className="my-2" />
-              <div className="mb-2 flex justify-between font-bold">
+              <div className="mb-2 flex flex-wrap justify-between font-bold">
                 <p>Terlaksana</p>
                 <p>{programsInformation.information.implemented.count}</p>
               </div>
               {programsInformation.information.implemented.programs.map(
                 (program) => (
-                  <div className="flex justify-between" key={program.id}>
+                  <div
+                    className="flex flex-col justify-between sm:flex-row"
+                    key={program.id}
+                  >
                     <p>{program.name}</p>
                     <p className="font-bold">{dateFormat(program.date)}</p>
                   </div>
                 ),
               )}
               <Separator className="my-2" />
-              <div className="mb-2 flex justify-between font-bold">
+              <div className="mb-2 flex flex-wrap justify-between font-bold">
                 <p>Tidak Terlaksana</p>
                 <p>{programsInformation.information.notImplemented.count}</p>
               </div>
               {programsInformation.information.notImplemented.programs.map(
                 (program) => (
-                  <div className="flex justify-between" key={program.id}>
+                  <div
+                    className="flex flex-col justify-between sm:flex-row"
+                    key={program.id}
+                  >
                     <p>{program.name}</p>
                     <p className="font-bold">{dateFormat(program.date)}</p>
                   </div>
                 ),
               )}
               <Separator className="my-2" />
-              <div className="mb-2 flex justify-between font-bold">
+              <div className="mb-2 flex flex-wrap justify-between font-bold">
                 <p>Belum Terlaksana</p>
                 <p>{programsInformation.information.notYetImplemented.count}</p>
               </div>
               {programsInformation.information.notYetImplemented.programs.map(
                 (program) => (
-                  <div className="flex justify-between" key={program.id}>
+                  <div
+                    className="flex flex-col justify-between sm:flex-row"
+                    key={program.id}
+                  >
                     <p>{program.name}</p>
                     <p className="font-bold">{dateFormat(program.date)}</p>
                   </div>
@@ -182,9 +194,13 @@ export default async function ProgramPage() {
             )}
             {programsInformation.programs.map((program) => (
               <TableRow key={program.id}>
-                <TableCell>{program.name}</TableCell>
+                <TableCell>
+                  <p className="min-w-[100px]">{program.name}</p>
+                </TableCell>
                 <TableCell>{program.division}</TableCell>
-                <TableCell>{dateFormat(program.date)}</TableCell>
+                <TableCell>
+                  <p className="min-w-[100px]">{dateFormat(program.date)}</p>
+                </TableCell>
                 <TableCell>
                   {program.workProgramNeeds.map((need) => (
                     <p key={need.id} className="min-w-[300px]">

@@ -97,30 +97,79 @@ export const confirmReport = async (
   reportId: string,
   confirmation: boolean,
 ) => {
-  const userPosition = await db.userPosition.findUnique({
-    where: { userId },
-    select: { role: true },
-  });
+  try {
+    const report = await db.accountablityReport.findUnique({
+      where: { userId: reportId },
+    });
 
-  if (!userPosition || userPosition.role !== "SECRETARY") {
+    if (!report) {
+      return {
+        error: true,
+        message: "LPJ tidak ditemukan",
+      };
+    }
+
+    const userPosition = await db.userPosition.findUnique({
+      where: { userId },
+      select: { role: true },
+    });
+
+    if (!userPosition || !userPosition.role) {
+      return {
+        error: true,
+        message: "User tidak ditemukan",
+      };
+    }
+
+    const { role } = userPosition;
+
+    if (role === "SECRETARY") {
+      if (report.secretaryConfirm !== null) {
+        return {
+          error: true,
+          message: "LPJ sudah dikonfirmasi",
+        };
+      }
+
+      await db.accountablityReport.update({
+        where: { userId: reportId },
+        data: {
+          secretaryConfirm: confirmation,
+        },
+      });
+
+      revalidatePath(privateRoutes.reportManage);
+      return {
+        error: false,
+        message: `LPJ berhasil ${confirmation ? "disetujui" : "ditolak"}`,
+      };
+    }
+
+    if (role === "TREASURER") {
+      if (report.treasurerConfirm !== null) {
+        return {
+          error: true,
+          message: "LPJ sudah dikonfirmasi",
+        };
+      }
+
+      await db.accountablityReport.update({
+        where: { userId: reportId },
+        data: {
+          treasurerConfirm: confirmation,
+        },
+      });
+
+      revalidatePath(privateRoutes.reportManage);
+      return {
+        error: false,
+        message: `LPJ berhasil ${confirmation ? "disetujui" : "ditolak"}`,
+      };
+    }
+
     return {
       error: true,
       message: "Tidak memiliki izin",
-    };
-  }
-
-  try {
-    await db.accountablityReport.update({
-      where: { userId: reportId },
-      data: {
-        secretaryConfirm: confirmation,
-      },
-    });
-
-    revalidatePath(privateRoutes.reportManage);
-    return {
-      error: false,
-      message: `LPJ berhasil ${confirmation ? "disetujui" : "ditolak"}`,
     };
   } catch (e) {
     console.log(e);

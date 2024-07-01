@@ -185,14 +185,14 @@ export const confirmProgramPlan = async (
       where: { workProgramId: programId },
     });
 
+    if (!program) {
+      return { error: true, message: "Program kerja tidak ditemukan" };
+    }
+
     const userRole = await db.user.findUnique({
       where: { id: userId },
       select: { userPosition: { select: { role: true } } },
     });
-
-    if (!program) {
-      return { error: true, message: "Program kerja tidak ditemukan" };
-    }
 
     if (!userRole || !userRole.userPosition) {
       return { error: true, message: "User tidak ditemukan" };
@@ -202,7 +202,7 @@ export const confirmProgramPlan = async (
 
     if (role === "CHAIRMAN") {
       if (program.chairmanConfirm !== null) {
-        return { error: true, message: "Program kerja sudah diatur" };
+        return { error: true, message: "Program kerja sudah dikonfirmasi" };
       }
 
       await db.workProgramPlan.update({
@@ -218,7 +218,7 @@ export const confirmProgramPlan = async (
 
     if (role === "TREASURER") {
       if (program.treasurerConfirm !== null) {
-        return { error: true, message: "Program kerja sudah diatur" };
+        return { error: true, message: "Program kerja sudah dikonfirmasi" };
       }
 
       await db.workProgramPlan.update({
@@ -234,7 +234,7 @@ export const confirmProgramPlan = async (
 
     if (role === "SECRETARY") {
       if (program.secretaryConfirm !== null) {
-        return { error: true, message: "Program kerja sudah diatur" };
+        return { error: true, message: "Program kerja sudah dikonfirmasi" };
       }
 
       await db.workProgramPlan.update({
