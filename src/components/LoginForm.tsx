@@ -66,7 +66,7 @@ export default function LoginForm({ className, ...props }: Props) {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="ldkskiup@gmail.com" {...field} />
+                      <Input placeholder="rizky@gmail.com" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -79,11 +79,7 @@ export default function LoginForm({ className, ...props }: Props) {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="********"
-                        type="password"
-                        {...field}
-                      />
+                      <Input placeholder="****" type="password" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -62,7 +62,7 @@ export default function AdviceForm() {
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
       <div className="grid content-center gap-4 lg:justify-center lg:gap-8">
         <h2 className="text-2xl font-bold lg:text-center lg:text-4xl lg:text-primary">
-          Punya Saran?
+          Punya Saran atau Pengaduan?
         </h2>
         <Image
           src={suggestion}
@@ -72,7 +72,7 @@ export default function AdviceForm() {
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>Ketik saranmu disini</CardTitle>
+          <CardTitle>Ketik saran atau pengaduan disini</CardTitle>
           <CardDescription>
             Kalimat harap tidak mengandung ujaran kebencian
           </CardDescription>
@@ -87,7 +87,7 @@ export default function AdviceForm() {
                   <FormItem>
                     <FormLabel>Email kamu</FormLabel>
                     <FormControl>
-                      <Input placeholder="ldkskiup@gmail.com" {...field} />
+                      <Input placeholder="rizky@gmail.com" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -98,7 +98,7 @@ export default function AdviceForm() {
                 name="adviceFor"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Saran untuk?</FormLabel>
+                    <FormLabel>Untuk siapa?</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -123,10 +123,10 @@ export default function AdviceForm() {
                 name="advice"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Saran</FormLabel>
+                    <FormLabel>Saran atau pengaduan</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Saya ingin memberikan saran berupa..."
+                        placeholder="Saya ingin memberikan saran/pengaduan berupa..."
                         className="h-40 resize-none"
                         {...field}
                       />

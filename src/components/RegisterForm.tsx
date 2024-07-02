@@ -91,7 +91,7 @@ export default function RegsiterForm({ className, ...props }: Props) {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="ldkskiup@gmail.com" {...field} />
+                      <Input placeholder="rizky@gmail.com" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -104,7 +104,10 @@ export default function RegsiterForm({ className, ...props }: Props) {
                   <FormItem>
                     <FormLabel>Nama lengkap</FormLabel>
                     <FormControl>
-                      <Input placeholder="Muhammad Rizky" {...field} />
+                      <Input
+                        placeholder="Muhammad Rizky Fadhillah"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -117,7 +120,11 @@ export default function RegsiterForm({ className, ...props }: Props) {
                   <FormItem>
                     <FormLabel>Nomor HP</FormLabel>
                     <FormControl>
-                      <Input placeholder="08xxxxx" type="tel" {...field} />
+                      <Input
+                        placeholder="0895xxxxxxxxx"
+                        type="tel"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -268,11 +275,7 @@ export default function RegsiterForm({ className, ...props }: Props) {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="********"
-                        type="password"
-                        {...field}
-                      />
+                      <Input placeholder="****" type="password" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
