@@ -20,7 +20,6 @@ import { getUserPosition } from "@/lib/userDb";
 import { FileText, X } from "lucide-react";
 
 type Report = {
-  userId: string;
   report: {
     userId: string;
     type: string;
@@ -30,7 +29,7 @@ type Report = {
   } | null;
 };
 
-function ReportAction({ userId, report }: Report) {
+function ReportAction({ report }: Report) {
   if (!report) {
     return <ReportUploadDialog />;
   }
@@ -93,14 +92,12 @@ export default async function ReportManagePage() {
               <TableCell>
                 <div className="flex justify-center">
                   <ConfirmationIcon isConfirmed={report?.secretaryConfirm} />
+                  <ConfirmationIcon isConfirmed={report?.treasurerConfirm} />
                 </div>
               </TableCell>
               <TableCell>
                 <div className="flex justify-center">
-                  <ReportAction
-                    userId={session.user.id as string}
-                    report={report}
-                  />
+                  <ReportAction report={report} />
                 </div>
               </TableCell>
             </TableRow>
