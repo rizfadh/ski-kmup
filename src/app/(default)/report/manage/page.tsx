@@ -90,7 +90,7 @@ export default async function ReportManagePage() {
                 </div>
               </TableCell>
               <TableCell>
-                <div className="flex justify-center">
+                <div className="flex justify-center gap-2">
                   <ConfirmationIcon isConfirmed={report?.secretaryConfirm} />
                   <ConfirmationIcon isConfirmed={report?.treasurerConfirm} />
                 </div>
