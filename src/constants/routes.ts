@@ -28,6 +28,8 @@ export const privateRoutes = {
   report: "/report",
   reportManage: "/report/manage",
   reportConfirm: "/report/confirm",
+  settings: "/settings",
+  settingsPosition: "/settings/position",
 };
 
 export const authRoutes = {

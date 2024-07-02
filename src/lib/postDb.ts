@@ -31,6 +31,45 @@ export const getPosts = async (isAccepted: boolean, take?: number) => {
   });
 };
 
+export const getMostLikedPosts = async () => {
+  const posts = await db.post.findMany({
+    where: { isAccepted: true },
+    select: {
+      id: true,
+      createdAt: true,
+      user: {
+        select: {
+          name: true,
+        },
+      },
+      imageUrl: true,
+      title: true,
+      isAccepted: true,
+      _count: {
+        select: {
+          postLike: {
+            where: { like: true },
+          },
+        },
+      },
+    },
+  });
+
+  posts.sort((a, b) => b._count.postLike - a._count.postLike);
+  posts.length = posts.length > 4 ? 4 : posts.length;
+
+  return posts.map((post) => {
+    return {
+      id: post.id,
+      createdAt: post.createdAt,
+      createdBy: post.user.name,
+      imageUrl: post.imageUrl,
+      title: post.title,
+      isAccepted: post.isAccepted,
+    };
+  });
+};
+
 export const getPostById = async (id: string, isAccepted?: boolean) => {
   return await db.post.findUnique({
     where: { id, isAccepted },

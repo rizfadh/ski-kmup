@@ -44,6 +44,31 @@ export const getUserPosition = async (id: string) => {
   });
 };
 
+export const getAllUserPostion = async () => {
+  const users = await db.user.findMany({
+    where: { registerApproval: { isAccepted: true } },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true,
+      userPosition: { select: { title: true, division: true, role: true } },
+    },
+  });
+
+  return users.map((user) => {
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      createdAt: user.createdAt,
+      title: user.userPosition?.title,
+      division: user.userPosition?.division,
+      role: user.userPosition?.role,
+    };
+  });
+};
+
 export const getUsersRegistrationStatus = async (isAccepted: boolean) => {
   const res = await db.user.findMany({
     where: { registerApproval: { isAccepted } },

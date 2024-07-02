@@ -9,6 +9,7 @@ import {
   MenuIcon,
   Newspaper,
   NotebookText,
+  Settings,
   User,
   Wallet,
 } from "lucide-react";
@@ -63,6 +64,11 @@ const routes = [
     label: "Saran",
     href: privateRoutes.advices,
   },
+  {
+    Icon: Settings,
+    label: "Pengaturan",
+    href: privateRoutes.settings,
+  },
 ];
 
 type NavBarAuthProps = {
@@ -75,9 +81,14 @@ export default function NavBarAuth({ userRole, className }: NavBarAuthProps) {
 
   const filteredRoutes = useMemo(
     () =>
-      routes.filter((route) =>
-        userRole !== "HEADOFKPSDM" ? route.label !== "Pendaftaran" : true,
-      ),
+      routes.filter((route) => {
+        if (userRole !== "HEADOFKPSDM" && route.label === "Pendaftaran")
+          return false;
+
+        if (userRole !== "ADMIN" && route.label === "Pengaturan") return false;
+
+        return true;
+      }),
     [userRole],
   );
 

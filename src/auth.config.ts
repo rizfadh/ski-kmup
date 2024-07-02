@@ -35,8 +35,7 @@ export const authConfig = {
       if (isLoggedin) {
         const { role } = auth.user;
 
-        if (role === "ADMIN") return true;
-
+        const admin = role === "ADMIN";
         const kpsdm = role === "HEADOFKPSDM";
         const medcen = role === "HEADOFMEDCEN";
         const treasurer = role === "TREASURER";
@@ -47,8 +46,6 @@ export const authConfig = {
         if (!kpsdm && pathname.startsWith(privateRoutes.registrations)) {
           return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
         }
-
-        console.log(role);
 
         if (!medcen && pathname.startsWith(privateRoutes.postsManage)) {
           return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
@@ -97,6 +94,10 @@ export const authConfig = {
           !(secretary || treasurer) &&
           pathname.startsWith(privateRoutes.reportConfirm)
         ) {
+          return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+        }
+
+        if (!admin && pathname.startsWith(privateRoutes.settings)) {
           return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
         }
       }

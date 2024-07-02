@@ -2,7 +2,7 @@ import LinkButton from "@/components/LinkButton";
 import { PostItems } from "@/components/PostItems";
 import { privateRoutes } from "@/constants/routes";
 import getSession from "@/lib/getSession";
-import { getPosts } from "@/lib/postDb";
+import { getMostLikedPosts, getPosts } from "@/lib/postDb";
 import { UserRole } from "@prisma/client";
 import { PlusCircle, ListChecks } from "lucide-react";
 
@@ -30,11 +30,19 @@ function PostsMenu({ role }: { role: UserRole }) {
 }
 
 export default async function PostsPage() {
-  const [posts, session] = await Promise.all([getPosts(true), getSession()]);
+  const [posts, favoritePosts, session] = await Promise.all([
+    getPosts(true),
+    getMostLikedPosts(),
+    getSession(),
+  ]);
   const isLoggedIn = !session || !session.user;
+
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">
       {isLoggedIn ? null : <PostsMenu role={session.user.role} />}
+      <h2 className="text-2xl font-bold">Postingan Favorit</h2>
+      <PostItems posts={favoritePosts} />
+      <h2 className="text-2xl font-bold">Postingan Terbaru</h2>
       <PostItems posts={posts} />
     </div>
   );
