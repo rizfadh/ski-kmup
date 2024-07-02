@@ -45,7 +45,6 @@ type ProgramPlan = {
 };
 
 type ProgramPlanConfirmTableProps = {
-  userId: string;
   userRole: UserRole;
   programPlans: ProgramPlan[];
 };
@@ -104,7 +103,6 @@ const userConfirm = (userRole: UserRole, confirmation: UserConfirm) => {
 };
 
 export function ProgramPlanConfirmTable({
-  userId,
   userRole,
   programPlans,
 }: ProgramPlanConfirmTableProps) {
@@ -122,7 +120,6 @@ export function ProgramPlanConfirmTable({
   const confirmHandler = () => {
     startTransition(async () => {
       const response = await confirmProgramPlan(
-        userId,
         program?.id as string,
         confirmation as boolean,
       );
@@ -174,7 +171,7 @@ export function ProgramPlanConfirmTable({
               <TableHead className="font-bold">Tanggal</TableHead>
               <TableHead className="font-bold">Keperluan</TableHead>
               <TableHead className="font-bold">Konfirmasi</TableHead>
-              <TableHead className="font-bold">Terima</TableHead>
+              <TableHead className="text-center font-bold">Terima</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

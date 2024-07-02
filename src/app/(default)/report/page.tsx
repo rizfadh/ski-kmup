@@ -11,7 +11,17 @@ import { privateRoutes } from "@/constants/routes";
 import { dateFormat } from "@/lib/formatter";
 import getSession from "@/lib/getSession";
 import { getReport } from "@/lib/reportDb";
+import { UserRole } from "@prisma/client";
 import { CircleCheck, FileText, Settings } from "lucide-react";
+
+const manageRole: UserRole[] = [
+  "HEADOFDIVISION",
+  "HEADOFKPSDM",
+  "HEADOFMEDCEN",
+  "CHAIRMAN",
+];
+
+const confirmRole: UserRole[] = ["TREASURER", "SECRETARY"];
 
 export default async function ReportPage() {
   const session = await getSession();
@@ -23,16 +33,20 @@ export default async function ReportPage() {
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">
       <div className="flex flex-col gap-2 sm:flex-row">
-        <LinkButton variant="outline" href={privateRoutes.reportManage}>
-          <span className="flex items-center gap-2">
-            Kelola <Settings className="h-[1.2rem] w-[1.2rem]" />
-          </span>
-        </LinkButton>
-        <LinkButton variant="outline" href={privateRoutes.reportConfirm}>
-          <span className="flex items-center gap-2">
-            Konfirmasi <CircleCheck className="h-[1.2rem] w-[1.2rem]" />
-          </span>
-        </LinkButton>
+        {manageRole.includes(session.user.role) && (
+          <LinkButton variant="outline" href={privateRoutes.reportManage}>
+            <span className="flex items-center gap-2">
+              Kelola <Settings className="h-[1.2rem] w-[1.2rem]" />
+            </span>
+          </LinkButton>
+        )}
+        {confirmRole.includes(session.user.role) && (
+          <LinkButton variant="outline" href={privateRoutes.reportConfirm}>
+            <span className="flex items-center gap-2">
+              Konfirmasi <CircleCheck className="h-[1.2rem] w-[1.2rem]" />
+            </span>
+          </LinkButton>
+        )}
       </div>
       <div className="rounded-md border">
         <Table>

@@ -12,7 +12,6 @@ export default async function ProgramConfirmPage() {
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">
       <ProgramPlanConfirmTable
-        userId={session.user.id as string}
         userRole={session.user.role}
         programPlans={programPlans}
       />

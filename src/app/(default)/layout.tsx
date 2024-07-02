@@ -17,7 +17,10 @@ export default async function DefaultLayout({
       {isLoggedIn ? (
         <NavBar />
       ) : (
-        <NavBarAuth className="md:fixed md:min-h-screen md:w-48 md:border-r" />
+        <NavBarAuth
+          userRole={session.user.role}
+          className="md:fixed md:min-h-screen md:w-48 md:border-r"
+        />
       )}
       <main className={isLoggedIn ? "" : "md:ml-48"}>{children}</main>
       <Toaster />

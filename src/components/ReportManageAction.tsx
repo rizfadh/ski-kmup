@@ -41,11 +41,7 @@ import {
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
 
-type Props = {
-  userId: string;
-};
-
-export function ReportUploadDialog({ userId }: Props) {
+export function ReportUploadDialog() {
   const [formOpen, setFormOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -58,7 +54,7 @@ export function ReportUploadDialog({ userId }: Props) {
       const formData = new FormData();
       formData.append("pdf", data.pdf);
 
-      const response = await uploadReport(userId, formData);
+      const response = await uploadReport(formData);
 
       setFormOpen(false);
       form.reset();
@@ -116,12 +112,12 @@ export function ReportUploadDialog({ userId }: Props) {
   );
 }
 
-export function ReportDeleteButton({ userId }: Props) {
+export function ReportDeleteButton() {
   const [isPending, startTransition] = useTransition();
 
   const confirmHandler = () => {
     startTransition(async () => {
-      const response = await deleteReport(userId);
+      const response = await deleteReport();
 
       toast({
         title: response.error ? "Gagal" : "Sukses",

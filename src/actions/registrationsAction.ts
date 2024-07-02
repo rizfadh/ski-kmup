@@ -2,10 +2,21 @@
 
 import { privateRoutes } from "@/constants/routes";
 import db from "@/lib/db";
+import getSession from "@/lib/getSession";
 import { revalidatePath } from "next/cache";
 
 export const acceptUser = async (id: string) => {
   try {
+    const session = await getSession();
+
+    if (!session || !session.user) {
+      return { error: true, message: "Unauthorized" };
+    }
+
+    if (session.user.role !== "HEADOFKPSDM") {
+      return { error: true, message: "Unauthorized" };
+    }
+
     await db.user.update({
       where: { id },
       data: {
@@ -31,6 +42,16 @@ export const acceptUser = async (id: string) => {
 
 export const deleteUser = async (id: string, pathToRevalidate: string) => {
   try {
+    const session = await getSession();
+
+    if (!session || !session.user) {
+      return { error: true, message: "Unauthorized" };
+    }
+
+    if (session.user.role !== "HEADOFKPSDM") {
+      return { error: true, message: "Unauthorized" };
+    }
+
     await db.user.delete({
       where: { id },
     });

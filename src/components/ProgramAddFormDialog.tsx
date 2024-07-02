@@ -29,12 +29,9 @@ import { ProgramPlanFormSchema } from "@/schemas/ProgramSchema";
 import { ScrollArea } from "./ui/scroll-area";
 import { addProgramPlan } from "@/actions/programAction";
 
-interface ProgramAddFormDialogProps extends ComponentProps<typeof Button> {
-  id: string;
-}
+interface ProgramAddFormDialogProps extends ComponentProps<typeof Button> {}
 
 export function ProgramAddFormDialog({
-  id,
   className,
   ...props
 }: ProgramAddFormDialogProps) {
@@ -68,7 +65,7 @@ export function ProgramAddFormDialog({
         amount: need.amount as number,
       }));
 
-      const response = await addProgramPlan(id, {
+      const response = await addProgramPlan({
         name: data.name,
         date,
         needs,

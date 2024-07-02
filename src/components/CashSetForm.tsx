@@ -27,7 +27,11 @@ import {
 } from "./ui/dialog";
 import { Settings2 } from "lucide-react";
 
-export default function CashSetForm({ disabled }: { disabled: boolean }) {
+type Props = {
+  disabled: boolean;
+};
+
+export default function CashSetForm({ disabled }: Props) {
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 

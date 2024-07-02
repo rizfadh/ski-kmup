@@ -84,13 +84,11 @@ type Report = {
 };
 
 type ReportConfirmTableProps = {
-  userId: string;
   userRole: UserRole;
   reports: Report[];
 };
 
 export function ReportConfirmTable({
-  userId,
   userRole,
   reports,
 }: ReportConfirmTableProps) {
@@ -108,7 +106,6 @@ export function ReportConfirmTable({
   const confirmHandler = () => {
     startTransition(async () => {
       const response = await confirmReport(
-        userId,
         report?.userId as string,
         confirmation as boolean,
       );
@@ -174,7 +171,7 @@ export function ReportConfirmTable({
               </TableRow>
             )}
             {reports.map((report) => (
-              <TableRow key={userId}>
+              <TableRow key={report.userId}>
                 <TableCell>{report.type}</TableCell>
                 <TableCell>{dateFormat(report.createdAt)}</TableCell>
                 <TableCell>

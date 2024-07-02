@@ -25,6 +25,7 @@ import { privateRoutes, publicRoutes } from "@/constants/routes";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import NavBarLink from "./NavBarLink";
+import { UserRole } from "@prisma/client";
 
 const routes = [
   {
@@ -65,14 +66,24 @@ const routes = [
 ];
 
 type NavBarAuthProps = {
+  userRole: UserRole;
   className: ComponentPropsWithoutRef<"header">["className"];
 };
 
-export default function NavBarAuth({ className }: NavBarAuthProps) {
+export default function NavBarAuth({ userRole, className }: NavBarAuthProps) {
   const pathname = usePathname();
+
+  const filteredRoutes = useMemo(
+    () =>
+      routes.filter((route) =>
+        userRole !== "HEADOFKPSDM" ? route.label !== "Pendaftaran" : true,
+      ),
+    [userRole],
+  );
+
   const activeRoute = useMemo(
     () =>
-      routes.map(({ Icon, label, href }) => (
+      filteredRoutes.map(({ Icon, label, href }) => (
         <NavBarLink
           key={href}
           Icon={Icon}
@@ -81,7 +92,7 @@ export default function NavBarAuth({ className }: NavBarAuthProps) {
           isActive={pathname === href}
         />
       )),
-    [pathname],
+    [pathname, filteredRoutes],
   );
 
   return (

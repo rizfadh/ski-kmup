@@ -34,7 +34,7 @@ export default async function CashPage() {
 
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">
-      {cashSet ? null : (
+      {cashSet || session.user.role !== "TREASURER" ? null : (
         <div className="w-fit rounded-md bg-destructive px-6 py-3 text-destructive-foreground">
           <p className="flex items-center gap-2">
             Iuran kas belum diatur, harap atur
@@ -60,12 +60,14 @@ export default async function CashPage() {
             Kas Keluar <ArrowLeftFromLine className="h-[1.2rem] w-[1.2rem]" />
           </span>
         </LinkButton>
-        <LinkButton variant="outline" href={privateRoutes.cashManage}>
-          <span className="flex items-center gap-2">
-            Kelola Pembayaran
-            <Settings className="h-[1.2rem] w-[1.2rem]" />
-          </span>
-        </LinkButton>
+        {session.user.role === "TREASURER" && (
+          <LinkButton variant="outline" href={privateRoutes.cashManage}>
+            <span className="flex items-center gap-2">
+              Kelola Pembayaran
+              <Settings className="h-[1.2rem] w-[1.2rem]" />
+            </span>
+          </LinkButton>
+        )}
       </div>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card>

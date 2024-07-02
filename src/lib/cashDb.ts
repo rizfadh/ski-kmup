@@ -33,7 +33,7 @@ export const getUserCashHistory = async (id: string) => {
   });
 };
 
-export const getCashInOut = async (type: CashInOutType) => {
+export const getCashInOut = async (type: CashInOutType, userRole: UserRole) => {
   const cash = await db.cashInOut.findMany({
     where: { type },
     orderBy: { createdAt: "desc" },
@@ -55,6 +55,7 @@ export const getCashInOut = async (type: CashInOutType) => {
       date: cash.date,
       createdBy: cash.user.name,
       createdAt: cash.createdAt,
+      userRole,
     };
   });
 };

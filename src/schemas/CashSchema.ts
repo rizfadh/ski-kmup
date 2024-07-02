@@ -1,5 +1,3 @@
-import { CashInOutType } from "@prisma/client";
-import { id } from "date-fns/locale";
 import { z } from "zod";
 
 export const CashSetFormSchema = z.object({

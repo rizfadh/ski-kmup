@@ -13,9 +13,27 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import { UserRole } from "@prisma/client";
+import getSession from "@/lib/getSession";
 
-export const uploadReport = async (userId: string, formData: FormData) => {
+export const uploadReport = async (formData: FormData) => {
   try {
+    const session = await getSession();
+
+    if (!session || !session.user) {
+      return { error: true, message: "Unauthorized" };
+    }
+
+    const uploadRole: UserRole[] = [
+      "HEADOFDIVISION",
+      "HEADOFKPSDM",
+      "HEADOFMEDCEN",
+      "CHAIRMAN",
+    ];
+
+    if (!uploadRole.includes(session.user.role)) {
+      return { error: true, message: "Unauthorized" };
+    }
+
     const data = {
       pdf: formData.get("pdf"),
     };
@@ -26,58 +44,71 @@ export const uploadReport = async (userId: string, formData: FormData) => {
 
     const { pdf } = validated.data;
 
-    const reportRef = ref(storage, storageRef.report + userId);
+    const reportRef = ref(
+      storage,
+      storageRef.report + (session.user.id as string),
+    );
 
     await uploadBytes(reportRef, pdf);
     const reportUrl = await getDownloadURL(reportRef);
 
     const userPosition = await db.userPosition.findUnique({
-      where: { userId },
-      select: { title: true, division: true, role: true },
+      where: { userId: session.user.id as string },
+      select: { division: true },
     });
 
-    const permission: UserRole[] = [
-      "ADMIN",
-      "CHAIRMAN",
-      "HEADOFDIVISION",
-      "HEADOFKPSDM",
-      "HEADOFMEDCEN",
-    ];
-
-    if (!permission.includes(userPosition?.role as UserRole)) {
-      return { error: true, message: "Tidak memiliki izin" };
-    }
-
     const type = userPosition?.division ?? "Global";
-    const accepted = userPosition?.role === "CHAIRMAN" ? true : null;
+    const accepted = session.user.role === "CHAIRMAN" ? true : null;
 
     await db.accountablityReport.create({
       data: {
-        userId,
-        reportUrl: reportUrl,
-        type: type as string,
+        userId: session.user.id as string,
+        reportUrl,
+        type,
         secretaryConfirm: accepted,
       },
     });
 
     revalidatePath(privateRoutes.reportManage);
-    return {
-      error: false,
-      message: "LPJ berhasil diupload, menunggu persetujuan Sekum",
-    };
+
+    const message =
+      session.user.role === "CHAIRMAN"
+        ? "LPJ berhasil diupload"
+        : "LPJ berhasil diupload, menunggu persetujuan Sekum";
+
+    return { error: false, message };
   } catch (e) {
     console.log(e);
     return { error: true, message: "Terjadi kesalahan" };
   }
 };
 
-export const deleteReport = async (userId: string) => {
+export const deleteReport = async () => {
   try {
+    const session = await getSession();
+
+    if (!session || !session.user) {
+      return { error: true, message: "Unauthorized" };
+    }
+
+    const uploadRole: UserRole[] = [
+      "HEADOFDIVISION",
+      "HEADOFKPSDM",
+      "HEADOFMEDCEN",
+    ];
+
+    if (!uploadRole.includes(session.user.role)) {
+      return { error: true, message: "Unauthorized" };
+    }
+
     await db.accountablityReport.delete({
-      where: { userId },
+      where: { userId: session.user.id as string },
     });
 
-    const reportRef = ref(storage, storageRef.report + userId);
+    const reportRef = ref(
+      storage,
+      storageRef.report + (session.user.id as string),
+    );
 
     await deleteObject(reportRef);
 
@@ -93,11 +124,16 @@ export const deleteReport = async (userId: string) => {
 };
 
 export const confirmReport = async (
-  userId: string,
   reportId: string,
   confirmation: boolean,
 ) => {
   try {
+    const session = await getSession();
+
+    if (!session || !session.user) {
+      return { error: true, message: "Unauthorized" };
+    }
+
     const report = await db.accountablityReport.findUnique({
       where: { userId: reportId },
     });
@@ -109,19 +145,7 @@ export const confirmReport = async (
       };
     }
 
-    const userPosition = await db.userPosition.findUnique({
-      where: { userId },
-      select: { role: true },
-    });
-
-    if (!userPosition || !userPosition.role) {
-      return {
-        error: true,
-        message: "User tidak ditemukan",
-      };
-    }
-
-    const { role } = userPosition;
+    const { role } = session.user;
 
     if (role === "SECRETARY") {
       if (report.secretaryConfirm !== null) {
@@ -167,10 +191,7 @@ export const confirmReport = async (
       };
     }
 
-    return {
-      error: true,
-      message: "Tidak memiliki izin",
-    };
+    return { error: true, message: "Unauthorized" };
   } catch (e) {
     console.log(e);
     return { error: true, message: "Terjadi kesalahan" };

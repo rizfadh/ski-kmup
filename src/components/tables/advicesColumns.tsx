@@ -8,6 +8,7 @@ import { deleteAdvice } from "@/actions/advicesAction";
 import { useTransition } from "react";
 import { toast } from "../ui/use-toast";
 import { ColumnHeaderSort } from "./ColumnHeaderSort";
+import { UserRole } from "@prisma/client";
 
 export type Advice = {
   id: string;
@@ -15,6 +16,7 @@ export type Advice = {
   adviceFor: string;
   advice: string;
   createdAt: Date;
+  userRole: UserRole;
 };
 
 function AdvicesActionCell({ row }: { row: Row<Advice> }) {
@@ -75,7 +77,9 @@ export const advicesColumns: ColumnDef<Advice>[] = [
   },
   {
     id: "actions",
-    header: () => <div className="text-center">Aksi</div>,
-    cell: AdvicesActionCell,
+    cell: ({ row }) => {
+      const { userRole } = row.original;
+      if (userRole === "HEADOFMEDCEN") return <AdvicesActionCell row={row} />;
+    },
   },
 ];

@@ -18,9 +18,16 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import { createId } from "@paralleldrive/cuid2";
+import getSession from "@/lib/getSession";
 
 export const addPost = async (formData: FormData) => {
   try {
+    const session = await getSession();
+
+    if (!session || !session.user) {
+      return { error: true, message: "Unauthorized" };
+    }
+
     const data = {
       id: formData.get("id"),
       image: formData.get("image"),
@@ -63,6 +70,16 @@ export const addPost = async (formData: FormData) => {
 
 export const updatePost = async (formData: FormData) => {
   try {
+    const session = await getSession();
+
+    if (!session || !session.user) {
+      return { error: true, message: "Unauthorized" };
+    }
+
+    if (session.user.role !== "HEADOFMEDCEN") {
+      return { error: true, message: "Unauthorized" };
+    }
+
     const data = {
       id: formData.get("id"),
       image:
@@ -115,6 +132,16 @@ export const updatePost = async (formData: FormData) => {
 
 export const deletePost = async (data: z.infer<typeof DeletePostSchema>) => {
   try {
+    const session = await getSession();
+
+    if (!session || !session.user) {
+      return { error: true, message: "Unauthorized" };
+    }
+
+    if (session.user.role !== "HEADOFMEDCEN") {
+      return { error: true, message: "Unauthorized" };
+    }
+
     const validated = DeletePostSchema.safeParse(data);
 
     if (!validated.success) return { error: true, message: "Invalid fields" };
@@ -139,6 +166,16 @@ export const deletePost = async (data: z.infer<typeof DeletePostSchema>) => {
 
 export const acceptPost = async (id: string) => {
   try {
+    const session = await getSession();
+
+    if (!session || !session.user) {
+      return { error: true, message: "Unauthorized" };
+    }
+
+    if (session.user.role !== "HEADOFMEDCEN") {
+      return { error: true, message: "Unauthorized" };
+    }
+
     await db.post.update({
       where: { id },
       data: {
@@ -156,6 +193,12 @@ export const acceptPost = async (id: string) => {
 
 export const likePost = async (userId: string, postId: string) => {
   try {
+    const session = await getSession();
+
+    if (!session || !session.user) {
+      return { error: true, message: "Unauthorized" };
+    }
+
     const postLike = await db.postLike.findUnique({
       where: {
         userId_postId: {
@@ -214,6 +257,12 @@ export const likePost = async (userId: string, postId: string) => {
 
 export const dislikePost = async (userId: string, postId: string) => {
   try {
+    const session = await getSession();
+
+    if (!session || !session.user) {
+      return { error: true, message: "Unauthorized" };
+    }
+
     const postLike = await db.postLike.findUnique({
       where: {
         userId_postId: {

@@ -31,12 +31,10 @@ import { dateFormatInput } from "@/lib/formatter";
 import { CashInOutType } from "@prisma/client";
 
 interface CashInOutAddFormDialogProps extends ComponentProps<typeof Button> {
-  id: string;
   cashType: CashInOutType;
 }
 
 export function CashInOutAddFormDialog({
-  id,
   cashType,
   className,
   ...props
@@ -59,7 +57,7 @@ export function CashInOutAddFormDialog({
 
       const dateInput = new Date(date);
 
-      const response = await addCashInOut(id, cashType, {
+      const response = await addCashInOut(cashType, {
         description,
         amount: amount as number,
         date: dateInput,

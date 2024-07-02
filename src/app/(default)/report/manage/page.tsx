@@ -32,12 +32,12 @@ type Report = {
 
 function ReportAction({ userId, report }: Report) {
   if (!report) {
-    return <ReportUploadDialog userId={userId} />;
+    return <ReportUploadDialog />;
   }
 
   if (report.secretaryConfirm) return null;
 
-  return <ReportDeleteButton userId={userId} />;
+  return <ReportDeleteButton />;
 }
 
 export default async function ReportManagePage() {

@@ -20,6 +20,16 @@ import getSession from "@/lib/getSession";
 
 export const setCash = async (data: z.infer<typeof CashSetSchema>) => {
   try {
+    const session = await getSession();
+
+    if (!session || !session.user) {
+      return { error: true, message: "Unauthorized" };
+    }
+
+    if (session.user.role !== "TREASURER") {
+      return { error: true, message: "Unauthorized" };
+    }
+
     const validated = CashSetSchema.safeParse(data);
 
     if (!validated.success) return { error: true, message: "Invalid fields" };
@@ -122,11 +132,20 @@ export const cashMidtrans = async (
 };
 
 export const addCashInOut = async (
-  id: string,
   type: CashInOutType,
   data: z.infer<typeof CashInOutSchema>,
 ) => {
   try {
+    const session = await getSession();
+
+    if (!session || !session.user) {
+      return { error: true, message: "Unauthorized" };
+    }
+
+    if (session.user.role !== "TREASURER") {
+      return { error: true, message: "Unauthorized" };
+    }
+
     const validated = CashInOutSchema.safeParse(data);
 
     if (!validated.success) return { error: true, message: "Invalid fields" };
@@ -135,7 +154,7 @@ export const addCashInOut = async (
 
     await db.cashInOut.create({
       data: {
-        userId: id,
+        userId: session.user.id as string,
         type,
         description,
         amount,
@@ -156,6 +175,16 @@ export const addCashInOut = async (
 
 export const deleteCashInOut = async (id: string, type: CashInOutType) => {
   try {
+    const session = await getSession();
+
+    if (!session || !session.user) {
+      return { error: true, message: "Unauthorized" };
+    }
+
+    if (session.user.role !== "TREASURER") {
+      return { error: true, message: "Unauthorized" };
+    }
+
     await db.cashInOut.delete({ where: { id } });
 
     const path = type === "IN" ? privateRoutes.cashIn : privateRoutes.cashOut;
@@ -175,6 +204,16 @@ export const updateCashInOut = async (
   data: z.infer<typeof CashInOutSchema>,
 ) => {
   try {
+    const session = await getSession();
+
+    if (!session || !session.user) {
+      return { error: true, message: "Unauthorized" };
+    }
+
+    if (session.user.role !== "TREASURER") {
+      return { error: true, message: "Unauthorized" };
+    }
+
     const validated = CashInOutSchema.safeParse(data);
 
     if (!validated.success) return { error: true, message: "Invalid fields" };
@@ -203,6 +242,16 @@ export const updateCashInOut = async (
 
 export const setUserCashPaid = async (id: string) => {
   try {
+    const session = await getSession();
+
+    if (!session || !session.user) {
+      return { error: true, message: "Unauthorized" };
+    }
+
+    if (session.user.role !== "TREASURER") {
+      return { error: true, message: "Unauthorized" };
+    }
+
     const cash = await db.cashPayment.update({
       where: { id },
       data: {

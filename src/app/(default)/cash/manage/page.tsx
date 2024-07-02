@@ -2,12 +2,16 @@ import CashSetForm from "@/components/CashSetForm";
 import { DataTable } from "@/components/DataTable";
 import { cashManageColumns } from "@/components/tables/cashColumns";
 import { getAllUserCash, isCashSet } from "@/lib/cashDb";
+import getSession from "@/lib/getSession";
 
 export default async function CashManagePage() {
-  const [cashSet, allUserCash] = await Promise.all([
+  const [session, cashSet, allUserCash] = await Promise.all([
+    getSession(),
     isCashSet(),
     getAllUserCash(),
   ]);
+
+  if (!session || !session.user) return null;
 
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">

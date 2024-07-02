@@ -11,12 +11,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Dispatch, SetStateAction, useTransition } from "react";
-import {
-  ACCEPTED_IMAGE_MIME_TYPES,
-  PostFormSchema,
-} from "@/schemas/PostSchema";
+import { ACCEPTED_IMAGE_MIME_TYPES } from "@/schemas/PostSchema";
 import Tiptap from "./TipTap";
-import { addPost } from "@/actions/postsAction";
 import { useRouter } from "next/navigation";
 import { toast } from "./ui/use-toast";
 import { ActionResponse } from "@/types/ActionResponse";

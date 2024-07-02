@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef, Row } from "@tanstack/react-table";
-import { CreditCard, Trash, Wallet } from "lucide-react";
+import { Trash, Wallet } from "lucide-react";
 import {
   currencyFormat,
   dateFormat,
@@ -13,7 +13,7 @@ import { ColumnHeaderSort } from "./ColumnHeaderSort";
 import { deleteCashInOut } from "@/actions/cashAction";
 import ButtonDialog from "@/components/ButtonDialog";
 import { CashInOutUpdateFormDialog } from "../CashInOutFormDialog";
-import { CashInOutType } from "@prisma/client";
+import { CashInOutType, UserRole } from "@prisma/client";
 import LinkButton from "../LinkButton";
 import { privateRoutes } from "@/constants/routes";
 
@@ -105,6 +105,7 @@ export type CashInOut = {
   amount: number;
   date: Date;
   createdBy: string;
+  userRole: UserRole;
 };
 
 function CashInOutCell({ row }: { row: Row<CashInOut> }) {
@@ -145,7 +146,7 @@ function CashInOutCell({ row }: { row: Row<CashInOut> }) {
   );
 }
 
-export const cashInColumns: ColumnDef<CashInOut>[] = [
+export const cashInOutColumns: ColumnDef<CashInOut>[] = [
   {
     accessorKey: "description",
     header: () => <div className="min-w-[200px]">Deskripsi</div>,
@@ -183,8 +184,10 @@ export const cashInColumns: ColumnDef<CashInOut>[] = [
   },
   {
     id: "actions",
-    header: () => <div className="text-center">Aksi</div>,
-    cell: CashInOutCell,
+    cell: ({ row }) => {
+      const { userRole } = row.original;
+      if (userRole === "TREASURER") return <CashInOutCell row={row} />;
+    },
   },
 ];
 
