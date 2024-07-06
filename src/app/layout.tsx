@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <NextTopLoader color="#16a34a" />
+          <NextTopLoader color="#16a34a" showSpinner={false} />
           {children}
         </ThemeProvider>
       </body>
