@@ -73,7 +73,7 @@ export const advicesColumns: ColumnDef<Advice>[] = [
   },
   {
     accessorKey: "advice",
-    header: () => <div className="min-w-[300px]">Saran</div>,
+    header: () => <div className="min-w-[300px]">Saran atau Pengaduan</div>,
   },
   {
     id: "actions",
