@@ -1,6 +1,5 @@
 import db from "@/lib/db";
 import crypto from "crypto";
-import { parse } from "date-fns";
 
 type verifySignatureType = {
   orderId: any;
@@ -25,9 +24,7 @@ const verifySignature = ({
 export async function POST(req: Request) {
   try {
     const {
-      transaction_time,
       transaction_status,
-      transaction_id,
       status_code,
       signature_key,
       payment_type,
@@ -45,7 +42,7 @@ export async function POST(req: Request) {
 
     if (!verify) return new Response("Invalid signature", { status: 400 });
 
-    let status = "Inisialisasi";
+    let status = "Init";
 
     if (transaction_status == "capture") {
       if (fraud_status == "accept") {
@@ -63,43 +60,15 @@ export async function POST(req: Request) {
       status = "Pending";
     }
 
-    const amount = parseInt(gross_amount);
-    const time = parse(transaction_time, "yyyy-MM-dd HH:mm:ss", new Date());
     const paid = status === "Sukses" ? true : false;
-
-    const cashHistory = await db.cashPaymentHistory.findUnique({
-      where: {
-        id: transaction_id,
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    if (!cashHistory) {
-      await db.cashPaymentHistory.create({
-        data: {
-          id: transaction_id,
-          paymentId: order_id,
-          status,
-          paymentType: payment_type,
-          amount,
-          time,
-        },
-      });
-
-      return new Response("Success", { status: 200 });
-    }
 
     await db.cashPaymentHistory.update({
       where: {
-        id: transaction_id,
+        id: order_id,
       },
       data: {
         status,
         paymentType: payment_type,
-        amount,
-        time,
         cashPayment: {
           update: {
             paid,

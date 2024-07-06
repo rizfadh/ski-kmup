@@ -185,7 +185,7 @@ export default function RegsiterForm({ className, ...props }: Props) {
                           <SelectValue placeholder="Silahkan pilih" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="max-h-[200px]">
                         {Object.entries(userMajor).map(([key, value]) => (
                           <SelectItem key={key} value={key}>
                             {value}

@@ -180,7 +180,7 @@ export default function SettingsPositionTable({ users }: Props) {
                           <SelectValue placeholder="Silahkan pilih" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="max-h-[200px]">
                         {userPosition.map((position, index) => (
                           <SelectItem key={position.name} value={String(index)}>
                             {position.name}

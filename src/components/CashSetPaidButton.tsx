@@ -15,6 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
+import { CircleCheckBig } from "lucide-react";
 
 type Props = {
   id: string;
@@ -38,8 +39,12 @@ export default function CashSetPaidButton({ id }: Props) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline" disabled={isPending}>
-          Sudah bayar
+        <Button
+          variant="outline"
+          disabled={isPending}
+          className="flex items-center gap-2"
+        >
+          Sudah bayar <CircleCheckBig className="h-[1.2rem] w-[1.2rem]" />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

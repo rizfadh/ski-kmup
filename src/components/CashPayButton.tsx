@@ -4,6 +4,7 @@ import { useTransition } from "react";
 import { toast } from "./ui/use-toast";
 import { cashMidtrans } from "@/actions/cashAction";
 import { Button } from "./ui/button";
+import { Wallet } from "lucide-react";
 
 declare global {
   interface Window {
@@ -44,8 +45,9 @@ export default function CashPayButton({ id, amount, month }: Props) {
       variant="outline"
       onClick={midtransPaymentHandler}
       disabled={isPending}
+      className="flex items-center gap-2"
     >
-      Bayar
+      Bayar <Wallet className="h-[1.2rem] w-[1.2rem]" />
     </Button>
   );
 }

@@ -13,6 +13,7 @@ import { add } from "date-fns";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isCashSet } from "@/lib/cashDb";
+import { createId } from "@paralleldrive/cuid2";
 
 // @ts-ignore
 import midtransClient from "midtrans-client";
@@ -103,9 +104,22 @@ export const cashMidtrans = async (
       clientKey: process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY,
     });
 
+    const cuid = createId();
+
+    await db.cashPaymentHistory.create({
+      data: {
+        id: cuid,
+        paymentId: id,
+        amount,
+        status: "Gagal",
+        paymentType: "Belum dipilih",
+        time: new Date(),
+      },
+    });
+
     const parameter = {
       transaction_details: {
-        order_id: id,
+        order_id: cuid,
         gross_amount: amount,
       },
       item_details: [

@@ -27,7 +27,7 @@ export default function HomeCarousel({ props }: { props: Props[] }) {
                 <p className="line-clamp-2 text-3xl font-bold lg:text-4xl">
                   {title}
                 </p>
-                <p className="mt-3 line-clamp-3">{description}</p>
+                <p className="line-clamp-3">{description}</p>
               </div>
             </div>
           </CarouselItem>

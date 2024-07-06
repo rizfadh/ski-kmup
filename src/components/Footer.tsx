@@ -8,22 +8,22 @@ export default function Footer() {
     {
       icon: <Facebook className="h-[2rem] w-[2rem]" />,
       lable: "Facebook",
-      href: "#",
+      href: "https://www.facebook.com/satuankegiatanislam.up",
     },
     {
       icon: <Instagram className="h-[2rem] w-[2rem]" />,
       lable: "Instagram",
-      href: "#",
+      href: "https://www.instagram.com/ski_kmup",
     },
     {
       icon: <Twitter className="h-[2rem] w-[2rem]" />,
       lable: "Twitter",
-      href: "#",
+      href: "https://x.com/SKI_KMUP",
     },
     {
       icon: <Youtube className="h-[2rem] w-[2rem]" />,
       lable: "Youtube",
-      href: "#",
+      href: "https://youtube.com/@satuankegiatanislamunivers4384",
     },
   ];
 
@@ -48,6 +48,8 @@ export default function Footer() {
                     href={href}
                     aria-label={lable}
                     className="flex h-[3rem] w-[3rem] rotate-0 items-center justify-center rounded-full bg-background text-foreground shadow-sm transition-all hover:rotate-45 hover:shadow-lg"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     {icon}
                   </Link>

@@ -31,43 +31,32 @@ export const getPosts = async (isAccepted: boolean, take?: number) => {
   });
 };
 
+type MostLikedPosts = {
+  id: string;
+  createdBy: string;
+  imageUrl: string;
+  title: string;
+  createdAt: Date;
+};
+
 export const getMostLikedPosts = async () => {
-  const posts = await db.post.findMany({
-    where: { isAccepted: true },
-    select: {
-      id: true,
-      createdAt: true,
-      user: {
-        select: {
-          name: true,
-        },
-      },
-      imageUrl: true,
-      title: true,
-      isAccepted: true,
-      _count: {
-        select: {
-          postLike: {
-            where: { like: true },
-          },
-        },
-      },
-    },
-  });
+  //prettier-ignore
+  const posts = await db.$queryRaw<MostLikedPosts[]>`
+  SELECT p.id, u.name as "createdBy", p."imageUrl", p.title, p."createdAt"
+  FROM "Post" p
+  LEFT JOIN (
+    SELECT "postId", COUNT(*) as like_count
+    FROM "PostLike"
+    WHERE "like" = true
+    GROUP BY "postId"
+  ) pl ON p.id = pl."postId"
+  JOIN "User" u ON p."createdBy" = u.id
+  WHERE p."isAccepted" = true
+  ORDER BY COALESCE(pl.like_count, 0) DESC
+  LIMIT 4;
+  `;
 
-  posts.sort((a, b) => b._count.postLike - a._count.postLike);
-  posts.length = posts.length > 4 ? 4 : posts.length;
-
-  return posts.map((post) => {
-    return {
-      id: post.id,
-      createdAt: post.createdAt,
-      createdBy: post.user.name,
-      imageUrl: post.imageUrl,
-      title: post.title,
-      isAccepted: post.isAccepted,
-    };
-  });
+  return posts;
 };
 
 export const getPostById = async (id: string, isAccepted?: boolean) => {
