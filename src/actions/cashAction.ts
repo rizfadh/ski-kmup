@@ -77,7 +77,7 @@ export const setCash = async (data: z.infer<typeof CashSetSchema>) => {
       }),
     );
 
-    await Promise.all(setCashPayment);
+    await db.$transaction(setCashPayment);
 
     revalidatePath(privateRoutes.cashManage);
     return { error: false, message: "Iuran kas berhasil ditetapkan" };
