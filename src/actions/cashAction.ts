@@ -46,6 +46,9 @@ export const setCash = async (data: z.infer<typeof CashSetSchema>) => {
         id: true,
       },
       where: {
+        registerApproval: {
+          isAccepted: true,
+        },
         userPosition: {
           role: {
             notIn: [UserRole.PASSIVE, UserRole.ADMIN],
