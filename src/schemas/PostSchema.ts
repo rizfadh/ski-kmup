@@ -34,7 +34,6 @@ export const PostFormUpdateSchema = z.object({
 });
 
 export const NewPostSchema = z.object({
-  id: z.string().min(1, { message: "Id tidak boleh kosong" }),
   image: z
     .instanceof(File, { message: "Gambar Tidak boleh kosong" })
     .refine((file) => file.size <= MAX_FILE_SIZE, "Ukuran maksimum 500KB")
@@ -55,7 +54,7 @@ export const UpdatePostSchema = z.object({
       (file) => ACCEPTED_IMAGE_MIME_TYPES.includes(file.type),
       "Hanya .jpg, .jpeg, .png and .webp yang didukung",
     )
-    .optional(),
+    .nullable(),
   title: z.string().trim().min(1, { message: "Judul tidak boleh kosong" }),
   content: z.string().trim().min(1, { message: "Konten tidak boleh kosong" }),
 });

@@ -21,7 +21,7 @@ function Toolbar({ editor }: TollbarProps) {
   if (!editor) return null;
 
   return (
-    <div className="sticky top-20 z-10 flex gap-1 overflow-x-auto rounded-md border border-input bg-background p-1 md:top-4 md:w-fit">
+    <div className="sticky top-20 z-10 flex flex-wrap gap-1 rounded-md border border-input bg-background p-1 md:top-4 md:w-fit">
       <Button
         variant="ghost"
         size="sm"

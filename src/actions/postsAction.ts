@@ -29,7 +29,6 @@ export const addPost = async (formData: FormData) => {
     }
 
     const data = {
-      id: formData.get("id"),
       image: formData.get("image"),
       title: formData.get("title"),
       content: formData.get("content"),
@@ -39,7 +38,7 @@ export const addPost = async (formData: FormData) => {
 
     if (!validated.success) return { error: true, message: "Invalid fields" };
 
-    const { id, image, title, content } = validated.data;
+    const { image, title, content } = validated.data;
     const cuid = createId();
     const imageRef = ref(storage, storageRef.postsImages + cuid);
 
@@ -49,7 +48,7 @@ export const addPost = async (formData: FormData) => {
     await db.post.create({
       data: {
         id: cuid,
-        createdBy: id,
+        createdBy: session.user.id as string,
         imageUrl,
         title,
         content,
@@ -82,10 +81,7 @@ export const updatePost = async (formData: FormData) => {
 
     const data = {
       id: formData.get("id"),
-      image:
-        formData.get("image") === "undefined"
-          ? undefined
-          : formData.get("image"),
+      image: formData.get("image"),
       title: formData.get("title"),
       content: formData.get("content"),
     };
@@ -96,15 +92,7 @@ export const updatePost = async (formData: FormData) => {
 
     const { id, image, title, content } = validated.data;
 
-    if (image === undefined) {
-      await db.post.update({
-        where: { id },
-        data: {
-          title,
-          content,
-        },
-      });
-    } else {
+    if (image) {
       const imageRef = ref(storage, storageRef.postsImages + id);
       await uploadBytes(imageRef, image);
       const imageUrl = await getDownloadURL(imageRef);
@@ -113,6 +101,14 @@ export const updatePost = async (formData: FormData) => {
         where: { id },
         data: {
           imageUrl,
+          title,
+          content,
+        },
+      });
+    } else {
+      await db.post.update({
+        where: { id },
+        data: {
           title,
           content,
         },

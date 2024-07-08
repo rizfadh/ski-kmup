@@ -1,4 +1,4 @@
-import PostEditor from "@/components/PostEditor";
+import { PostEditorUpdate } from "@/components/PostEditor";
 import { getPostById } from "@/lib/postDb";
 import { notFound } from "next/navigation";
 
@@ -13,8 +13,7 @@ export default async function EditPostPage({
 
   return (
     <div className="container my-4 grid grid-cols-1 gap-y-4">
-      <PostEditor
-        type="EDIT"
+      <PostEditorUpdate
         id={post.id}
         imageUrl={post.imageUrl}
         title={post.title}
