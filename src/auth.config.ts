@@ -24,13 +24,10 @@ export const authConfig = {
 
       const shouldRedirectToDashboard =
         isLoggedin && (isAuthRoute || isHomeRoute);
-      const hasNoRole = isLoggedin && !auth?.user.role;
 
       if (shouldRedirectToDashboard) {
         return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
       }
-
-      if (hasNoRole) return false;
 
       if (isLoggedin) {
         const { role } = auth.user;
