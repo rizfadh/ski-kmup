@@ -14,23 +14,34 @@ export const getUserCash = async (id: string) => {
   });
 };
 
-export const getUserCashHistory = async (id: string) => {
-  const cashHistory = await db.cashPayment.findMany({
-    where: { userId: id },
-    select: {
-      month: true,
-      cashPaymentHistory: true,
-    },
-  });
+type CashPaymentHistory = {
+  id: string;
+  paymentId: string;
+  status: string;
+  paymentType: string;
+  amount: number;
+  time: Date;
+  month: string;
+};
 
-  return cashHistory.flatMap((cash) => {
-    return cash.cashPaymentHistory.map((history) => {
-      return {
-        month: cash.month,
-        ...history,
-      };
-    });
-  });
+export const getUserCashHistory = async (id: string) => {
+  //prettier-ignore
+  const cashHistory = await db.$queryRaw<CashPaymentHistory[]>`
+  SELECT
+    cph.id,
+    cph."paymentId",
+    cph.status,
+    cph."paymentType",
+    cph.amount,
+    cph.time,
+    cp."month"
+  FROM "CashPayment" cp
+  JOIN "CashPaymentHistory" cph ON cp.id = cph."paymentId"
+  WHERE cp."userId" = ${id}
+  ORDER BY cph.time DESC;
+  `;
+
+  return cashHistory;
 };
 
 export const getCashInOut = async (type: CashInOutType, userRole: UserRole) => {
