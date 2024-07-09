@@ -114,11 +114,7 @@ export function ProgramAddFormDialog({
                     <FormItem>
                       <FormLabel>Nama program</FormLabel>
                       <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="Print LPJ 100 lembar"
-                          {...field}
-                        />
+                        <Input type="text" placeholder="Ngopi #1" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

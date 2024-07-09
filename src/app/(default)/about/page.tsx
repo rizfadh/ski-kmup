@@ -23,7 +23,7 @@ export default function AboutPage() {
         </div>
         <div
           className="relative h-[250px] w-[250px]"
-          style={{ boxShadow: `-15px 15px #16a34a` }}
+          style={{ boxShadow: `-10px 10px #16a34a` }}
         >
           <Image
             src={aboutImage}

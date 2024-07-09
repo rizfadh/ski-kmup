@@ -1,13 +1,12 @@
 "use client";
 
 import { BadgeAlert, BadgeCheck, BadgeInfo } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "./ui/button";
+import { useSearchParams } from "next/navigation";
 import { privateRoutes } from "@/constants/routes";
+import LinkButton from "./LinkButton";
 
 export default function CashStatus() {
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   const orderId = searchParams.get("order_id");
   const transactionStatus = searchParams.get("transaction_status");
@@ -17,6 +16,7 @@ export default function CashStatus() {
       case "settlement":
         return {
           Icon: BadgeCheck,
+          className: "text-primary",
           title: "Berhasil",
           body: "Pembayaran kas berhasil diterima",
         };
@@ -25,39 +25,43 @@ export default function CashStatus() {
       case "expired":
         return {
           Icon: BadgeAlert,
+          className: "text-destructive",
           title: "Gagal",
           body: "Pembayaran kas belum berhasil",
         };
       default:
         return {
           Icon: BadgeInfo,
+          className: "text-muted-foreground",
           title: "Pending",
           body: "Menunggu pembayaran kas",
         };
     }
   };
 
-  const { Icon, title, body } = getStatus(transactionStatus);
+  const { Icon, className, title, body } = getStatus(transactionStatus);
 
   return (
     <div className="flex flex-col items-center">
-      <Icon className="h-40 w-40 text-primary" />
-      <h2 className="mt-4 text-4xl font-black">{title}</h2>
+      <Icon className={`h-40 w-40 ${className}`} />
+      <h2 className={`mt-4 text-4xl font-black ${className}`}>{title}</h2>
       <p className="mt-4 text-sm text-muted-foreground">Order Id: {orderId}</p>
       <p>{body}</p>
       <div className="mt-4 flex gap-2">
-        <Button
+        <LinkButton
+          href={privateRoutes.cashPayment}
           className="w-[100px]"
-          onClick={() => router.push(privateRoutes.cashPayment)}
+          variant="outline"
         >
           Cek Kas
-        </Button>
-        <Button
+        </LinkButton>
+        <LinkButton
+          href={privateRoutes.dashboard}
           className="w-[100px]"
-          onClick={() => router.push(privateRoutes.dashboard)}
+          variant="outline"
         >
           Dashboard
-        </Button>
+        </LinkButton>
       </div>
     </div>
   );
