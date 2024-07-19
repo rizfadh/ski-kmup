@@ -54,6 +54,7 @@ export function PostLikeButton({
         pressed={isLiked === true}
         onPressedChange={likePostHandler}
         disabled={isPending}
+        className="data-[state=on]:bg-primary/10 data-[state=on]:text-primary"
       >
         <ThumbsUp className="h-[1.2rem] w-[1.2rem]" />
       </Toggle>
@@ -62,6 +63,7 @@ export function PostLikeButton({
         pressed={isLiked !== undefined && isLiked === false}
         onPressedChange={dislikePostHandler}
         disabled={isPending}
+        className="data-[state=on]:bg-primary/10 data-[state=on]:text-primary"
       >
         <ThumbsDown className="h-[1.2rem] w-[1.2rem]" />
       </Toggle>

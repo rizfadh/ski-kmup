@@ -195,8 +195,14 @@ export function ReportConfirmTable({
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-center gap-2">
-                    <ConfirmationIcon isConfirmed={report.secretaryConfirm} />
-                    <ConfirmationIcon isConfirmed={report.treasurerConfirm} />
+                    <ConfirmationIcon
+                      isConfirmed={report.secretaryConfirm}
+                      label="S"
+                    />
+                    <ConfirmationIcon
+                      isConfirmed={report.treasurerConfirm}
+                      label="B"
+                    />
                   </div>
                 </TableCell>
                 <TableCell>

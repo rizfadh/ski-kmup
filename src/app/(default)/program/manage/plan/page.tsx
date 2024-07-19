@@ -1,6 +1,5 @@
 import ConfirmationIcon from "@/components/ConfirmationIcon";
 import { ProgramAddFormDialog } from "@/components/ProgramAddFormDialog";
-import ProgramPlanDeleteButton from "@/components/ProgramPlanDeleteButton";
 import {
   Table,
   TableBody,
@@ -12,27 +11,6 @@ import {
 import { currencyFormat, dateFormat } from "@/lib/formatter";
 import getSession from "@/lib/getSession";
 import { getDivisionProgramPlans } from "@/lib/programDb";
-
-type PlanDeleteVisibleProps = {
-  id: string;
-  confirmation: {
-    chairmanConfirm: boolean | null;
-    treasurerConfirm: boolean | null;
-    secretaryConfirm: boolean | null;
-  } | null;
-};
-
-function PlanDeleteVisible({ id, confirmation }: PlanDeleteVisibleProps) {
-  if (confirmation === null) return null;
-
-  const { chairmanConfirm, treasurerConfirm, secretaryConfirm } = confirmation;
-
-  if (chairmanConfirm && treasurerConfirm && secretaryConfirm) {
-    return null;
-  }
-
-  return <ProgramPlanDeleteButton id={id} />;
-}
 
 export default async function ProgramManagePlanPage() {
   const session = await getSession();
@@ -78,6 +56,11 @@ export default async function ProgramManagePlanPage() {
                   <p className="min-w-[100px]">{dateFormat(plan.date)}</p>
                 </TableCell>
                 <TableCell>
+                  {plan.workProgramNeeds.length === 0 && (
+                    <p className="min-w-[300px] text-muted-foreground">
+                      Tidak ada
+                    </p>
+                  )}
                   {plan.workProgramNeeds.map((need) => (
                     <p key={need.id} className="min-w-[300px]">
                       {need.name} - {currencyFormat(need.amount)}
@@ -88,20 +71,17 @@ export default async function ProgramManagePlanPage() {
                   <div className="flex gap-2">
                     <ConfirmationIcon
                       isConfirmed={plan.workProgramPlan?.chairmanConfirm}
+                      label="K"
                     />
                     <ConfirmationIcon
                       isConfirmed={plan.workProgramPlan?.secretaryConfirm}
+                      label="S"
                     />
                     <ConfirmationIcon
                       isConfirmed={plan.workProgramPlan?.treasurerConfirm}
+                      label="B"
                     />
                   </div>
-                </TableCell>
-                <TableCell>
-                  <PlanDeleteVisible
-                    id={plan.id}
-                    confirmation={plan.workProgramPlan}
-                  />
                 </TableCell>
               </TableRow>
             ))}

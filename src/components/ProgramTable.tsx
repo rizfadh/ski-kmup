@@ -247,17 +247,22 @@ export function ProgramTable({ divisionPrograms }: ProgramTableProps) {
                 </TableCell>
               </TableRow>
             )}
-            {divisionPrograms.map((plan) => (
-              <TableRow key={plan.id}>
+            {divisionPrograms.map((program) => (
+              <TableRow key={program.id}>
                 <TableCell>
-                  <p className="min-w-[100px]">{plan.name}</p>
+                  <p className="min-w-[100px]">{program.name}</p>
                 </TableCell>
-                <TableCell>{plan.division}</TableCell>
+                <TableCell>{program.division}</TableCell>
                 <TableCell>
-                  <p className="min-w-[100px]">{dateFormat(plan.date)}</p>
+                  <p className="min-w-[100px]">{dateFormat(program.date)}</p>
                 </TableCell>
                 <TableCell>
-                  {plan.workProgramNeeds.map((need) => (
+                  {program.workProgramNeeds.length === 0 && (
+                    <p className="min-w-[300px] text-muted-foreground">
+                      Tidak ada
+                    </p>
+                  )}
+                  {program.workProgramNeeds.map((need) => (
                     <p key={need.id} className="min-w-[300px]">
                       {need.name} - {currencyFormat(need.amount)}
                     </p>
@@ -265,11 +270,11 @@ export function ProgramTable({ divisionPrograms }: ProgramTableProps) {
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-center">
-                    {plan.workProgramReport?.proofUrl ? (
+                    {program.workProgramReport?.proofUrl ? (
                       <LinkButton
                         variant="outline"
                         size="icon"
-                        href={plan.workProgramReport.proofUrl}
+                        href={program.workProgramReport.proofUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -284,9 +289,9 @@ export function ProgramTable({ divisionPrograms }: ProgramTableProps) {
                 </TableCell>
                 <TableCell>
                   <ConfirmationButton
-                    implemented={plan.workProgramReport?.implemented}
+                    implemented={program.workProgramReport?.implemented}
                     confirmationHandler={confirmationHandler}
-                    program={plan}
+                    program={program}
                   />
                 </TableCell>
               </TableRow>

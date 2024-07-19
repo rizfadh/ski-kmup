@@ -205,12 +205,15 @@ export function ProgramPlanConfirmTable({
                   <div className="flex gap-2">
                     <ConfirmationIcon
                       isConfirmed={plan.workProgramPlan?.chairmanConfirm}
+                      label="K"
                     />
                     <ConfirmationIcon
                       isConfirmed={plan.workProgramPlan?.secretaryConfirm}
+                      label="S"
                     />
                     <ConfirmationIcon
                       isConfirmed={plan.workProgramPlan?.treasurerConfirm}
+                      label="B"
                     />
                   </div>
                 </TableCell>

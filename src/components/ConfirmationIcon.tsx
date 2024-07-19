@@ -1,17 +1,40 @@
-import { Check, CircleHelp, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { CircleCheck, CircleHelp, CircleX } from "lucide-react";
+
+interface Props extends React.ComponentPropsWithoutRef<"p"> {
+  isConfirmed?: boolean | null;
+  label: string;
+}
 
 export default function ConfirmationIcon({
   isConfirmed,
-}: {
-  isConfirmed?: boolean | null;
-}) {
+  label,
+  className,
+}: Props) {
   if (isConfirmed) {
-    return <Check className="h-[1.2rem] w-[1.2rem]" />;
+    return (
+      <p className={cn("flex items-center gap-2 text-primary", className)}>
+        {label}
+        <CircleCheck className="h-[1.2rem] w-[1.2rem]" />
+      </p>
+    );
   }
 
   if (isConfirmed === false) {
-    return <X className="h-[1.2rem] w-[1.2rem]" />;
+    return (
+      <p className={cn("flex items-center gap-2 text-destructive", className)}>
+        {label}
+        <CircleX className="h-[1.2rem] w-[1.2rem]" />
+      </p>
+    );
   }
 
-  return <CircleHelp className="h-[1.2rem] w-[1.2rem]" />;
+  return (
+    <p
+      className={cn("flex items-center gap-2 text-muted-foreground", className)}
+    >
+      {label}
+      <CircleHelp className="h-[1.2rem] w-[1.2rem]" />
+    </p>
+  );
 }

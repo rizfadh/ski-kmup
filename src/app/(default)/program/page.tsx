@@ -213,6 +213,11 @@ export default async function ProgramPage() {
                   <p className="min-w-[100px]">{dateFormat(program.date)}</p>
                 </TableCell>
                 <TableCell>
+                  {program.workProgramNeeds.length === 0 && (
+                    <p className="min-w-[300px] text-muted-foreground">
+                      Tidak ada
+                    </p>
+                  )}
                   {program.workProgramNeeds.map((need) => (
                     <p key={need.id} className="min-w-[300px]">
                       {need.name} - {currencyFormat(need.amount)}
