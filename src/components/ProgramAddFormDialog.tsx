@@ -43,7 +43,7 @@ export function ProgramAddFormDialog({
     resolver: zodResolver(ProgramPlanFormSchema),
     defaultValues: {
       name: "",
-      date: "",
+      date: new Date(),
       needs: [
         {
           name: "",
@@ -61,7 +61,7 @@ export function ProgramAddFormDialog({
   function onSubmit(data: z.infer<typeof ProgramPlanFormSchema>) {
     startTransition(async () => {
       const date = new Date(data.date);
-      const needs = data.needs.map((need) => ({
+      const needs = data.needs?.map((need) => ({
         name: need.name,
         amount: need.amount as number,
       }));
@@ -133,6 +133,11 @@ export function ProgramAddFormDialog({
                           min={dateFormatInput(new Date())}
                           className="inline-block"
                           {...field}
+                          value={
+                            field.value instanceof Date
+                              ? dateFormatInput(field.value)
+                              : field.value
+                          }
                         />
                       </FormControl>
                       <FormMessage />
@@ -149,7 +154,7 @@ export function ProgramAddFormDialog({
                       name={`needs.${index}.name`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{`Keperluan ke-${index + 1}`}</FormLabel>
+                          <FormLabel>{`Keperluan ke-${index + 1}?`}</FormLabel>
                           <FormControl>
                             <Input
                               type="text"
@@ -166,7 +171,7 @@ export function ProgramAddFormDialog({
                       name={`needs.${index}.amount`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{`Biaya ke-${index + 1}`}</FormLabel>
+                          <FormLabel>{`Biaya keperluan ke-${index + 1}?`}</FormLabel>
                           <FormControl>
                             <Input
                               type="number"
@@ -178,16 +183,14 @@ export function ProgramAddFormDialog({
                         </FormItem>
                       )}
                     />
-                    {index > 0 && (
-                      <Button
-                        variant="outline"
-                        disabled={isPending}
-                        onClick={() => remove(index)}
-                        className="w-full"
-                      >
-                        Hapus Keperluan
-                      </Button>
-                    )}
+                    <Button
+                      variant="outline"
+                      disabled={isPending}
+                      onClick={() => remove(index)}
+                      className="w-full"
+                    >
+                      Hapus Keperluan
+                    </Button>
                   </div>
                 ))}
                 <Button

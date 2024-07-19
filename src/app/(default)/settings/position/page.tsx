@@ -13,7 +13,7 @@ export default async function SettingsPositionPage() {
   const usersPositon = await getAllUserPostion();
 
   return (
-    <div className="container my-4 grid grid-cols-1 gap-y-4">
+    <div className="container grid grid-cols-1 gap-y-4 py-4">
       <SettingsPositionTable users={usersPositon} />
     </div>
   );

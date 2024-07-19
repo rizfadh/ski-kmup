@@ -11,7 +11,7 @@ export default async function CashOutPage() {
   const cashOut = await getCashInOut("OUT", session.user.role);
 
   return (
-    <div className="container my-4 grid grid-cols-1 gap-y-4">
+    <div className="container grid grid-cols-1 gap-y-4 py-4">
       <div className="flex gap-2">
         {session.user.role === "TREASURER" && (
           <CashInOutAddFormDialog cashType="OUT" />

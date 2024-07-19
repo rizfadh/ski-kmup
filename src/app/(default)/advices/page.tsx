@@ -10,7 +10,7 @@ export default async function AdvicePage() {
   const advices = await getAdvices(session.user.role);
 
   return (
-    <div className="container my-4 grid grid-cols-1 gap-y-4">
+    <div className="container grid grid-cols-1 gap-y-4 py-4">
       <DataTable
         columns={advicesColumns}
         data={advices}

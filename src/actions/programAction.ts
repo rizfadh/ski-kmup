@@ -5,7 +5,6 @@ import db from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { ProgramPlanSchema, DocumentSchema } from "@/schemas/ProgramSchema";
-import { createId } from "@paralleldrive/cuid2";
 import { storage } from "@/lib/firebase";
 import { storageRef } from "@/constants/storageRef";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -55,25 +54,42 @@ export const addProgramPlan = async (
       select: { division: true },
     });
 
-    await db.workProgram.create({
-      data: {
-        userId: session.user.id as string,
-        name,
-        date,
-        division: userPosition?.division as string,
-        workProgramNeeds: {
-          createMany: {
-            data: needs,
+    if (needs) {
+      await db.workProgram.create({
+        data: {
+          userId: session.user.id as string,
+          name,
+          date,
+          division: userPosition?.division as string,
+          workProgramNeeds: {
+            createMany: {
+              data: needs,
+            },
+          },
+          workProgramPlan: {
+            create: {},
+          },
+          workProgramReport: {
+            create: {},
           },
         },
-        workProgramPlan: {
-          create: {},
+      });
+    } else {
+      await db.workProgram.create({
+        data: {
+          userId: session.user.id as string,
+          name,
+          date,
+          division: userPosition?.division as string,
+          workProgramPlan: {
+            create: {},
+          },
+          workProgramReport: {
+            create: {},
+          },
         },
-        workProgramReport: {
-          create: {},
-        },
-      },
-    });
+      });
+    }
 
     revalidatePath(privateRoutes.programManagePlan);
     return {

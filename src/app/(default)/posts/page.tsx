@@ -38,7 +38,7 @@ export default async function PostsPage() {
   const isLoggedIn = !session || !session.user;
 
   return (
-    <div className="container my-4 grid grid-cols-1 gap-y-4">
+    <div className="container grid grid-cols-1 gap-y-4 py-4">
       {isLoggedIn ? null : <PostsMenu role={session.user.role} />}
       <h2 className="text-2xl font-bold">Postingan Favorit</h2>
       <PostItems posts={favoritePosts} />

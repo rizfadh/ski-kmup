@@ -12,7 +12,7 @@ export default async function EditPostPage({
   if (!post) notFound();
 
   return (
-    <div className="container my-4 grid grid-cols-1 gap-y-4">
+    <div className="container grid grid-cols-1 gap-y-4 py-4">
       <PostEditorUpdate
         id={post.id}
         imageUrl={post.imageUrl}

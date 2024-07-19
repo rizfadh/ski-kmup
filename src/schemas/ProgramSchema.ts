@@ -1,7 +1,8 @@
+import { getDateNowIgnoreTime } from "@/lib/utils";
 import { z } from "zod";
 
 const NeedsFormSchema = z.object({
-  name: z.string().trim().min(1, { message: "Nama wajib diisi" }),
+  name: z.string().trim().min(1, { message: "Keperluan wajib diisi" }),
   amount: z.union([
     z.coerce.number().gte(1000, { message: "Minimal 1000" }),
     z.literal("").refine(() => false),
@@ -10,8 +11,10 @@ const NeedsFormSchema = z.object({
 
 export const ProgramPlanFormSchema = z.object({
   name: z.string().trim().min(1, { message: "Nama program wajib diisi" }),
-  date: z.string().trim().min(1, { message: "Tanggal wajib diisi" }),
-  needs: z.array(NeedsFormSchema).min(1, { message: "Kebutuhan wajib diisi" }),
+  date: z.coerce
+    .date({ required_error: "Tanggal wajib diisi" })
+    .min(getDateNowIgnoreTime(), { message: "Tanggal sudah lewat" }),
+  needs: z.array(NeedsFormSchema).optional(),
 });
 
 const NeedsSchema = z.object({
@@ -21,8 +24,10 @@ const NeedsSchema = z.object({
 
 export const ProgramPlanSchema = z.object({
   name: z.string().trim().min(1, { message: "Nama program wajib diisi" }),
-  date: z.date({ required_error: "Tanggal wajib diisi" }),
-  needs: z.array(NeedsSchema).min(1, { message: "Kebutuhan wajib diisi" }),
+  date: z
+    .date({ required_error: "Tanggal wajib diisi" })
+    .min(getDateNowIgnoreTime(), { message: "Tanggal sudah lewat" }),
+  needs: z.array(NeedsSchema).optional(),
 });
 
 const MAX_FILE_SIZE = 1024 * 500;

@@ -10,7 +10,7 @@ export default async function ProgramConfirmPage() {
   const reports = await getConfirmationReport();
 
   return (
-    <div className="container my-4 grid grid-cols-1 gap-y-4">
+    <div className="container grid grid-cols-1 gap-y-4 py-4">
       <ReportConfirmTable userRole={session.user.role} reports={reports} />
     </div>
   );

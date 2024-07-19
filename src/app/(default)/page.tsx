@@ -10,7 +10,7 @@ export default async function HomePage() {
   const posts = await getPosts(true, 4);
 
   return (
-    <div className="container my-4 grid grid-cols-1 gap-y-4">
+    <div className="container grid grid-cols-1 gap-y-4 py-4">
       <HomeCarousel props={carouselImages} />
       <div className="flex flex-col justify-between md:flex-row md:items-center">
         <h2 className="text-2xl font-bold">Postingan Terbaru</h2>

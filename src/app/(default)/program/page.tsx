@@ -39,7 +39,7 @@ export default async function ProgramPage() {
   const programsInformation = await getProgramsInformation();
 
   return (
-    <div className="container my-4 grid grid-cols-1 gap-y-4">
+    <div className="container grid grid-cols-1 gap-y-4 py-4">
       <div className="flex flex-col gap-2 sm:flex-row">
         {headOfDivision.includes(session.user.role) && (
           <LinkButton variant="outline" href={privateRoutes.programManage}>
@@ -94,92 +94,90 @@ export default async function ProgramPage() {
           </CardContent>
         </Card>
       </div>
-      <Card>
-        <CardContent className="grid grid-cols-1 gap-6 p-6 lg:grid-cols-2 lg:gap-4">
-          <div className="lg:pr-6">
-            <div className="space-y-1.5">
-              <CardTitle>Proker Bulan {dateFormatMonth(new Date())}</CardTitle>
-              <CardDescription>Proker pada bulan ini</CardDescription>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Proker Bulan {dateFormatMonth(new Date())}</CardTitle>
+            <CardDescription>Proker pada bulan ini</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-4xl font-bold lg:text-5xl">
+              {programsInformation.thisMonth.count} Proker
+            </p>
+            <div className="mt-6">
+              {programsInformation.thisMonth.programs.map((program) => (
+                <div
+                  className="flex flex-col justify-between sm:flex-row"
+                  key={program.id}
+                >
+                  <p>{program.name}</p>
+                  <p className="font-bold">{dateFormat(program.date)}</p>
+                </div>
+              ))}
             </div>
-            <div className="pt-6">
-              <p className="text-4xl font-bold lg:text-5xl">
-                {programsInformation.thisMonth.count} Proker
-              </p>
-              <div className="mt-6">
-                {programsInformation.thisMonth.programs.map((program) => (
-                  <div
-                    className="flex flex-col justify-between sm:flex-row"
-                    key={program.id}
-                  >
-                    <p>{program.name}</p>
-                    <p className="font-bold">{dateFormat(program.date)}</p>
-                  </div>
-                ))}
-              </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Informasi</CardTitle>
+            <CardDescription>Info proker periode ini</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap justify-between font-bold">
+              <p>Jumlah Proker</p>
+              <p>{programsInformation.information.count}</p>
             </div>
-          </div>
-          <div className="lg:pl-6">
-            <div className="space-y-1.5">
-              <CardTitle>Informasi</CardTitle>
-              <CardDescription>Info proker periode ini</CardDescription>
+            <Separator className="my-2" />
+            <div className="mb-2 flex flex-wrap justify-between font-bold">
+              <p>Terlaksana</p>
+              <p>{programsInformation.information.implemented.count}</p>
             </div>
-            <div className="pt-6">
-              <div className="flex flex-wrap justify-between font-bold">
-                <p>Jumlah Proker</p>
-                <p>{programsInformation.information.count}</p>
-              </div>
-              <Separator className="my-2" />
-              <div className="mb-2 flex flex-wrap justify-between font-bold">
-                <p>Terlaksana</p>
-                <p>{programsInformation.information.implemented.count}</p>
-              </div>
-              {programsInformation.information.implemented.programs.map(
-                (program) => (
-                  <div
-                    className="flex flex-col justify-between sm:flex-row"
-                    key={program.id}
-                  >
-                    <p>{program.name}</p>
-                    <p className="font-bold">{dateFormat(program.date)}</p>
-                  </div>
-                ),
-              )}
-              <Separator className="my-2" />
-              <div className="mb-2 flex flex-wrap justify-between font-bold">
-                <p>Tidak Terlaksana</p>
-                <p>{programsInformation.information.notImplemented.count}</p>
-              </div>
-              {programsInformation.information.notImplemented.programs.map(
-                (program) => (
-                  <div
-                    className="flex flex-col justify-between sm:flex-row"
-                    key={program.id}
-                  >
-                    <p>{program.name}</p>
-                    <p className="font-bold">{dateFormat(program.date)}</p>
-                  </div>
-                ),
-              )}
-              <Separator className="my-2" />
-              <div className="mb-2 flex flex-wrap justify-between font-bold">
-                <p>Belum Terlaksana</p>
-                <p>{programsInformation.information.notYetImplemented.count}</p>
-              </div>
-              {programsInformation.information.notYetImplemented.programs.map(
-                (program) => (
-                  <div
-                    className="flex flex-col justify-between sm:flex-row"
-                    key={program.id}
-                  >
-                    <p>{program.name}</p>
-                    <p className="font-bold">{dateFormat(program.date)}</p>
-                  </div>
-                ),
-              )}
+            {programsInformation.information.implemented.programs.map(
+              (program) => (
+                <div
+                  className="flex flex-col justify-between sm:flex-row"
+                  key={program.id}
+                >
+                  <p>{program.name}</p>
+                  <p className="font-bold">{dateFormat(program.date)}</p>
+                </div>
+              ),
+            )}
+            <Separator className="my-2" />
+            <div className="mb-2 flex flex-wrap justify-between font-bold">
+              <p>Tidak Terlaksana</p>
+              <p>{programsInformation.information.notImplemented.count}</p>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+            {programsInformation.information.notImplemented.programs.map(
+              (program) => (
+                <div
+                  className="flex flex-col justify-between sm:flex-row"
+                  key={program.id}
+                >
+                  <p>{program.name}</p>
+                  <p className="font-bold">{dateFormat(program.date)}</p>
+                </div>
+              ),
+            )}
+            <Separator className="my-2" />
+            <div className="mb-2 flex flex-wrap justify-between font-bold">
+              <p>Belum Terlaksana</p>
+              <p>{programsInformation.information.notYetImplemented.count}</p>
+            </div>
+            {programsInformation.information.notYetImplemented.programs.map(
+              (program) => (
+                <div
+                  className="flex flex-col justify-between sm:flex-row"
+                  key={program.id}
+                >
+                  <p>{program.name}</p>
+                  <p className="font-bold">{dateFormat(program.date)}</p>
+                </div>
+              ),
+            )}
+          </CardContent>
+        </Card>
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>

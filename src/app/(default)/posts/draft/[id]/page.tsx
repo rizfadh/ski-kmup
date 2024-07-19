@@ -15,7 +15,7 @@ export default async function PostDraftDetailPage({
   if (!post) notFound();
 
   return (
-    <div className="container my-4 grid grid-cols-1 gap-y-4">
+    <div className="container grid grid-cols-1 gap-y-4 py-4">
       <div className="prose prose-sm mx-auto w-full dark:prose-invert sm:prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl">
         <Image
           src={post.imageUrl}

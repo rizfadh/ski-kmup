@@ -42,7 +42,7 @@ export default async function ProgramManagePlanPage() {
   const programPlans = await getDivisionProgramPlans(session.user.id as string);
 
   return (
-    <div className="container my-4 grid grid-cols-1 gap-y-4">
+    <div className="container grid grid-cols-1 gap-y-4 py-4">
       <div className="flex flex-col gap-2 sm:flex-row">
         <ProgramAddFormDialog />
       </div>

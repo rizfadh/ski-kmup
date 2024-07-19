@@ -47,7 +47,7 @@ export function CashInOutAddFormDialog({
     defaultValues: {
       description: "",
       amount: "",
-      date: "",
+      date: new Date(),
     },
   });
 
@@ -55,12 +55,10 @@ export function CashInOutAddFormDialog({
     startTransition(async () => {
       const { description, amount, date } = data;
 
-      const dateInput = new Date(date);
-
       const response = await addCashInOut(cashType, {
         description,
         amount: amount as number,
-        date: dateInput,
+        date,
       });
 
       setOpen(false);
@@ -133,7 +131,16 @@ export function CashInOutAddFormDialog({
                 <FormItem>
                   <FormLabel>Tanggal</FormLabel>
                   <FormControl>
-                    <Input type="date" className="inline-block" {...field} />
+                    <Input
+                      type="date"
+                      className="inline-block"
+                      {...field}
+                      value={
+                        field.value instanceof Date
+                          ? dateFormatInput(field.value)
+                          : field.value
+                      }
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -174,24 +181,22 @@ export function CashInOutUpdateFormDialog({
     defaultValues: {
       description: "",
       amount: "",
-      date: "",
+      date: new Date(),
     },
   });
 
   useEffect(() => {
-    form.reset({ description, amount, date: dateFormatInput(date) });
+    form.reset({ description, amount, date });
   }, [description, amount, date, form]);
 
   function onSubmit(data: z.infer<typeof CashInOutFormSchema>) {
     startTransition(async () => {
       const { description, amount, date } = data;
 
-      const dateInput = new Date(date);
-
       const response = await updateCashInOut(id, cashType, {
         description,
         amount: amount as number,
-        date: dateInput,
+        date,
       });
 
       setOpen(false);
@@ -264,7 +269,16 @@ export function CashInOutUpdateFormDialog({
                 <FormItem>
                   <FormLabel>Tanggal</FormLabel>
                   <FormControl>
-                    <Input type="date" className="inline-block" {...field} />
+                    <Input
+                      type="date"
+                      className="inline-block"
+                      {...field}
+                      value={
+                        field.value instanceof Date
+                          ? dateFormatInput(field.value)
+                          : field.value
+                      }
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

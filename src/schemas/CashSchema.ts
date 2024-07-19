@@ -34,7 +34,7 @@ export const CashInOutFormSchema = z.object({
     z.coerce.number().gte(1000, { message: "Minimal 1000" }),
     z.literal("").refine(() => false),
   ]),
-  date: z.string().trim().min(1, { message: "Tanggal wajib diisi" }),
+  date: z.coerce.date({ required_error: "Tanggal wajib diisi" }),
 });
 
 export const CashInOutSchema = z.object({

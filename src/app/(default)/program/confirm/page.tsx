@@ -10,7 +10,7 @@ export default async function ProgramConfirmPage() {
   const programPlans = await getProgramPlans();
 
   return (
-    <div className="container my-4 grid grid-cols-1 gap-y-4">
+    <div className="container grid grid-cols-1 gap-y-4 py-4">
       <ProgramPlanConfirmTable
         userRole={session.user.role}
         programPlans={programPlans}

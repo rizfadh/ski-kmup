@@ -33,7 +33,7 @@ export default async function CashPage() {
   const { cashIn, cashOut, amount, months, userCashInfo } = cashInfo;
 
   return (
-    <div className="container my-4 grid grid-cols-1 gap-y-4">
+    <div className="container grid grid-cols-1 gap-y-4 py-4">
       {cashSet || session.user.role !== "TREASURER" ? null : (
         <div className="w-fit rounded-md bg-destructive px-6 py-3 text-destructive-foreground">
           <p className="flex items-center gap-2">

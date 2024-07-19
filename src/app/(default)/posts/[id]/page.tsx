@@ -22,7 +22,7 @@ export default async function PostDetailPage({
 
   if (!session || !session.user)
     return (
-      <div className="container my-4 grid grid-cols-1 gap-y-4">
+      <div className="container grid grid-cols-1 gap-y-4 py-4">
         <div className="prose prose-sm mx-auto w-full dark:prose-invert sm:prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl">
           <Image
             src={post.imageUrl}
@@ -49,7 +49,7 @@ export default async function PostDetailPage({
   const isLiked = await isLikedByUser(session.user.id as string, params.id);
 
   return (
-    <div className="container my-4 grid grid-cols-1 gap-y-4">
+    <div className="container grid grid-cols-1 gap-y-4 py-4">
       <div className="prose prose-sm mx-auto w-full dark:prose-invert sm:prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl">
         <Image
           src={post.imageUrl}
