@@ -107,15 +107,28 @@ model PostLike {
   @@id([userId, postId])
 }
 
+model CashInformation {
+  id        String   @id @default(cuid())
+  amount    Int
+  months    Int
+  startDate DateTime @default(now())
+  endDate   DateTime
+
+  cashPayment CashPayment[]
+}
+
 model CashPayment {
   id String @id @default(cuid())
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
-  due    DateTime
+  cashInformation   CashInformation @relation(fields: [cashInformationId], references: [id], onDelete: Cascade)
+  cashInformationId String
+
   amount Int
   month  String
+  due    DateTime
   paid   Boolean  @default(false)
 
   cashPaymentHistory CashPaymentHistory[]

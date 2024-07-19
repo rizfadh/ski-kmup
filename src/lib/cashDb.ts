@@ -3,7 +3,7 @@ import db from "./db";
 import { endOfMonth, startOfMonth } from "date-fns";
 
 export const isCashSet = async () => {
-  const cash = await db.cashPayment.findFirst();
+  const cash = await db.cashInformation.findFirst();
   return !!cash;
 };
 
@@ -117,7 +117,7 @@ export const getCashPaidLate = async (id: string) => {
   });
 
   const cashLate = db.cashPayment.count({
-    where: { userId: id, due: { lt: new Date() } },
+    where: { userId: id, paid: false, due: { lt: new Date() } },
   });
 
   const [months, paid, late] = await Promise.all([
@@ -134,8 +134,7 @@ export const getCashPaidLate = async (id: string) => {
 };
 
 export const getCashInfo = async (id: string) => {
-  const cashAmount = db.cashPayment.findFirst({
-    where: { userId: id },
+  const cashAmount = db.cashInformation.findFirst({
     select: {
       amount: true,
     },

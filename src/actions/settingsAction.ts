@@ -2,11 +2,14 @@
 
 import { privateRoutes } from "@/constants/routes";
 import { storageRef } from "@/constants/storageRef";
+import { isCashSet } from "@/lib/cashDb";
 import db from "@/lib/db";
 import { storage } from "@/lib/firebase";
+import { dateFormatMonth } from "@/lib/formatter";
 import getSession from "@/lib/getSession";
 import { ChangeTermSchema } from "@/schemas/SettingsSchema";
 import { UserRole } from "@prisma/client";
+import { add, differenceInCalendarMonths } from "date-fns";
 import { deleteObject, listAll, ref } from "firebase/storage";
 import { revalidatePath } from "next/cache";
 
@@ -35,7 +38,13 @@ export const setUserPosition = async (
       return { error: true, message: "Tidak bisa mengubah menjadi admin" };
     }
 
-    await db.userPosition.update({
+    const cashInformation = await db.cashInformation.findFirst();
+    const isUserCashSet = await db.cashPayment.findFirst({
+      where: { userId: id },
+      select: { userId: true },
+    });
+
+    const setUserPosition = db.userPosition.update({
       where: { userId: id },
       data: {
         title,
@@ -43,6 +52,35 @@ export const setUserPosition = async (
         role,
       },
     });
+
+    if (cashInformation && !isUserCashSet) {
+      const now = new Date();
+      const months = differenceInCalendarMonths(cashInformation.endDate, now);
+
+      if (months > 0) {
+        const monthsArr = Array.from(Array(months + 1).keys());
+
+        const setCashPayment = monthsArr.map((i) => {
+          const date = add(now, { months: i });
+          const month = dateFormatMonth(date);
+          const due = add(date, { months: 1 });
+
+          return db.cashPayment.create({
+            data: {
+              userId: id,
+              cashInformationId: cashInformation.id,
+              due,
+              amount: cashInformation.amount,
+              month,
+            },
+          });
+        });
+
+        await db.$transaction([setUserPosition, ...setCashPayment]);
+      }
+    }
+
+    await setUserPosition;
 
     revalidatePath(privateRoutes.settingsPosition);
     return { error: false, message: "Jabatan berhasil diubah" };
@@ -99,7 +137,7 @@ export const changeTerm = async (word: string) => {
       });
     });
 
-    const deleteCashPayment = db.cashPayment.deleteMany();
+    const deleteCashPayment = db.cashInformation.deleteMany();
     const deleteCashInOut = db.cashInOut.deleteMany();
     const deleteProgram = db.workProgram.deleteMany();
     const deleteReport = db.accountablityReport.deleteMany();

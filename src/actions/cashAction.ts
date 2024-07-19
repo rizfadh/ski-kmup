@@ -41,7 +41,21 @@ export const setCash = async (data: z.infer<typeof CashSetSchema>) => {
 
     if (cashSet) return { error: true, message: "Iuran kas sudah diatur" };
 
-    const users = await db.user.findMany({
+    const now = new Date();
+
+    const cashInformationQuery = db.cashInformation.create({
+      data: {
+        amount,
+        months,
+        startDate: now,
+        endDate: add(now, { months: months - 1 }),
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    const usersQuery = db.user.findMany({
       select: {
         id: true,
       },
@@ -57,11 +71,15 @@ export const setCash = async (data: z.infer<typeof CashSetSchema>) => {
       },
     });
 
+    const [cashInformation, users] = await db.$transaction([
+      cashInformationQuery,
+      usersQuery,
+    ]);
+
     const monthsArr = Array.from(Array(months).keys());
 
     const setCashPayment = users.flatMap((user) =>
       monthsArr.map((i) => {
-        const now = new Date();
         const date = add(now, { months: i });
         const month = dateFormatMonth(date);
         const due = add(date, { months: 1 });
@@ -69,6 +87,7 @@ export const setCash = async (data: z.infer<typeof CashSetSchema>) => {
         return db.cashPayment.create({
           data: {
             userId: user.id,
+            cashInformationId: cashInformation.id,
             due,
             amount,
             month,

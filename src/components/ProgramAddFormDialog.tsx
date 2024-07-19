@@ -28,6 +28,7 @@ import { toast } from "./ui/use-toast";
 import { ProgramPlanFormSchema } from "@/schemas/ProgramSchema";
 import { ScrollArea } from "./ui/scroll-area";
 import { addProgramPlan } from "@/actions/programAction";
+import { dateFormatInput } from "@/lib/formatter";
 
 interface ProgramAddFormDialogProps extends ComponentProps<typeof Button> {}
 
@@ -129,6 +130,7 @@ export function ProgramAddFormDialog({
                       <FormControl>
                         <Input
                           type="date"
+                          min={dateFormatInput(new Date())}
                           className="inline-block"
                           {...field}
                         />
