@@ -25,7 +25,6 @@ import {
 } from "./ui/alert-dialog";
 import { confirmProgramPlan } from "@/actions/programAction";
 import ConfirmationIcon from "./ConfirmationIcon";
-import { UserRole } from "@prisma/client";
 
 type ProgramPlan = {
   id: string;
@@ -45,65 +44,10 @@ type ProgramPlan = {
 };
 
 type ProgramPlanConfirmTableProps = {
-  userRole: UserRole;
   programPlans: ProgramPlan[];
 };
 
-type ConfirmationButtonProps = {
-  confirmed: boolean | null | undefined;
-  dialogHandler: (program: ProgramPlan, confirmation: boolean) => void;
-  program: ProgramPlan;
-};
-
-function ConfirmationButton({
-  confirmed,
-  dialogHandler,
-  program,
-}: ConfirmationButtonProps) {
-  if (confirmed || confirmed === false) {
-    return <p className="text-center">{confirmed ? "Diterima" : "Ditolak"}</p>;
-  }
-
-  if (confirmed === null) {
-    return (
-      <div className="flex justify-center">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="flex gap-2"
-          onClick={() => dialogHandler(program, false)}
-        >
-          <X className="h-[1.2rem] w-[1.2rem]" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="flex gap-2"
-          onClick={() => dialogHandler(program, true)}
-        >
-          <Check className="h-[1.2rem] w-[1.2rem]" />
-        </Button>
-      </div>
-    );
-  }
-
-  return null;
-}
-
-type UserConfirm = {
-  chairmanConfirm: boolean | null;
-  treasurerConfirm: boolean | null;
-  secretaryConfirm: boolean | null;
-} | null;
-
-const userConfirm = (userRole: UserRole, confirmation: UserConfirm) => {
-  if (userRole === "CHAIRMAN") return confirmation?.chairmanConfirm;
-  if (userRole === "TREASURER") return confirmation?.treasurerConfirm;
-  if (userRole === "SECRETARY") return confirmation?.secretaryConfirm;
-};
-
 export function ProgramPlanConfirmTable({
-  userRole,
   programPlans,
 }: ProgramPlanConfirmTableProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -218,11 +162,24 @@ export function ProgramPlanConfirmTable({
                   </div>
                 </TableCell>
                 <TableCell>
-                  <ConfirmationButton
-                    confirmed={userConfirm(userRole, plan.workProgramPlan)}
-                    dialogHandler={dialogHandler}
-                    program={plan}
-                  />
+                  <div className="flex justify-center">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="flex gap-2"
+                      onClick={() => dialogHandler(plan, false)}
+                    >
+                      <X className="h-[1.2rem] w-[1.2rem]" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="flex gap-2"
+                      onClick={() => dialogHandler(plan, true)}
+                    >
+                      <Check className="h-[1.2rem] w-[1.2rem]" />
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

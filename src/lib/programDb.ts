@@ -1,9 +1,24 @@
 import { endOfMonth, startOfMonth } from "date-fns";
 import db from "./db";
+import getSession from "./getSession";
+import { UserRole } from "@prisma/client";
 
-export const getDivisionProgramPlans = async (id: string) => {
-  return await db.workProgram.findMany({
-    where: { userId: id },
+export const getDivisionProgramPlans = async () => {
+  const session = await getSession();
+
+  if (!session || !session.user) throw new Error("Unauthorized");
+
+  const getWaiting = db.workProgram.findMany({
+    where: {
+      userId: session.user.id,
+      workProgramPlan: {
+        OR: [
+          { chairmanConfirm: null },
+          { secretaryConfirm: null },
+          { treasurerConfirm: null },
+        ],
+      },
+    },
     select: {
       id: true,
       name: true,
@@ -24,13 +39,105 @@ export const getDivisionProgramPlans = async (id: string) => {
         },
       },
     },
+    orderBy: { createdAt: "desc" },
   });
+
+  const getAccepted = db.workProgram.findMany({
+    where: {
+      userId: session.user.id,
+      workProgramPlan: {
+        AND: [
+          { chairmanConfirm: true },
+          { secretaryConfirm: true },
+          { treasurerConfirm: true },
+        ],
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      division: true,
+      date: true,
+      workProgramNeeds: {
+        select: {
+          id: true,
+          name: true,
+          amount: true,
+        },
+      },
+      workProgramPlan: {
+        select: {
+          chairmanConfirm: true,
+          secretaryConfirm: true,
+          treasurerConfirm: true,
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const getrejected = db.workProgram.findMany({
+    where: {
+      userId: session.user.id,
+      workProgramPlan: {
+        AND: [
+          {
+            AND: [
+              { NOT: { chairmanConfirm: null } },
+              { NOT: { secretaryConfirm: null } },
+              { NOT: { treasurerConfirm: null } },
+            ],
+          },
+          {
+            OR: [
+              { chairmanConfirm: false },
+              { secretaryConfirm: false },
+              { treasurerConfirm: false },
+            ],
+          },
+        ],
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      division: true,
+      date: true,
+      workProgramNeeds: {
+        select: {
+          id: true,
+          name: true,
+          amount: true,
+        },
+      },
+      workProgramPlan: {
+        select: {
+          chairmanConfirm: true,
+          secretaryConfirm: true,
+          treasurerConfirm: true,
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const [waiting, accepted, rejected] = await db.$transaction([
+    getWaiting,
+    getAccepted,
+    getrejected,
+  ]);
+
+  return { waiting, accepted, rejected };
 };
 
-export const getDivisionPrograms = async (id: string) => {
+export const getDivisionPrograms = async () => {
+  const session = await getSession();
+
+  if (!session || !session.user) throw new Error("Unauthorized");
+
   return await db.workProgram.findMany({
     where: {
-      userId: id,
+      userId: session.user.id,
       workProgramPlan: {
         chairmanConfirm: true,
         treasurerConfirm: true,
@@ -56,11 +163,29 @@ export const getDivisionPrograms = async (id: string) => {
         },
       },
     },
+    orderBy: { date: "asc" },
   });
 };
 
 export const getProgramPlans = async () => {
-  return await db.workProgram.findMany({
+  const session = await getSession();
+
+  if (!session || !session.user) throw new Error("Unauthorized");
+
+  const roleConfirmFields: { [key: string]: string } = {
+    CHAIRMAN: "chairmanConfirm",
+    TREASURER: "treasurerConfirm",
+    SECRETARY: "secretaryConfirm",
+  };
+
+  const confirmField = roleConfirmFields[session.user.role];
+
+  const getWaiting = db.workProgram.findMany({
+    where: {
+      workProgramPlan: {
+        [confirmField]: null,
+      },
+    },
     select: {
       id: true,
       name: true,
@@ -81,7 +206,74 @@ export const getProgramPlans = async () => {
         },
       },
     },
+    orderBy: { createdAt: "desc" },
   });
+
+  const getAccepted = db.workProgram.findMany({
+    where: {
+      workProgramPlan: {
+        [confirmField]: true,
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      division: true,
+      date: true,
+      workProgramNeeds: {
+        select: {
+          id: true,
+          name: true,
+          amount: true,
+        },
+      },
+      workProgramPlan: {
+        select: {
+          chairmanConfirm: true,
+          secretaryConfirm: true,
+          treasurerConfirm: true,
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const getrejected = db.workProgram.findMany({
+    where: {
+      workProgramPlan: {
+        [confirmField]: false,
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      division: true,
+      date: true,
+      workProgramNeeds: {
+        select: {
+          id: true,
+          name: true,
+          amount: true,
+        },
+      },
+      workProgramPlan: {
+        select: {
+          chairmanConfirm: true,
+          secretaryConfirm: true,
+          treasurerConfirm: true,
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const [waiting, accepted, rejected] = await db.$transaction([
+    getWaiting,
+    getAccepted,
+    getrejected,
+  ]);
+
+  return { waiting, accepted, rejected };
 };
 
 export const getProgramsInformation = async () => {

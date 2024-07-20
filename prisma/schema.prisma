@@ -170,9 +170,10 @@ model WorkProgram {
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  name     String
-  division String
-  date     DateTime
+  name      String
+  division  String
+  date      DateTime
+  createdAt DateTime @default(now())
 
   workProgramPlan   WorkProgramPlan?
   workProgramNeeds  WorkProgramNeeds[]

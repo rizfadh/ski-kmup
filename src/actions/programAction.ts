@@ -277,57 +277,27 @@ export const confirmProgramPlan = async (
       return { error: true, message: "Program kerja tidak ditemukan" };
     }
 
-    const { role } = session.user;
+    const roleConfirmFields: { [key: string]: keyof typeof program } = {
+      CHAIRMAN: "chairmanConfirm",
+      SECRETARY: "secretaryConfirm",
+      TREASURER: "treasurerConfirm",
+    };
 
-    if (role === "CHAIRMAN") {
-      if (program.chairmanConfirm !== null) {
-        return { error: true, message: "Program kerja sudah dikonfirmasi" };
-      }
+    const confirmField = roleConfirmFields[session.user.role];
 
-      await db.workProgramPlan.update({
-        where: { workProgramId: programId },
-        data: {
-          chairmanConfirm: confirmation,
-        },
-      });
-
-      revalidatePath(privateRoutes.programConfirm);
-      return { error: false, message: "Konfirmasi program kerja berhasil" };
+    if (program[confirmField] !== null) {
+      return { error: true, message: "Program kerja sudah dikonfirmasi" };
     }
 
-    if (role === "TREASURER") {
-      if (program.treasurerConfirm !== null) {
-        return { error: true, message: "Program kerja sudah dikonfirmasi" };
-      }
+    await db.workProgramPlan.update({
+      where: { workProgramId: programId },
+      data: {
+        [confirmField]: confirmation,
+      },
+    });
 
-      await db.workProgramPlan.update({
-        where: { workProgramId: programId },
-        data: {
-          treasurerConfirm: confirmation,
-        },
-      });
-
-      revalidatePath(privateRoutes.programConfirm);
-      return { error: false, message: "Konfirmasi program kerja berhasil" };
-    }
-
-    if (role === "SECRETARY") {
-      if (program.secretaryConfirm !== null) {
-        return { error: true, message: "Program kerja sudah dikonfirmasi" };
-      }
-
-      await db.workProgramPlan.update({
-        where: { workProgramId: programId },
-        data: {
-          secretaryConfirm: confirmation,
-        },
-      });
-
-      revalidatePath(privateRoutes.programConfirm);
-      return { error: false, message: "Konfirmasi program kerja berhasil" };
-    }
-
-    return { error: true, message: "Unauthorized" };
+    revalidatePath(privateRoutes.programConfirm);
+    return { error: false, message: "Konfirmasi program kerja berhasil" };
   } catch (e) {
     console.log(e);
     return { error: true, message: "Terjadi kesalahan" };

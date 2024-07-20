@@ -136,6 +136,10 @@ export const confirmReport = async (
 
     const report = await db.accountablityReport.findUnique({
       where: { userId: reportId },
+      select: {
+        secretaryConfirm: true,
+        treasurerConfirm: true,
+      },
     });
 
     if (!report) {
@@ -145,53 +149,32 @@ export const confirmReport = async (
       };
     }
 
-    const { role } = session.user;
+    const roleConfirmFields: { [key: string]: keyof typeof report } = {
+      SECRETARY: "secretaryConfirm",
+      TREASURER: "treasurerConfirm",
+    };
 
-    if (role === "SECRETARY") {
-      if (report.secretaryConfirm !== null) {
-        return {
-          error: true,
-          message: "LPJ sudah dikonfirmasi",
-        };
-      }
+    const confirmField = roleConfirmFields[session.user.role];
 
-      await db.accountablityReport.update({
-        where: { userId: reportId },
-        data: {
-          secretaryConfirm: confirmation,
-        },
-      });
-
-      revalidatePath(privateRoutes.reportManage);
+    if (report[confirmField] !== null) {
       return {
-        error: false,
-        message: `LPJ berhasil ${confirmation ? "disetujui" : "ditolak"}`,
+        error: true,
+        message: "LPJ sudah dikonfirmasi",
       };
     }
 
-    if (role === "TREASURER") {
-      if (report.treasurerConfirm !== null) {
-        return {
-          error: true,
-          message: "LPJ sudah dikonfirmasi",
-        };
-      }
+    await db.accountablityReport.update({
+      where: { userId: reportId },
+      data: {
+        [confirmField]: confirmation,
+      },
+    });
 
-      await db.accountablityReport.update({
-        where: { userId: reportId },
-        data: {
-          treasurerConfirm: confirmation,
-        },
-      });
-
-      revalidatePath(privateRoutes.reportManage);
-      return {
-        error: false,
-        message: `LPJ berhasil ${confirmation ? "disetujui" : "ditolak"}`,
-      };
-    }
-
-    return { error: true, message: "Unauthorized" };
+    revalidatePath(privateRoutes.reportManage);
+    return {
+      error: false,
+      message: `LPJ berhasil ${confirmation ? "disetujui" : "ditolak"}`,
+    };
   } catch (e) {
     console.log(e);
     return { error: true, message: "Terjadi kesalahan" };
