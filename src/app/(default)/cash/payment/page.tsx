@@ -15,6 +15,18 @@ import MidtransScriptLoader from "@/components/MidtransScriptLoader";
 import { privateRoutes } from "@/constants/routes";
 import getSession from "@/lib/getSession";
 
+function CashPaid({ paid }: { paid: boolean }) {
+  const paidClass = paid
+    ? "bg-primary text-primary-foreground"
+    : "bg-destructive text-destructive-foreground";
+
+  return (
+    <div className={`w-[100px] rounded py-1 text-center ${paidClass}`}>
+      {paid ? "Lunas" : "Belum bayar"}
+    </div>
+  );
+}
+
 export default async function CashPaymentPage() {
   const session = await getSession();
   if (!session || !session.user) return null;
@@ -56,7 +68,9 @@ export default async function CashPaymentPage() {
                 <TableRow key={cash.id}>
                   <TableCell>{cash.month}</TableCell>
                   <TableCell>{currencyFormat(cash.amount)}</TableCell>
-                  <TableCell>{cash.paid ? "Lunas" : "Belum dibayar"}</TableCell>
+                  <TableCell>
+                    <CashPaid paid={cash.paid} />
+                  </TableCell>
                   <TableCell className="flex justify-center">
                     {cash.paid ? null : (
                       <CashPayButton

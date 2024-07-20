@@ -78,13 +78,37 @@ type ConfirmationButtonProps = {
   program: Program;
 };
 
+function ProgramImplemented({ implemented }: { implemented: boolean }) {
+  const implementedClass = implemented
+    ? "bg-primary text-primary-foreground"
+    : "bg-destructive text-destructive-foreground";
+
+  return (
+    <div className={`w-[60px] rounded py-1 text-center ${implementedClass}`}>
+      {implemented ? "Ya" : "Tidak"}
+    </div>
+  );
+}
+
 function ConfirmationButton({
   implemented,
   confirmationHandler,
   program,
 }: ConfirmationButtonProps) {
-  if (implemented) return <p className="text-center">Ya</p>;
-  if (implemented === false) return <p className="text-center">Tidak</p>;
+  if (implemented)
+    return (
+      <div className="flex justify-center">
+        <ProgramImplemented implemented={implemented} />
+      </div>
+    );
+
+  if (implemented === false)
+    return (
+      <div className="flex justify-center">
+        <ProgramImplemented implemented={implemented} />
+      </div>
+    );
+
   return (
     <div className="flex justify-center">
       <Button

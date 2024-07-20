@@ -11,6 +11,18 @@ import { getUserCash } from "@/lib/cashDb";
 import { currencyFormat } from "@/lib/formatter";
 import { notFound } from "next/navigation";
 
+function CashPaid({ paid }: { paid: boolean }) {
+  const paidClass = paid
+    ? "bg-primary text-primary-foreground"
+    : "bg-destructive text-destructive-foreground";
+
+  return (
+    <div className={`w-[100px] rounded py-1 text-center ${paidClass}`}>
+      {paid ? "Lunas" : "Belum bayar"}
+    </div>
+  );
+}
+
 export default async function CashManageUserPage({
   params,
 }: {
@@ -37,7 +49,9 @@ export default async function CashManageUserPage({
               <TableRow key={cash.id}>
                 <TableCell>{cash.month}</TableCell>
                 <TableCell>{currencyFormat(cash.amount)}</TableCell>
-                <TableCell>{cash.paid ? "Lunas" : "Belum dibayar"}</TableCell>
+                <TableCell>
+                  <CashPaid paid={cash.paid} />
+                </TableCell>
                 <TableCell className="flex justify-center">
                   {cash.paid ? null : <CashSetPaidButton id={cash.id} />}
                 </TableCell>

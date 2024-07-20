@@ -31,6 +31,24 @@ const headOfDivision: UserRole[] = [
 
 const confirmRole: UserRole[] = ["CHAIRMAN", "TREASURER", "SECRETARY"];
 
+function ProgramImplemented({
+  implemented,
+}: {
+  implemented: boolean | null | undefined;
+}) {
+  const implementedClass = implemented
+    ? "bg-primary text-primary-foreground"
+    : implemented === false
+      ? "bg-destructive text-destructive-foreground"
+      : "bg-secondary text-secondary-foreground";
+
+  return (
+    <div className={`w-[60px] rounded py-1 text-center ${implementedClass}`}>
+      {implemented ? "Ya" : implemented === false ? "Tidak" : "Belum"}
+    </div>
+  );
+}
+
 export default async function ProgramPage() {
   const session = await getSession();
 
@@ -244,13 +262,11 @@ export default async function ProgramPage() {
                   </div>
                 </TableCell>
                 <TableCell>
-                  <p className="text-center">
-                    {program.workProgramReport?.implemented
-                      ? "Ya"
-                      : program.workProgramReport?.implemented === false
-                        ? "Tidak"
-                        : "Belum"}
-                  </p>
+                  <div className="flex justify-center">
+                    <ProgramImplemented
+                      implemented={program.workProgramReport?.implemented}
+                    />
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
