@@ -58,8 +58,7 @@ export const addPost = async (formData: FormData) => {
     revalidatePath(privateRoutes.postsManage);
     return {
       error: false,
-      message:
-        "Postingan berhasil dibuat, menunggu persetujuan divisi Media Center",
+      message: "Postingan berhasil dibuat, menunggu persetujuan",
     };
   } catch (e) {
     console.log(e);

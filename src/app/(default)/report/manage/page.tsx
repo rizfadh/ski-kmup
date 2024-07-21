@@ -1,10 +1,6 @@
 import ConfirmationIcon from "@/components/ConfirmationIcon";
 import LinkButton from "@/components/LinkButton";
-import {
-  ReportDeleteButton,
-  ReportUploadDialog,
-} from "@/components/ReportManageAction";
-import { Button } from "@/components/ui/button";
+import { ReportUploadDialog } from "@/components/ReportManageAction";
 import {
   Table,
   TableBody,
@@ -14,43 +10,54 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { dateFormat } from "@/lib/formatter";
-import getSession from "@/lib/getSession";
-import { getDivisionReport } from "@/lib/reportDb";
-import { getUserPosition } from "@/lib/userDb";
+import { getDivisionReports, isUploadEnabled } from "@/lib/reportDb";
 import { FileText, X } from "lucide-react";
 
-type Report = {
-  report: {
-    userId: string;
-    type: string;
-    reportUrl: string;
-    secretaryConfirm: boolean | null;
-    createdAt: Date;
-  } | null;
-};
+function ReportStatus({
+  secretaryConfirm,
+  treasurerConfirm,
+}: {
+  secretaryConfirm: boolean | null;
+  treasurerConfirm: boolean | null;
+}) {
+  const statusClass = "w-[90px] py-1 rounded text-center";
 
-function ReportAction({ report }: Report) {
-  if (!report) {
-    return <ReportUploadDialog />;
-  }
+  if (secretaryConfirm && treasurerConfirm)
+    return (
+      <div className={`${statusClass} bg-primary text-primary-foreground`}>
+        Diterima
+      </div>
+    );
 
-  if (report.secretaryConfirm) return null;
+  if (
+    secretaryConfirm !== null &&
+    treasurerConfirm !== null &&
+    (secretaryConfirm === false || treasurerConfirm === false)
+  )
+    return (
+      <div
+        className={`${statusClass} bg-destructive text-destructive-foreground`}
+      >
+        Ditolak
+      </div>
+    );
 
-  return <ReportDeleteButton />;
+  return (
+    <div className={`${statusClass} bg-secondary text-secondary-foreground`}>
+      Menunggu
+    </div>
+  );
 }
 
 export default async function ReportManagePage() {
-  const session = await getSession();
-
-  if (!session || !session.user) return null;
-
-  const [userPosition, report] = await Promise.all([
-    getUserPosition(session.user.id as string),
-    getDivisionReport(session.user.id as string),
+  const [reports, uploadEnabled] = await Promise.all([
+    getDivisionReports(),
+    isUploadEnabled(),
   ]);
 
   return (
     <div className="container grid grid-cols-1 gap-y-4 py-4">
+      {uploadEnabled && <ReportUploadDialog />}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -61,18 +68,26 @@ export default async function ReportManagePage() {
               <TableHead className="text-center font-bold">
                 Konfirmasi
               </TableHead>
-              <TableHead className="text-center font-bold">Aksi</TableHead>
+              <TableHead className="text-center font-bold">Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>{userPosition?.division ?? "Global"}</TableCell>
-              <TableCell>
-                {report?.createdAt ? dateFormat(report.createdAt) : null}
-              </TableCell>
-              <TableCell>
-                <div className="flex justify-center">
-                  {report?.reportUrl ? (
+            {reports.length === 0 && (
+              <TableRow>
+                <TableCell
+                  colSpan={5}
+                  className="h-24 text-center text-muted-foreground"
+                >
+                  Belum ada LPJ
+                </TableCell>
+              </TableRow>
+            )}
+            {reports.map((report) => (
+              <TableRow key={report.id}>
+                <TableCell>{report.type}</TableCell>
+                <TableCell>{dateFormat(report.createdAt)}</TableCell>
+                <TableCell>
+                  <div className="flex justify-center">
                     <LinkButton
                       variant="outline"
                       size="icon"
@@ -82,31 +97,30 @@ export default async function ReportManagePage() {
                     >
                       <FileText className="h-[1.2rem] w-[1.2rem]" />
                     </LinkButton>
-                  ) : (
-                    <Button variant="outline" size="icon" disabled>
-                      <FileText className="h-[1.2rem] w-[1.2rem] text-muted-foreground" />
-                    </Button>
-                  )}
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="flex justify-center gap-2">
-                  <ConfirmationIcon
-                    isConfirmed={report?.secretaryConfirm}
-                    label="S"
-                  />
-                  <ConfirmationIcon
-                    isConfirmed={report?.treasurerConfirm}
-                    label="B"
-                  />
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="flex justify-center">
-                  <ReportAction report={report} />
-                </div>
-              </TableCell>
-            </TableRow>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex justify-center gap-2">
+                    <ConfirmationIcon
+                      isConfirmed={report.secretaryConfirm}
+                      label="S"
+                    />
+                    <ConfirmationIcon
+                      isConfirmed={report.treasurerConfirm}
+                      label="B"
+                    />
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex justify-center">
+                    <ReportStatus
+                      secretaryConfirm={report.secretaryConfirm}
+                      treasurerConfirm={report.treasurerConfirm}
+                    />
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </div>

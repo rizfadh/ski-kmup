@@ -14,10 +14,14 @@ import {
 } from "firebase/storage";
 import { UserRole } from "@prisma/client";
 import getSession from "@/lib/getSession";
+import { isUploadEnabled } from "@/lib/reportDb";
 
 export const uploadReport = async (formData: FormData) => {
   try {
-    const session = await getSession();
+    const [session, isEnabled] = await Promise.all([
+      getSession(),
+      isUploadEnabled(),
+    ]);
 
     if (!session || !session.user) {
       return { error: true, message: "Unauthorized" };
@@ -34,6 +38,10 @@ export const uploadReport = async (formData: FormData) => {
       return { error: true, message: "Unauthorized" };
     }
 
+    if (!isEnabled) {
+      return { error: true, message: "Sudah upload LPJ" };
+    }
+
     const data = {
       pdf: formData.get("pdf"),
     };
@@ -44,16 +52,13 @@ export const uploadReport = async (formData: FormData) => {
 
     const { pdf } = validated.data;
 
-    const reportRef = ref(
-      storage,
-      storageRef.report + (session.user.id as string),
-    );
+    const reportRef = ref(storage, storageRef.report + session.user.id);
 
     await uploadBytes(reportRef, pdf);
     const reportUrl = await getDownloadURL(reportRef);
 
     const userPosition = await db.userPosition.findUnique({
-      where: { userId: session.user.id as string },
+      where: { userId: session.user.id },
       select: { division: true },
     });
 
@@ -66,6 +71,7 @@ export const uploadReport = async (formData: FormData) => {
         reportUrl,
         type,
         secretaryConfirm: accepted,
+        treasurerConfirm: accepted,
       },
     });
 
@@ -74,7 +80,7 @@ export const uploadReport = async (formData: FormData) => {
     const message =
       session.user.role === "CHAIRMAN"
         ? "LPJ berhasil diupload"
-        : "LPJ berhasil diupload, menunggu persetujuan Sekum";
+        : "LPJ berhasil diupload, menunggu persetujuan";
 
     return { error: false, message };
   } catch (e) {
@@ -83,7 +89,7 @@ export const uploadReport = async (formData: FormData) => {
   }
 };
 
-export const deleteReport = async () => {
+export const deleteReport = async (id: string) => {
   try {
     const session = await getSession();
 
@@ -102,7 +108,7 @@ export const deleteReport = async () => {
     }
 
     await db.accountablityReport.delete({
-      where: { userId: session.user.id as string },
+      where: { id },
     });
 
     const reportRef = ref(
@@ -135,7 +141,7 @@ export const confirmReport = async (
     }
 
     const report = await db.accountablityReport.findUnique({
-      where: { userId: reportId },
+      where: { id: reportId },
       select: {
         secretaryConfirm: true,
         treasurerConfirm: true,
@@ -164,7 +170,7 @@ export const confirmReport = async (
     }
 
     await db.accountablityReport.update({
-      where: { userId: reportId },
+      where: { id: reportId },
       data: {
         [confirmField]: confirmation,
       },

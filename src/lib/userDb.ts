@@ -1,4 +1,5 @@
 import db from "./db";
+import getSession from "./getSession";
 
 export const getUserByEmail = async (email: string) => {
   return await db.user.findUnique({
@@ -38,9 +39,13 @@ export const getUserById = async (id: string) => {
   });
 };
 
-export const getUserPosition = async (id: string) => {
+export const getUserPosition = async () => {
+  const session = await getSession();
+
+  if (!session || !session.user) throw new Error("Unauthorized");
+
   return await db.userPosition.findUnique({
-    where: { userId: id },
+    where: { userId: session.user.id },
   });
 };
 

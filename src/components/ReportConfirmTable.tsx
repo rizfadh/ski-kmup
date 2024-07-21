@@ -40,7 +40,15 @@ function ConfirmationButton({
   report,
 }: ConfirmationButtonProps) {
   if (confirmed || confirmed === false) {
-    return <p className="text-center">{confirmed ? "Diterima" : "Ditolak"}</p>;
+    return (
+      <div className="flex justify-center">
+        <div
+          className={`w-[80px] rounded py-1 text-center ${confirmed ? "bg-primary text-primary-foreground" : "bg-destructive text-destructive-foreground"}`}
+        >
+          {confirmed ? "Diterima" : "Ditolak"}
+        </div>
+      </div>
+    );
   }
 
   if (confirmed === null) {
@@ -75,6 +83,7 @@ const userConfirm = (userRole: UserRole, report: Report) => {
 };
 
 type Report = {
+  id: string;
   userId: string;
   type: string;
   reportUrl: string;
@@ -106,7 +115,7 @@ export function ReportConfirmTable({
   const confirmHandler = () => {
     startTransition(async () => {
       const response = await confirmReport(
-        report?.userId as string,
+        report?.id as string,
         confirmation as boolean,
       );
 

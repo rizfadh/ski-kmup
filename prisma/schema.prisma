@@ -36,7 +36,7 @@ model User {
   cashPayment          CashPayment[]
   cashInOut            CashInOut[]
   workProgram          WorkProgram[]
-  accountabilityReport AccountablityReport?
+  accountabilityReport AccountablityReport[]
 }
 
 enum UserRole {
@@ -207,8 +207,10 @@ model WorkProgramNeeds {
 }
 
 model AccountablityReport {
+  id String @id @default(cuid())
+
   user   User   @relation(fields: [userId], references: [id])
-  userId String @id
+  userId String
 
   type             String
   reportUrl        String

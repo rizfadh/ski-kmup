@@ -70,7 +70,7 @@ export function ReportUploadDialog() {
   return (
     <Dialog open={formOpen} onOpenChange={setFormOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="flex items-center gap-2">
+        <Button variant="outline" className="flex w-fit items-center gap-2">
           Upload <Upload className="h-[1.2rem] w-[1.2rem]" />
         </Button>
       </DialogTrigger>
@@ -112,12 +112,12 @@ export function ReportUploadDialog() {
   );
 }
 
-export function ReportDeleteButton() {
+export function ReportDeleteButton({ id }: { id: string }) {
   const [isPending, startTransition] = useTransition();
 
   const confirmHandler = () => {
     startTransition(async () => {
-      const response = await deleteReport();
+      const response = await deleteReport(id);
 
       toast({
         title: response.error ? "Gagal" : "Sukses",
