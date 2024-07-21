@@ -23,7 +23,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { PlusCircle, X } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { toast } from "./ui/use-toast";
 import { ProgramPlanFormSchema } from "@/schemas/ProgramSchema";
 import { ScrollArea } from "./ui/scroll-area";

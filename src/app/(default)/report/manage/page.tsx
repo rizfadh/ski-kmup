@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import { dateFormat } from "@/lib/formatter";
 import { getDivisionReports, isUploadEnabled } from "@/lib/reportDb";
-import { FileText, X } from "lucide-react";
+import { FileText } from "lucide-react";
 
 function ReportStatus({
   secretaryConfirm,

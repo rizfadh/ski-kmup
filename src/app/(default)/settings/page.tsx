@@ -2,7 +2,7 @@ import ChangeTermFormDialog from "@/components/ChangeTermFormDialog";
 import LinkButton from "@/components/LinkButton";
 import { privateRoutes } from "@/constants/routes";
 import getSession from "@/lib/getSession";
-import { CircleCheck, Settings, UserCog } from "lucide-react";
+import { UserCog } from "lucide-react";
 
 export default async function SettingsPage() {
   const session = await getSession();

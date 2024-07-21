@@ -2,7 +2,6 @@
 
 import { privateRoutes } from "@/constants/routes";
 import { storageRef } from "@/constants/storageRef";
-import { isCashSet } from "@/lib/cashDb";
 import db from "@/lib/db";
 import { storage } from "@/lib/firebase";
 import { dateFormatMonth } from "@/lib/formatter";

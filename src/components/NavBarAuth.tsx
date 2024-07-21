@@ -21,7 +21,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ComponentPropsWithoutRef, ComponentType, useMemo } from "react";
+import { ComponentPropsWithoutRef, useMemo } from "react";
 import { privateRoutes, publicRoutes } from "@/constants/routes";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";

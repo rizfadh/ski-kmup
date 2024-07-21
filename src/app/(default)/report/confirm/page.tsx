@@ -1,6 +1,6 @@
 import { ReportConfirmTable } from "@/components/ReportConfirmTable";
 import getSession from "@/lib/getSession";
-import { getConfirmationReport, getReport } from "@/lib/reportDb";
+import { getConfirmationReport } from "@/lib/reportDb";
 
 export default async function ProgramConfirmPage() {
   const session = await getSession();

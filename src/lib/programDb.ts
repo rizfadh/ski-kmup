@@ -1,7 +1,6 @@
 import { endOfMonth, startOfMonth } from "date-fns";
 import db from "./db";
 import getSession from "./getSession";
-import { UserRole } from "@prisma/client";
 
 export const getDivisionProgramPlans = async () => {
   const session = await getSession();

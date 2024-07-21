@@ -1,6 +1,6 @@
 "use client";
 
-import { ColumnDef, Row } from "@tanstack/react-table";
+import { ColumnDef } from "@tanstack/react-table";
 import { ColumnHeaderSort } from "./tables/ColumnHeaderSort";
 import { useEffect, useState, useTransition } from "react";
 import { dateFormat } from "@/lib/formatter";
