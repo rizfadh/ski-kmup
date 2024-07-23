@@ -29,6 +29,7 @@ type DashboradCardProps = {
   title: string;
   description: string;
 };
+
 function DashboardCard({ Icon, title, description }: DashboradCardProps) {
   return (
     <Card>
@@ -75,7 +76,9 @@ export default async function DashboardPage() {
         <DashboardCard
           Icon={CalendarPlus}
           title="Bergabung"
-          description={dateFormat(userData?.createdAt as Date)}
+          description={
+            userData?.createdAt ? dateFormat(userData.createdAt) : "Tidak ada"
+          }
         />
         <DashboardCard
           Icon={Newspaper}
