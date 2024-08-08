@@ -76,6 +76,7 @@ type ConfirmationButtonProps = {
   implemented: boolean | null | undefined;
   confirmationHandler: (program: Program, implemented: boolean) => void;
   program: Program;
+  isPending: boolean;
 };
 
 function ProgramImplemented({ implemented }: { implemented: boolean }) {
@@ -94,6 +95,7 @@ function ConfirmationButton({
   implemented,
   confirmationHandler,
   program,
+  isPending,
 }: ConfirmationButtonProps) {
   if (implemented)
     return (
@@ -116,6 +118,7 @@ function ConfirmationButton({
         size="icon"
         className="flex gap-2"
         onClick={() => confirmationHandler(program, false)}
+        disabled={isPending}
       >
         <X className="h-[1.2rem] w-[1.2rem]" />
       </Button>
@@ -124,6 +127,7 @@ function ConfirmationButton({
         size="icon"
         className="flex gap-2"
         onClick={() => confirmationHandler(program, true)}
+        disabled={isPending}
       >
         <Check className="h-[1.2rem] w-[1.2rem]" />
       </Button>
@@ -316,6 +320,7 @@ export function ProgramTable({ divisionPrograms }: ProgramTableProps) {
                     implemented={program.workProgramReport?.implemented}
                     confirmationHandler={confirmationHandler}
                     program={program}
+                    isPending={isPending}
                   />
                 </TableCell>
               </TableRow>

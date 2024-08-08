@@ -32,12 +32,14 @@ type ConfirmationButtonProps = {
   confirmed: boolean | null | undefined;
   dialogHandler: (report: Report, confirmation: boolean) => void;
   report: Report;
+  isPending: boolean;
 };
 
 function ConfirmationButton({
   confirmed,
   dialogHandler,
   report,
+  isPending,
 }: ConfirmationButtonProps) {
   if (confirmed || confirmed === false) {
     return (
@@ -59,6 +61,7 @@ function ConfirmationButton({
           size="icon"
           className="flex gap-2"
           onClick={() => dialogHandler(report, false)}
+          disabled={isPending}
         >
           <X className="h-[1.2rem] w-[1.2rem]" />
         </Button>
@@ -67,6 +70,7 @@ function ConfirmationButton({
           size="icon"
           className="flex gap-2"
           onClick={() => dialogHandler(report, true)}
+          disabled={isPending}
         >
           <Check className="h-[1.2rem] w-[1.2rem]" />
         </Button>
@@ -219,6 +223,7 @@ export function ReportConfirmTable({
                     confirmed={userConfirm(userRole, report)}
                     dialogHandler={dialogHandler}
                     report={report}
+                    isPending={isPending}
                   />
                 </TableCell>
               </TableRow>

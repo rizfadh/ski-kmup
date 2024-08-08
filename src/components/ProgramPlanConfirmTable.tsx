@@ -168,6 +168,7 @@ export function ProgramPlanConfirmTable({
                       size="icon"
                       className="flex gap-2"
                       onClick={() => dialogHandler(plan, false)}
+                      disabled={isPending}
                     >
                       <X className="h-[1.2rem] w-[1.2rem]" />
                     </Button>
@@ -176,6 +177,7 @@ export function ProgramPlanConfirmTable({
                       size="icon"
                       className="flex gap-2"
                       onClick={() => dialogHandler(plan, true)}
+                      disabled={isPending}
                     >
                       <Check className="h-[1.2rem] w-[1.2rem]" />
                     </Button>
